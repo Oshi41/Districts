@@ -1,0 +1,82 @@
+﻿<Window x:Class="Districts.Views.EditHomeInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Districts.Views"
+        xmlns:viewModel="clr-namespace:Districts.ViewModel"
+        mc:Ignorable="d"
+        Title="EditHomeInfo" Height="300" Width="300"
+    d:DataContext="{d:DesignInstance {x:Type viewModel:EditHomeInfoViewModel}}">
+
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Агрессии"/>
+        <TextBox Grid.Row="1" 
+                   Text="{Binding Aggresive}"
+                 TextChanged="RestrictText"/>
+
+        <TextBlock Grid.Row="2" 
+                   Text="Просили не призодить"/>
+        <TextBox Grid.Row="3"
+                   Text="{Binding NoWorried}"
+                 TextChanged="RestrictText"/>
+
+        <TextBlock Grid.Row="4" 
+                   Text="Не посещать"/>
+        <TextBox Grid.Row="5"
+                   Text="{Binding NoVisit}"
+                 TextChanged="RestrictText"/>
+
+        <TextBlock Grid.Row="6" 
+                   Text="Коды"/>
+        <TabControl Grid.Row="7"
+                    ItemsSource="{Binding Codes}">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Setter Property="Header" Value="{Binding Number, StringFormat={}{0} под.}"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <TextBox Text="{Binding Path=HomeCodes,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             AcceptsReturn="True"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+        <StackPanel Grid.Row="8" 
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Content="Ok" 
+                    Margin="5"
+                    MinWidth="50"
+                    Command="{Binding SaveCommand}"
+                    IsDefault="True"
+                    Click="ButtonBase_OnClick"/>
+
+            <Button Content="Close" 
+                    Margin="5"
+                    MinWidth="50"
+                    IsCancel="True"
+                    Click="ButtonBase_OnClick"/>
+        </StackPanel>
+    </Grid>
+</Window>
