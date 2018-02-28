@@ -18,8 +18,11 @@ using Districts.Views;
 
 namespace Districts.Printing
 {
+    /// <summary>
+    /// Выводит на печать получившиеся карточки
+    /// </summary>
     class CustomDocumentPaginator : DocumentPaginator
-    {
+    { 
         private readonly List<Card> _cards;
         private readonly PrintCapabilities _printCapabilities;
         private Size _pageSize;
