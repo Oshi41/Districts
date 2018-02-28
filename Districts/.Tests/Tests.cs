@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 
 namespace Districts.Tests
 {
+    /// <summary>
+    /// Вспомогательный класс для тестов
+    /// </summary>
     class Tests
     {
         public static void StartTests()

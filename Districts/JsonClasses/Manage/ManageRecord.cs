@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Districts.JsonClasses
+namespace Districts.JsonClasses.Manage
 {
-    enum ActionTypes
+    public enum ActionTypes
     {
         /// <summary>
         /// Участок взят
@@ -14,7 +14,7 @@ namespace Districts.JsonClasses
         Dropped,
     }
 
-    class ManageRecord
+    public class ManageRecord
     {
         /// <summary>
         /// Время записи

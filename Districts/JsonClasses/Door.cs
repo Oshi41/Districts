@@ -21,10 +21,13 @@ namespace Districts.JsonClasses
         /// </summary>
         public List<string> Codes { get; set; } = new List<string>();
 
-        public Door(string street, string houseNumber) : base(street, houseNumber)
+        public Door(BaseFindableObject obj) : base(obj)
         {
         }
 
+        public Door(string street, string houseNumber) : base(street, houseNumber)
+        {
+        }
         #region Overrided
 
         public override bool Equals(object obj)
@@ -62,5 +65,7 @@ namespace Districts.JsonClasses
         }
 
         #endregion
+
+
     }
 }

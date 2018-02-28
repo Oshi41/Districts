@@ -18,6 +18,9 @@ namespace Districts.JsonClasses
         /// </summary>
         public List<int> NoVisit { get; set; } = new List<int>();
 
+        public ForbiddenElement(BaseFindableObject obj) : base(obj)
+        {
+        }
 
         public ForbiddenElement(string street, string houseNumber) : base(street, houseNumber)
         {

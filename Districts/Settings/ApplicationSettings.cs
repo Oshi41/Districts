@@ -19,12 +19,33 @@ namespace Districts.Settings
         /// Макс кол-во квартир
         /// </summary>
         public int MaxDoors { get; set; } = 25;
+        /// <summary>
+        /// Путь к домам
+        /// </summary>
         public string BuildingPath { get; set; } = GetLocalFolder() + "\\Buildings";
+        /// <summary>
+        /// Путь к карточкам участков
+        /// </summary>
         public string CardsPath { get; set; } = GetLocalFolder() + "\\Cards";
+        /// <summary>
+        /// Путь к улицам
+        /// </summary>
         public string StreetsPath { get; set; } = GetLocalFolder() + "\\Streets.txt";
+        /// <summary>
+        /// Путь к кодам
+        /// </summary>
         public string CodesPath { get; set; } = GetLocalFolder() + "\\Codes";
+        /// <summary>
+        /// Путь к правилам доступа
+        /// </summary>
         public string RestrictionsPath { get; set; } = GetLocalFolder() + "\\Restrictions";
+        /// <summary>
+        /// Путь для логирования
+        /// </summary>
         public string LogPath { get; set; } = GetLocalFolder() + "\\Logs";
+        /// <summary>
+        /// Путь для записей о карточке
+        /// </summary>
         public string ManageRecordsPath { get; set; } = GetLocalFolder() + "\\ManageRecords";
 
         #region ctor
@@ -57,7 +78,12 @@ namespace Districts.Settings
             }
 
             //Создаю папки, если их нет
-            CheckExistance(settings.BuildingPath, settings.CardsPath, settings.CodesPath, settings.RestrictionsPath);
+            CheckExistance(settings.BuildingPath,
+                settings.CardsPath,
+                settings.CodesPath, 
+                settings.RestrictionsPath,
+                settings.LogPath,
+                settings.ManageRecordsPath);
             return settings;
         }
 

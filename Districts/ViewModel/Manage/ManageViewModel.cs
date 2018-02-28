@@ -36,7 +36,7 @@ namespace Districts.ViewModel.Manage
 
         public ManageViewModel()
         {
-            var all = Helper.Helper.LoadCardManagements();
+            var all = LoadingWork.LoadManageElements().Select(x => x.Value).ToList();
             Cards = new ObservableCollection<CardManagement>(all);
 
             // сгруппировал по именам и взял только те, что на руках

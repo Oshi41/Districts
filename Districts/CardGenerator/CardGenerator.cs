@@ -27,14 +27,26 @@ using Image = System.Drawing.Image;
 
 namespace Districts.CardGenerator
 {
+    /// <summary>
+    /// Генератор карточек
+    /// </summary>
     class CardGenerator
     {
+        /// <summary>
+        /// настройки приложения
+        /// </summary>
         ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
+
+        #region Public
+
+        /// <summary>
+        /// сгенерировать карточки согласно домам, правилам доступа и кодам.
+        /// </summary>
         public void Generate()
         {
-            List<Building> allHomes = Helper.Helper.LoadHomes().Values.SelectMany(x => x).ToList();
-            List<ForbiddenElement> allRules = Helper.Helper.LoadRules().Values.ToList().SelectMany(x => x).ToList();
-            List<Codes> allCodes = Helper.Helper.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
+            List<Building> allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
+            List<ForbiddenElement> allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
+            List<Codes> allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
 
             List<Door> allDoors = GetAllDoors(allHomes, allRules, allCodes);
             List<Card> cards = GenerateCards(allHomes, allRules, allCodes, allDoors);
@@ -42,11 +54,25 @@ namespace Districts.CardGenerator
         }
 
         /// <summary>
-        /// Все квартиры во всех домах
+        /// Печатаем участки
         /// </summary>
-        /// <param name="allHomes"></param>
-        /// <param name="allRules"></param>
-        /// <param name="allCodes"></param>
+        public void PrintVisual()
+        {
+            var cards = LoadingWork.LoadCards().Select(x => x.Value).ToList();
+            //var codes = Helper.Helper.LoadCodes().Values.SelectMany(x => x).ToList();
+
+            PrintVisual(cards);
+        }
+        #endregion
+
+        #region Private
+
+        /// <summary>
+        /// Получает все доступные квартиры квартиры
+        /// </summary>
+        /// <param name="allHomes">Список домов</param>
+        /// <param name="allRules">Список правил посещения</param>
+        /// <param name="allcodes">Список кодов</param>
         /// <returns></returns>
         private List<Door> GetAllDoors(List<Building> allHomes,
             List<ForbiddenElement> allRules,
@@ -56,7 +82,7 @@ namespace Districts.CardGenerator
 
             foreach (var home in allHomes)
             {
-                var rule = allRules.FirstOrDefault(x => home.IsTheSameObject(x)) 
+                var rule = allRules.FirstOrDefault(x => home.IsTheSameObject(x))
                            ?? new ForbiddenElement(home.Street, home.HouseNumber);
                 var code = allcodes.FirstOrDefault(x => home.IsTheSameObject(x))
                            ?? new Codes(home.Street, home.HouseNumber);
@@ -69,8 +95,9 @@ namespace Districts.CardGenerator
         /// <summary>
         /// Все незапрещенные квартиры в доме
         /// </summary>
-        /// <param name="home"></param>
-        /// <param name="rule"></param>
+        /// <param name="home">Дом</param>
+        /// <param name="rule">Правила доступо</param>
+        /// <param name="code">Код</param>
         /// <returns></returns>
         private IEnumerable<Door> GetHomeDoors(Building home,
             ForbiddenElement rule, Codes code)
@@ -97,6 +124,13 @@ namespace Districts.CardGenerator
             }
         }
 
+        /// <summary>
+        /// Высчитывает подъезд, в котором находится 
+        /// </summary>
+        /// <param name="floor"></param>
+        /// <param name="total"></param>
+        /// <param name="totalEntrances"></param>
+        /// <returns></returns>
         private int GetEntrance(int floor, int total, int totalEntrances)
         {
             // квартиры в подъезде
@@ -120,10 +154,10 @@ namespace Districts.CardGenerator
         /// <summary>
         /// Сгенерили карточки
         /// </summary>
-        /// <param name="allHomes"></param>
-        /// <param name="allRules"></param>
-        /// <param name="allCodes"></param>
-        /// <param name="doors"></param>
+        /// <param name="allHomes">Все дома</param>
+        /// <param name="allRules">Все правила</param>
+        /// <param name="allCodes">Все коды</param>
+        /// <param name="doors">Полученныедвери</param>
         /// <returns></returns>
         private List<Card> GenerateCards(List<Building> allHomes,
             List<ForbiddenElement> allRules, List<Codes> allCodes,
@@ -162,16 +196,6 @@ namespace Districts.CardGenerator
 
             return cards;
         }
-
-        // Получили для распечатки
-        public void PrintVisual()
-        {
-            var cards = Helper.Helper.LoadCards();
-            //var codes = Helper.Helper.LoadCodes().Values.SelectMany(x => x).ToList();
-
-            PrintVisual(cards);
-        }
-
 
         private Card GetFreeCard(List<Card> cards, int index)
         {
@@ -212,6 +236,8 @@ namespace Districts.CardGenerator
         }
 
 
+        #endregion
+
         //private void PrintVisualNew(List<Card> cards, List<Codes> codes)
         //{
         //    PrintDialog printDlg = new PrintDialog();
@@ -249,7 +275,7 @@ namespace Districts.CardGenerator
         //    //}
         //}
 
-        
+
 
         //private void StartPrint(Visual visual, string printerName, string fileName)
         //{

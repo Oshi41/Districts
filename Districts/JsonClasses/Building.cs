@@ -39,16 +39,32 @@ namespace Districts.JsonClasses
         /// </summary>
         public string Uri { get; set; }
 
+        public Building(BaseFindableObject obj) : base(obj)
+        {
+        }
+
         public Building(string street, string houseNumber) : base(street, houseNumber)
         {
         }
     }
 
-
+    /// <summary>
+    /// Сравнивает дома по номеру
+    /// </summary>
     public class HouseNumberComparer : IComparer<Building>
     {
+        /// <summary>
+        /// Сравнивает два дома
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public int Compare(Building x, Building y)
         {
+            if (ReferenceEquals(x, y)) return 0;
+            if (ReferenceEquals(x, null)) return -1;
+            if (ReferenceEquals(y, null)) return 1;
+
             var first = new HouseNumber(x.HouseNumber);
             var second = new HouseNumber(y.HouseNumber);
 
@@ -63,10 +79,22 @@ namespace Districts.JsonClasses
 
         #region Nested class
 
+        /// <summary>
+        /// Класс представляющий номер дома
+        /// </summary>
         private struct HouseNumber
         {
+            /// <summary>
+            /// Номер дома
+            /// </summary>
             public int Number { get; set; }
+            /// <summary>
+            /// Подъезд
+            /// </summary>
             public int Housing { get; set; }
+            /// <summary>
+            /// То, что иде т после слеша
+            /// </summary>
             public int AfterSlash { get; set; }
 
             public HouseNumber(string text)

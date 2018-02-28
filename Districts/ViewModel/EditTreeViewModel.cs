@@ -34,7 +34,7 @@ namespace Districts.ViewModel
         private void Load()
         {
             // загрузил все дома
-            var allHomes = Helper.Helper.LoadHomes();
+            var allHomes = Helper.LoadingWork.LoadSortedHomes();
             foreach (var street in allHomes)
             {
                 Homes.AddRange(street.Value);
@@ -43,14 +43,14 @@ namespace Districts.ViewModel
             }
 
             // загрузил правила
-            var allRules = Helper.Helper.LoadRules();
+            var allRules = LoadingWork.LoadRules();
             foreach (var street in allRules)
             {
                 Rules.AddRange(street.Value);
             }
 
             // загрузил коды
-            var allCodes = Helper.Helper.LoadCodes();
+            var allCodes = LoadingWork.LoadCodes();
             foreach (var street in allCodes)
             {
                 Codes.AddRange(street.Value);

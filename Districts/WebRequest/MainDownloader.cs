@@ -2,18 +2,27 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.Settings;
 using Newtonsoft.Json;
 
 namespace Districts.WebRequest
 {
+    /// <summary>
+    /// Скачивает всю информаию об улицах
+    /// </summary>
     public class MainDownloader
     {
         public async Task DownloadInfo()
         {
             ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
-            CheckIfStreetFileExist(settings);
+            
+             if (CheckIfStreetFileExist(settings))
+            {
+                Tracer.Write("Улицы не были заполнены");
+                return;
+            }
             
 
             var streets = File.ReadAllLines(settings.StreetsPath);
@@ -80,13 +89,15 @@ namespace Districts.WebRequest
         /// Проверяет налчие файла улиц
         /// </summary>
         /// <param name="settings"></param>
-        private void CheckIfStreetFileExist(ApplicationSettings settings)
+        private bool CheckIfStreetFileExist(ApplicationSettings settings)
         {
             if (!File.Exists(settings.StreetsPath))
             {
                 var stream = File.CreateText(settings.StreetsPath);
                 stream.Close();
+                return false;
             }
+            return true;
         }
 
         private List<Building> GetLivingBuilding(List<Building> buildings)

@@ -1,5 +1,8 @@
 ﻿namespace Districts.JsonClasses.Base
 {
+    /// <summary>
+    /// Базовый класс-родитель для квартир и домов
+    /// </summary>
     public class BaseFindableObject
     {
         #region Properties
@@ -17,6 +20,15 @@
         #endregion
 
         #region Constructors
+
+        public BaseFindableObject(BaseFindableObject obj)
+        {
+            if (obj == null)
+                return;
+            
+            Street = obj.Street;
+            HouseNumber = obj.HouseNumber;
+        }
 
         public BaseFindableObject(string street, string houseNumber)
         {

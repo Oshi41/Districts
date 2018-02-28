@@ -19,15 +19,20 @@ using Districts.Views;
 namespace Districts.Printing
 {
     /// <summary>
-    /// Выводит на печать получившиеся карточки
+    /// Печать кучи карточек в один многостраничный файл
     /// </summary>
     class CustomDocumentPaginator : DocumentPaginator
-    { 
+    {
         private readonly List<Card> _cards;
         private readonly PrintCapabilities _printCapabilities;
         private Size _pageSize;
         private int _count;
 
+        /// <summary>
+        /// Создаю документ на основе карточек и настроек принтера
+        /// </summary>
+        /// <param name="cards"></param>
+        /// <param name="dlg"></param>
         public CustomDocumentPaginator(List<Card> cards, PrintDialog dlg)
         {
             _cards = cards;

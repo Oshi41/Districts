@@ -6,16 +6,18 @@ namespace Districts.JsonClasses
     /// <summary>
     /// Информацияч о карточке
     /// </summary>
-    public class Card 
+    public class Card
     {
         /// <summary>
         /// Hомер кварточки
         /// </summary>
-        public int  Number { get; set; }
+        public int Number { get; set; }
         /// <summary>
         /// Список всеХ квартир в участке
         /// </summary>
         public List<Door> Doors { get; set; } = new List<Door>();
+
+        #region Overrided
 
         public override bool Equals(object obj)
         {
@@ -28,7 +30,7 @@ namespace Districts.JsonClasses
             return false;
         }
 
-        public static bool operator == (Card x, Card y)
+        public static bool operator ==(Card x, Card y)
         {
             if (ReferenceEquals(x, y))
                 return true;
@@ -43,5 +45,7 @@ namespace Districts.JsonClasses
         {
             return !(x == y);
         }
+
+        #endregion
     }
 }

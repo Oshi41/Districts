@@ -85,11 +85,14 @@
     <Compile Include="CardGenerator\CardGenerator.cs" />
     <Compile Include="Checker\DoorChecker.cs" />
     <Compile Include="Helper\Helper.cs" />
+    <Compile Include="Helper\LoadingWork.cs" />
     <Compile Include="Helper\Logger.cs" />
+    <Compile Include="Helper\Tracer.cs" />
     <Compile Include="JsonClasses\ForbiddenElement.cs" />
     <Compile Include="JsonClasses\Manage\CardManagement.cs" />
     <Compile Include="JsonClasses\Manage\ManageRecord.cs" />
     <Compile Include="Printing\CustomDocumentPaginator.cs" />
+    <Compile Include="Printing\FastCardPrinter.cs" />
     <Compile Include="Settings\ApplicationSettings.cs" />
     <Compile Include="ViewModel\EditHomeInfoViewModel.cs" />
     <Compile Include="ViewModel\EditTreeViewModel.cs" />

@@ -6,9 +6,12 @@ using Districts.JsonClasses;
 
 namespace Districts.WebRequest
 {
+    /// <summary>
+    /// Получает инф-у о доме
+    /// </summary>
     public class HomeDownloader
     {
-        #region NodeNames
+        #region HTML node names
 
         private string _floorsKey = "Количество этажей";
         private string _doorsKey = "Количество жилых помещений";

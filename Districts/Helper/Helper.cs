@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Manage;
@@ -9,8 +10,19 @@ using Newtonsoft.Json;
 
 namespace Districts.Helper
 {
+    /// <summary>
+    /// Вспомогательные методы
+    /// </summary>
     public static class Helper
     {
+        #region List work
+
+        /// <summary>
+        /// Перечислитель в простую коллекцию
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerator"></param>
+        /// <returns></returns>
         public static IEnumerable<T> ToIEnumerable<T>(this IEnumerator<T> enumerator)
         {
             while (enumerator.MoveNext())
@@ -20,150 +32,179 @@ namespace Districts.Helper
         }
 
         /// <summary>
+        /// Перечислитель в список
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerator"></param>
+        /// <returns></returns>
+        public static IList<T> ToList<T>(this IEnumerator<T> enumerator)
+        {
+            var list = new List<T>();
+
+            while (enumerator.MoveNext())
+            {
+                list.Add(enumerator.Current);
+            }
+
+            return list;
+        }
+
+        #endregion
+
+        #region Loading work
+
+        /// <summary>
         /// Загружаю дома по названиям файла. Сортированы!
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, List<Building>> LoadHomes()
-        {
-            var settings = ApplicationSettings.ReadOrCreate();
-            var result = new Dictionary<string, List<Building>>();
+        //[Obsolete("Исползуй LoadinWork.LoadSortedHomes.")]
+        //public static Dictionary<string, List<Building>> LoadHomes()
+        //{
+        //    var settings = ApplicationSettings.ReadOrCreate();
+        //    var result = new Dictionary<string, List<Building>>();
 
-            var logger = new Logger();
-            // загрузил дома
-            var streets = Directory.GetFiles(settings.BuildingPath);
-            foreach (var street in streets)
-            {
-                var json = File.ReadAllText(street);
-                try
-                {
-                    var temp = JsonConvert.DeserializeObject<List<Building>>(json);
-                    temp.Sort(new HouseNumberComparer());
-                    result.Add(Path.GetFileName(street), temp);
+        //    var logger = new Logger();
+        //    // загрузил дома
+        //    var streets = Directory.GetFiles(settings.BuildingPath);
+        //    foreach (var street in streets)
+        //    {
+        //        var json = File.ReadAllText(street);
+        //        try
+        //        {
+        //            var temp = JsonConvert.DeserializeObject<List<Building>>(json);
+        //            temp.Sort(new HouseNumberComparer());
+        //            result.Add(Path.GetFileName(street), temp);
 
-                }
-                catch (Exception e)
-                {
-                    logger.AddMessage(e);
-                }
-            }
-            logger.WriteToFile();
-            return result;
-        }
-        /// <summary>
-        /// Загружаю правила по названию фала
-        /// </summary>
-        /// <returns></returns>
-        public static Dictionary<string, List<ForbiddenElement>> LoadRules()
-        {
-            var settings = ApplicationSettings.ReadOrCreate();
-            var result = new Dictionary<string, List<ForbiddenElement>>();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            logger.AddMessage(e);
+        //        }
+        //    }
+        //    logger.WriteToFile();
+        //    return result;
+        //}
+        ///// <summary>
+        ///// Загружаю правила по названию фала
+        ///// </summary>
+        ///// <returns></returns>
+        //[Obsolete("Используй LoadinWork.")]
+        //public static Dictionary<string, List<ForbiddenElement>> LoadRules()
+        //{
+        //    var settings = ApplicationSettings.ReadOrCreate();
+        //    var result = new Dictionary<string, List<ForbiddenElement>>();
 
-            var logger = new Logger();
-            // загрузил запретные правилп
-            var streets = Directory.GetFiles(settings.RestrictionsPath);
-            foreach (var street in streets)
-            {
-                var json = File.ReadAllText(street);
-                try
-                {
-                    var temp = JsonConvert.DeserializeObject<List<ForbiddenElement>>(json);
-                    result.Add(Path.GetFileName(street), temp);
-                }
-                catch (Exception e)
-                {
-                    logger.AddMessage(e);
-                }
-            }
+        //    var logger = new Logger();
+        //    // загрузил запретные правилп
+        //    var streets = Directory.GetFiles(settings.RestrictionsPath);
+        //    foreach (var street in streets)
+        //    {
+        //        var json = File.ReadAllText(street);
+        //        try
+        //        {
+        //            var temp = JsonConvert.DeserializeObject<List<ForbiddenElement>>(json);
+        //            result.Add(Path.GetFileName(street), temp);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            logger.AddMessage(e);
+        //        }
+        //    }
 
-            logger.WriteToFile();
-            return result;
-        }
-        public static Dictionary<string, List<Codes>> LoadCodes()
-        {
-            var settings = ApplicationSettings.ReadOrCreate();
-            var result = new Dictionary<string, List<Codes>>();
+        //    logger.WriteToFile();
+        //    return result;
+        //}
+        //[Obsolete("Используй LoadinWork.")]
+        //public static Dictionary<string, List<Codes>> LoadCodes()
+        //{
+        //    var settings = ApplicationSettings.ReadOrCreate();
+        //    var result = new Dictionary<string, List<Codes>>();
 
-            var logger = new Logger();
-            // загузил коды
-            var streets = Directory.GetFiles(settings.CodesPath);
-            foreach (var street in streets)
-            {
-                var json = File.ReadAllText(street);
-                try
-                {
-                    var temp = JsonConvert.DeserializeObject<List<Codes>>(json);
-                    result.Add(Path.GetFileName(street), temp);
-                }
-                catch (Exception e)
-                {
-                    logger.AddMessage(e);
-                }
+        //    var logger = new Logger();
+        //    // загузил коды
+        //    var streets = Directory.GetFiles(settings.CodesPath);
+        //    foreach (var street in streets)
+        //    {
+        //        var json = File.ReadAllText(street);
+        //        try
+        //        {
+        //            var temp = JsonConvert.DeserializeObject<List<Codes>>(json);
+        //            result.Add(Path.GetFileName(street), temp);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            logger.AddMessage(e);
+        //        }
 
-            }
+        //    }
 
-            logger.WriteToFile();
+        //    logger.WriteToFile();
 
-            return result;
-        }
-        /// <summary>
-        /// Щагружаю карточки
-        /// </summary>
-        /// <returns></returns>
-        public static List<Card> LoadCards()
-        {
-            var settings = ApplicationSettings.ReadOrCreate();
-            var result = new List<Card>();
+        //    return result;
+        //}
+        ///// <summary>
+        ///// Щагружаю карточки
+        ///// </summary>
+        ///// <returns></returns>
+        //[Obsolete("Используй LoadinWork.")]
+        //public static List<Card> LoadCards()
+        //{
+        //    var settings = ApplicationSettings.ReadOrCreate();
+        //    var result = new List<Card>();
 
-            var logger = new Logger();
-            // загузил карточки
-            var cards = Directory.GetFiles(settings.CardsPath);
-            foreach (var card in cards)
-            {
-                var json = File.ReadAllText(card);
-                try
-                {
-                    var temp = JsonConvert.DeserializeObject<Card>(json);
-                    result.Add(temp);
-                }
-                catch (Exception e)
-                {
-                    logger.AddMessage(e);
-                }
-            }
-            logger.WriteToFile();
+        //    var logger = new Logger();
+        //    // загузил карточки
+        //    var cards = Directory.GetFiles(settings.CardsPath);
+        //    foreach (var card in cards)
+        //    {
+        //        var json = File.ReadAllText(card);
+        //        try
+        //        {
+        //            var temp = JsonConvert.DeserializeObject<Card>(json);
+        //            result.Add(temp);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            logger.AddMessage(e);
+        //        }
+        //    }
+        //    logger.WriteToFile();
 
-            return result;
-        }
+        //    return result;
+        //}
+        ///// <summary>
+        ///// Щагружаю записи о карточках
+        ///// </summary>
+        ///// <returns></returns>
+        //[Obsolete("Используй LoadinWork.")]
+        //public static List<CardManagement> LoadCardManagements()
+        //{
+        //    var settings = ApplicationSettings.ReadOrCreate();
+        //    var result = new List<CardManagement>();
 
-        /// <summary>
-        /// Щагружаю записи о карточках
-        /// </summary>
-        /// <returns></returns>
-        public static List<CardManagement> LoadCardManagements()
-        {
-            var settings = ApplicationSettings.ReadOrCreate();
-            var result = new List<CardManagement>();
+        //    var logger = new Logger();
+        //    // загузил карточки
+        //    var cards = Directory.GetFiles(settings.CardsPath);
+        //    foreach (var card in cards)
+        //    {
+        //        var json = File.ReadAllText(card);
+        //        try
+        //        {
+        //            var temp = JsonConvert.DeserializeObject<CardManagement>(json);
+        //            result.Add(temp);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            logger.AddMessage(e);
+        //        }
+        //    }
+        //    logger.WriteToFile();
 
-            var logger = new Logger();
-            // загузил карточки
-            var cards = Directory.GetFiles(settings.CardsPath);
-            foreach (var card in cards)
-            {
-                var json = File.ReadAllText(card);
-                try
-                {
-                    var temp = JsonConvert.DeserializeObject<CardManagement>(json);
-                    result.Add(temp);
-                }
-                catch (Exception e)
-                {
-                    logger.AddMessage(e);
-                }
-            }
-            logger.WriteToFile();
+        //    return result;
+        //}
 
-            return result;
-        }
+        #endregion
+
         /// <summary>
         /// Удаляю пустые строки
         /// </summary>
@@ -174,7 +215,10 @@ namespace Districts.Helper
             var result = Regex.Replace(text, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
             return result;
         }
-
+        /// <summary>
+        /// Очищаю папку
+        /// </summary>
+        /// <param name="path"></param>
         public static void ClearFolder(string path)
         {
             if (!Directory.Exists(path))
@@ -183,7 +227,6 @@ namespace Districts.Helper
                 return;
             }
 
-            var logger = new Logger();
             foreach (var file in Directory.GetFiles(path))
             {
                 try
@@ -192,11 +235,9 @@ namespace Districts.Helper
                 }
                 catch (Exception e)
                 {
-                    logger.AddMessage("Can't delete " + file, e);
+                    Tracer.WriteError(e, "Can't delete " + file);
                 }
             }
-
-            logger.WriteToFile();
         }
     }
 }

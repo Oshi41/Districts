@@ -14,6 +14,11 @@ namespace Districts.JsonClasses
         /// </summary>
         public Dictionary<int, List<string>> AllCodes { get; set; } = new Dictionary<int, List<string>>();
 
+        /// <summary>
+        /// Возвращает коды по номеру подъезда
+        /// </summary>
+        /// <param name="entrance"></param>
+        /// <returns></returns>
         public IList<string> GetCodesByEntrance(int entrance)
         {
             if (AllCodes.ContainsKey(entrance))
@@ -21,6 +26,10 @@ namespace Districts.JsonClasses
 
 
             return new List<string>();
+        }
+
+        public Codes(BaseFindableObject obj) : base(obj)
+        {
         }
 
         public Codes(string street, string houseNumber) : base(street, houseNumber)
@@ -73,5 +82,7 @@ namespace Districts.JsonClasses
 
 
         #endregion
+
+
     }
 }
