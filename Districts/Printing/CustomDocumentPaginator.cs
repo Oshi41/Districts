@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Drawing.Printing;
-using System.Linq;
 using System.Printing;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Districts.JsonClasses;
 using Districts.ViewModel.PrintVM;

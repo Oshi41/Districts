@@ -32,8 +32,9 @@ namespace Districts.JsonClasses
         {
         }
 
-        public Codes(string street, string houseNumber) : base(street, houseNumber)
+        public Codes()
         {
+            
         }
 
         #region Override
@@ -82,7 +83,5 @@ namespace Districts.JsonClasses
 
 
         #endregion
-
-
     }
 }

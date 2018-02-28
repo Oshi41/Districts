@@ -83,9 +83,9 @@ namespace Districts.CardGenerator
             foreach (var home in allHomes)
             {
                 var rule = allRules.FirstOrDefault(x => home.IsTheSameObject(x))
-                           ?? new ForbiddenElement(home.Street, home.HouseNumber);
+                           ?? new ForbiddenElement(home);
                 var code = allcodes.FirstOrDefault(x => home.IsTheSameObject(x))
-                           ?? new Codes(home.Street, home.HouseNumber);
+                           ?? new Codes(home);
                 result.AddRange(GetHomeDoors(home, rule, code));
             }
 
@@ -113,7 +113,7 @@ namespace Districts.CardGenerator
 
             foreach (var i in all)
             {
-                var temp = new Door(home.Street, home.HouseNumber);
+                var temp = new Door(home);
                 temp.Number = i;
                 temp.Entrance = GetEntrance(i, home.Floors, home.Entrances);
                 if (code.AllCodes.ContainsKey(temp.Entrance))
@@ -163,31 +163,57 @@ namespace Districts.CardGenerator
             List<ForbiddenElement> allRules, List<Codes> allCodes,
             List<Door> doors)
         {
+            // итеративная переменная для циклической пробежки по всем карточкам
             int cardindex = 0;
+            // макс. кол-во кв. в карточках
             int max = settings.MaxDoors;
             var amount = (int)Math.Ceiling((doors.Count / (double)max));
 
+            // создаю опр. кол-во карточке
             var cards = new List<Card>(amount);
             for (int i = 0; i < amount; i++)
             {
                 cards.Add(new Card { Number = i + 1 });
             }
 
-            var homes = doors.GroupBy(x => x.HouseNumber).ToDictionary(x => x.Key,
-                x => x.GetEnumerator().ToIEnumerable().ToList());
+            // группирую квартиры по улицам
+            var streets = doors.GroupBy(x => x.Street)
+                .ToDictionary(x => x.Key, x => x.GetEnumerator()
+                    .ToList());
+
+            var homesRaw = new List<IList<Door>>();
+            foreach (var street in streets)
+            {
+                // группирую по домам
+                var streetHomes = street.Value.GroupBy(x => x.HouseNumber)
+                    // выбираю все дома в список
+                    .Select(x => x.GetEnumerator().ToList());
+                // записываю его в рузельтат
+                homesRaw.AddRange(streetHomes);
+            }
+
+            //
+            // нашел на StackOverFlow отличное решение случайного перемешивания списка
+            // https://stackoverflow.com/questions/273313/randomize-a-listt
+            //
+            var homes = homesRaw.OrderBy(x => Guid.NewGuid()).ToList();
 
             foreach (var home in homes)
             {
                 // пока есть свободные дверки
-                while (home.Value.Any())
+                while (home.Any())
                 {
+                    // получаю первую дступную карточку
                     var card = GetFreeCard(cards, cardindex);
+                    // берем прям первый элемент
+                    var chosen = home.First();
 
-                    var chosen = home.Value.First();
+                    // todo сделать проверку на подъезд
 
                     card.Doors.Add(chosen);
-                    home.Value.Remove(chosen);
+                    home.Remove(chosen);
 
+                    // перемещаем индекс
                     cardindex++;
                     if (cardindex >= cards.Count)
                         cardindex = 0;

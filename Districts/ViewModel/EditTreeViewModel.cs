@@ -26,15 +26,15 @@ namespace Districts.ViewModel
         public List<ForbiddenElement> Rules { get; private set; } = new List<ForbiddenElement>();
         public List<Codes> Codes { get; private set; } = new List<Codes>();
 
-        public Dictionary<Building, ForbiddenElement> _mappedRules = new Dictionary<Building, ForbiddenElement>();
-        public Dictionary<Building, Codes> _mappedCodes = new Dictionary<Building, Codes>();
+        private Dictionary<Building, ForbiddenElement> _mappedRules = new Dictionary<Building, ForbiddenElement>();
+        private Dictionary<Building, Codes> _mappedCodes = new Dictionary<Building, Codes>();
 
         #region load/save
 
         private void Load()
         {
             // загрузил все дома
-            var allHomes = Helper.LoadingWork.LoadSortedHomes();
+            var allHomes = LoadingWork.LoadSortedHomes();
             foreach (var street in allHomes)
             {
                 Homes.AddRange(street.Value);
@@ -60,9 +60,9 @@ namespace Districts.ViewModel
             foreach (var home in Homes)
             {
                 var rule = Rules.FirstOrDefault(x => home.IsTheSameObject(x))
-                           ?? new ForbiddenElement(home.Street, home.HouseNumber);
+                           ?? new ForbiddenElement(home);
                 var code = Codes.FirstOrDefault(x => home.IsTheSameObject(x))
-                           ?? new Codes(home.Street, home.HouseNumber);
+                           ?? new Codes(home);
 
                 _mappedCodes.Add(home, code);
                 _mappedRules.Add(home, rule);
@@ -132,7 +132,6 @@ namespace Districts.ViewModel
 
         #region Props
 
-        private bool _changeHomes = false;
 
         /// <summary>
         /// Все наши улицы
@@ -208,8 +207,6 @@ namespace Districts.ViewModel
                     break;
                 }
             }
-
-            _changeHomes = true;
         }
 
         private bool OnCanDeleteCommand(object obj)
@@ -238,8 +235,7 @@ namespace Districts.ViewModel
         private void OnSave()
         {
             Save();
-            if (_changeHomes)
-                SaveHome();
+            SaveHome();
         }
         #endregion
 

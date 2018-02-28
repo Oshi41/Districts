@@ -33,7 +33,7 @@ namespace Districts.Tests
             var card = new Card();
             for (int i = 0; i < 15; i++)
             {
-                var door = new Door(i.ToString(), " " + i * 2);
+                var door = new Door();
                 card.Doors.Add(door);
             }
 
@@ -49,7 +49,7 @@ namespace Districts.Tests
 
         public void TestCodesJson()
         {
-            var codes = new Codes("street", "house");
+            var codes = new Codes();
 
             for (int i = 0; i < 7; i++)
             {

@@ -15,7 +15,7 @@ namespace Districts.Helper
 
         private Tracer()
         {
-            _filename = Path.Combine(ApplicationSettings.ReadOrCreate().LogPath, new Guid().ToString());
+            _filename = Path.Combine(ApplicationSettings.ReadOrCreate().LogPath, Guid.NewGuid().ToString());
             var stream = File.CreateText(_filename);
             stream.Close();
         }

@@ -43,8 +43,14 @@ namespace Districts.JsonClasses
         {
         }
 
-        public Building(string street, string houseNumber) : base(street, houseNumber)
+        public Building(string street, string home) : base(street, home)
         {
+            
+        }
+
+        public Building()
+        {
+            
         }
     }
 

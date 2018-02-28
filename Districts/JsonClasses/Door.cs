@@ -25,9 +25,12 @@ namespace Districts.JsonClasses
         {
         }
 
-        public Door(string street, string houseNumber) : base(street, houseNumber)
+        public Door()
         {
+            
         }
+
+       
         #region Overrided
 
         public override bool Equals(object obj)

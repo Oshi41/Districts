@@ -48,6 +48,16 @@ namespace Districts.Helper
 
             return list;
         }
+        /// <summary>
+        /// Проверяет на пустой список
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerator"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerator)
+        {
+            return enumerator == null || !enumerator.Any();
+        }
 
         #endregion
 

@@ -22,8 +22,10 @@ namespace Districts.JsonClasses
         {
         }
 
-        public ForbiddenElement(string street, string houseNumber) : base(street, houseNumber)
+        public ForbiddenElement()
         {
+            
         }
+
     }
 }

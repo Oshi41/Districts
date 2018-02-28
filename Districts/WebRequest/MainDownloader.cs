@@ -18,7 +18,7 @@ namespace Districts.WebRequest
         {
             ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
             
-             if (CheckIfStreetFileExist(settings))
+             if (!CheckIfStreetFileExist(settings))
             {
                 Tracer.Write("Улицы не были заполнены");
                 return;
@@ -64,7 +64,7 @@ namespace Districts.WebRequest
             var settings = ApplicationSettings.ReadOrCreate();
 
             var writableObj = buildings
-                .Select(x => new ForbiddenElement(x.Street, x.HouseNumber))
+                .Select(x => new ForbiddenElement(x))
                 .ToList();
 
             var writtableStr = JsonConvert.SerializeObject(writableObj, Formatting.Indented);
@@ -76,7 +76,7 @@ namespace Districts.WebRequest
         {
             var settings = ApplicationSettings.ReadOrCreate();
             var writableObj = buildings
-                .Select(x => new Codes(x.Street, x.HouseNumber))
+                .Select(x => new Codes(x))
                 .ToList();
             var writtableStr = JsonConvert.SerializeObject(writableObj, Formatting.Indented);
             var filePath = Path.Combine(settings.CodesPath, writableObj.First().Street);

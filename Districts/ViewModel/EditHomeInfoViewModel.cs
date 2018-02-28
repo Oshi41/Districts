@@ -11,6 +11,8 @@ namespace Districts.ViewModel
 {
     public class EditHomeInfoViewModel : ObservableObject
     {
+        #region Fields
+
         private Building _home;
         private readonly ForbiddenElement _rule;
         private readonly Codes _code;
@@ -18,6 +20,10 @@ namespace Districts.ViewModel
         private string _aggresive;
         private string _noWorried;
         private string _noVisit;
+
+        #endregion
+
+        #region Props
 
         public ObservableCollection<CodesViewModel> Codes
         {
@@ -65,6 +71,7 @@ namespace Districts.ViewModel
 
         public ICommand SaveCommand { get; set; }
 
+        #endregion
 
         public EditHomeInfoViewModel(Building home, ForbiddenElement rule, Codes code)
         {
@@ -114,12 +121,16 @@ namespace Districts.ViewModel
 
         public static string CompressArray(List<int> ints)
         {
-            ints.Sort();
+            if (ints.IsNullOrEmpty())
+                return "";
 
+            // сортирую по возрастанию
+            ints.Sort();
             var values = new List<string>();
 
             for (var i = 0; i < ints.Count; i++)
             {
+                // индекс группы значений
                 var groupStart = ints[i];
                 var groupEnd = groupStart;
                 while (i < ints.Count - 1 && ints[i] - ints[i + 1] == -1)
@@ -127,7 +138,7 @@ namespace Districts.ViewModel
                     groupEnd = ints[i + 1];
                     i++;
                 }
-
+                // если группа меньше двух, добавляю через запятую
                 if (groupEnd - groupStart < 2)
                 {
                     for (var j = groupStart; j <= groupEnd; j++)
@@ -136,21 +147,22 @@ namespace Districts.ViewModel
                     }
                 }
                 else
-                {
+                {   // добавляю список
                     values.Add(groupStart + "-" + groupEnd);
                 }
 
             }
 
-            var result = values.Aggregate(string.Empty, (s, s1) => s += s1)
-                .Replace("[", "").Replace("]", "");
-            return result;
+            var result = values.Aggregate(string.Empty, (s, s1) => s += s1 + ",");
+            return result.Substring(0, result.Length - 1);
         }
 
         private List<int> ParseSequence(string text)
         {
-            List<int> result = new List<int>();
-
+            HashSet<int> result = new HashSet<int>();
+            if (string.IsNullOrWhiteSpace(text))
+                return result.ToList();
+            
             string temp = text.Replace(" ", "");
             string[] splitted = temp.Split(',');
             for (var i = 0; i < splitted.Length; i++)
@@ -159,7 +171,7 @@ namespace Districts.ViewModel
 
                 if (number.Contains("-"))
                 {
-                    result.AddRange(getRange(number));
+                    result.UnionWith(getRange(number));
                 }
                 else
                 {
@@ -170,7 +182,9 @@ namespace Districts.ViewModel
                 }
             }
 
-            return result;
+            //Пишу только уникальные хаты по возрастанию
+            result.OrderBy(x => x);
+            return result.ToList();
         }
 
         private List<int> getRange(string element)

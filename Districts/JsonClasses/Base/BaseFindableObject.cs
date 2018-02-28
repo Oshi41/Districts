@@ -30,7 +30,12 @@
             HouseNumber = obj.HouseNumber;
         }
 
-        public BaseFindableObject(string street, string houseNumber)
+        /// <summary>
+        /// Нужен открытый конструктор для сериализации
+        /// </summary>
+        /// <param name="street"></param>
+        /// <param name="houseNumber"></param>
+        public BaseFindableObject(string street = "", string houseNumber = "")
         {
             Street = street;
             HouseNumber = houseNumber;

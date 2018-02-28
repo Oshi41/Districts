@@ -40,21 +40,21 @@ namespace Districts.ViewModel.Manage
             Cards = new ObservableCollection<CardManagement>(all);
 
             // сгруппировал по именам и взял только те, что на руках
-            var groupped = all.GroupBy(x => x.GetLastOwner())
-                .ToDictionary(x => x.Key, x => x.GetEnumerator().ToIEnumerable().Where(y => y.HasOwner()).ToList());
+            //var groupped = all.GroupBy(x => x.GetLastOwner())
+            //    .ToDictionary(x => x.Key, x => x.GetEnumerator().ToIEnumerable().Where(y => y.HasOwner()).ToList());
 
-            //отсортировал по возрастанию
-            groupped.OrderBy(x => x.Value.Count);
+            ////отсортировал по возрастанию
+            //groupped.OrderBy(x => x.Value.Count);
 
-            foreach (var person in groupped)
-            {
-                if (!string.IsNullOrWhiteSpace(person.Key) && person.Value.Any())
-                {
-                    // добавил все занятые карточки
-                    var takenCards = person.Value.Select(x => x.Number + " ").Aggregate("", (s, s1) => s += s1);
-                    People.Add(person.Key, takenCards);
-                }
-            }
+            //foreach (var person in groupped)
+            //{
+            //    if (!string.IsNullOrWhiteSpace(person.Key) && person.Value.Any())
+            //    {
+            //        // добавил все занятые карточки
+            //        var takenCards = person.Value.Select(x => x.Number + " ").Aggregate("", (s, s1) => s += s1);
+            //        People.Add(person.Key, takenCards);
+            //    }
+            //}
         }
 
         //private ObservableCollection<ManageViewModel> _cards = new ObservableCollection<ManageViewModel>();
