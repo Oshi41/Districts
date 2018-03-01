@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using Districts.Helper;
 
 namespace Districts.JsonClasses.Manage
@@ -11,7 +8,7 @@ namespace Districts.JsonClasses.Manage
     /// <summary>
     /// Записи использования карточки
     /// </summary>
-    public class CardManagement
+    public class CardManagement : ICloneable<CardManagement>
     {
         /// <summary>
         /// Номер карточки
@@ -32,6 +29,31 @@ namespace Districts.JsonClasses.Manage
             return Actions.Any() && Actions.LastOrDefault()?.ActionType == ActionTypes.Taken;
         }
 
+        public DateTime? GetLastDroppedTime()
+        {
+            var find = Actions.FindLast(x => x.ActionType == ActionTypes.Dropped);
+            return find?.Date;
+        }
+
+        public DateTime? GetLastTakenTime(string name = "")
+        {
+            Predicate<ManageRecord> nameCondition = record =>
+                record.Subject.Equals(name, StringComparison.InvariantCultureIgnoreCase);
+
+            Predicate<ManageRecord> mainCondition = record =>
+                record.ActionType == ActionTypes.Taken;
+
+            // если пришло пустое имя, ищем без этого условия
+            var find = Actions.FindLast(x => mainCondition(x) &&
+                                             (string.IsNullOrWhiteSpace(name)
+                                              || nameCondition(x)));
+
+            return find?.Date;
+        }
+
+
+
+
         ///// <summary>
         ///// Владелец в данный момент
         ///// </summary>
@@ -51,7 +73,7 @@ namespace Districts.JsonClasses.Manage
         //{
         //    return Actions?.LastOrDefault()?.Subject;
         //}
-        
+
         ///// <summary>
         ///// Находим последние даты использования
         ///// </summary>
@@ -89,5 +111,23 @@ namespace Districts.JsonClasses.Manage
 
         //    begin = prevTaken.Date;
         //}
+
+        public CardManagement Clone()
+        {
+            var copied = Actions.Select(x => new ManageRecord
+            {
+                ActionType = x.ActionType,
+                Date = x.Date,
+                Subject = x.Subject.ToString()
+            });
+
+            var copy = new CardManagement
+            {
+                Actions = copied.ToList(),
+                Number = Number
+            };
+
+            return copy;
+        }
     }
 }

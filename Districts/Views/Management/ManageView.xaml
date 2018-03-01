@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Districts.Views.Management"
+        xmlns:manage="clr-namespace:Districts.ViewModel.Manage"
         mc:Ignorable="d"
-        Title="ManageView" Height="300" Width="300">
+        Title="ManageView" Height="300" Width="300"
+        d:DataContext="{d:DesignInstance {x:Type manage:ManageViewModel}}">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -20,9 +22,44 @@
         <DataGrid ItemsSource="{Binding Managements}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn SortMemberPath="Number"></DataGridTextColumn>
+                <DataGridTextColumn SortMemberPath="Number"
+                                    Binding="{Binding Number}"/>
+                <DataGridTextColumn SortMemberPath="Date"
+                                    Binding="{Binding LastRecord.TakenDate}"/>
+                <DataGridTextColumn SortMemberPath="Date"
+                                    Binding="{Binding Date}"/>
+                <DataGridTextColumn SortMemberPath="Number"
+                                    Binding="{Binding Number}"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <CheckBox Grid.Row="1"
+                  IsChecked="{Binding IsSorted}"
+                  Content="Сортировать по релевантности"/>
+        
+        <ItemsControl Grid.Column="1" 
+                      ItemsSource="{Binding People}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBox IsReadOnly="True"
+                             Text="{Binding Path=Key, Mode=OneWay}"
+                             ToolTip="{Binding Path=Value}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <StackPanel Grid.Column="1" Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="OK" 
+                    IsDefault="True"
+                    Command="{Binding SaveCommand}"
+                    Click="CloseWindow"/>
+            <Button Content="Close" 
+                    Margin="10 0"
+                    IsCancel="True"
+                    Click="CloseWindow"/>
+        </StackPanel>
     </Grid>
 
 </Window>

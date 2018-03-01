@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Districts.Comparers;
 using Districts.JsonClasses;
+using Districts.JsonClasses.Base;
 using Districts.JsonClasses.Manage;
 using Districts.Settings;
 using Newtonsoft.Json;
@@ -46,11 +46,30 @@ namespace Districts.Helper
 
             return result;
         }
+        /// <summary>
+        /// Загружаю только ункуальные значния
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        private static Dictionary<string, List<T>> LoadDistinct<T>(string folder) 
+            where T : BaseFindableObject
+        {
+            // загрузл все объекты
+            Dictionary<string, List<T>> loaded = LoadSmth<List<T>>(folder);
+            // сохранил их в большой список
+            var allHomes = loaded.SelectMany(x => x.Value).ToList();
+            // выбрал только уникальные
+            allHomes = allHomes.Distinct(new BaseFindableObjectComparer()).OfType<T>().ToList();
+            // вернул группированные по улице (имени файла)
+            return allHomes.GroupBy(x => x.Street)
+                .ToDictionary(x => x.Key, x => x.GetEnumerator().ToIEnumerable().ToList());
+        }
 
 
         public static Dictionary<string, List<Building>> LoadSortedHomes()
         {
-            var result = LoadSmth<List<Building>>(ApplicationSettings.ReadOrCreate().BuildingPath);
+            var result = LoadDistinct<Building>(ApplicationSettings.ReadOrCreate().BuildingPath);
             foreach (var keyValuePair in result)
             {
                 keyValuePair.Value.Sort(new HouseNumberComparer());
@@ -60,11 +79,11 @@ namespace Districts.Helper
         }
         public static Dictionary<string, List<ForbiddenElement>> LoadRules()
         {
-            return LoadSmth<List<ForbiddenElement>>(ApplicationSettings.ReadOrCreate().RestrictionsPath);
+            return LoadDistinct<ForbiddenElement>(ApplicationSettings.ReadOrCreate().RestrictionsPath);
         }
         public static Dictionary<string, List<Codes>> LoadCodes()
         {
-            return LoadSmth<List<Codes>>(ApplicationSettings.ReadOrCreate().CodesPath);
+            return LoadDistinct<Codes>(ApplicationSettings.ReadOrCreate().CodesPath);
         }
         public static Dictionary<string, Card> LoadCards()
         {
@@ -72,7 +91,8 @@ namespace Districts.Helper
         }
         public static Dictionary<string, CardManagement> LoadManageElements()
         {
-            return LoadSmth<CardManagement>(ApplicationSettings.ReadOrCreate().ManageRecordsPath);
+            var result = LoadSmth<CardManagement>(ApplicationSettings.ReadOrCreate().ManageRecordsPath);
+            return result;
         }
     }
 }

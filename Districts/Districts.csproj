@@ -84,6 +84,9 @@
     <Compile Include="Backup\BackupManager.cs" />
     <Compile Include="CardGenerator\CardGenerator.cs" />
     <Compile Include="Checker\DoorChecker.cs" />
+    <Compile Include="Comparers\BaseFindableObjectComparer.cs" />
+    <Compile Include="Comparers\DoorComparer.cs" />
+    <Compile Include="Comparers\HouseNumberComparer.cs" />
     <Compile Include="Helper\Helper.cs" />
     <Compile Include="Helper\LoadingWork.cs" />
     <Compile Include="Helper\Logger.cs" />

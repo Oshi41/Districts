@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Districts.JsonClasses;
-using Districts.JsonClasses.Manage;
-using Districts.Settings;
-using Newtonsoft.Json;
 
 namespace Districts.Helper
 {
+    /// <summary>
+    /// Generic clone
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    interface ICloneable<T>
+    {
+        T Clone();
+    }
+
+
     /// <summary>
     /// Вспомогательные методы
     /// </summary>

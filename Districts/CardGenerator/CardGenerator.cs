@@ -1,29 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Printing;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using System.Windows.Xps;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.Printing;
 using Districts.Settings;
-using Districts.ViewModel;
-using Districts.ViewModel.PrintVM;
-using Districts.Views;
-using iTextSharp.text.pdf;
 using Newtonsoft.Json;
-using Image = System.Drawing.Image;
 
 namespace Districts.CardGenerator
 {

@@ -1,5 +1,4 @@
-﻿using System.CodeDom.Compiler;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -7,7 +6,6 @@ using System.Windows.Controls;
 using Districts.Settings;
 using Districts.ViewModel;
 using Districts.WebRequest;
-using Newtonsoft.Json;
 
 namespace Districts.Views
 {

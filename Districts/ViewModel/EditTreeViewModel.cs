@@ -41,7 +41,6 @@ namespace Districts.ViewModel
                 AddStreet(street.Value);
                 
             }
-
             // загрузил правила
             var allRules = LoadingWork.LoadRules();
             foreach (var street in allRules)

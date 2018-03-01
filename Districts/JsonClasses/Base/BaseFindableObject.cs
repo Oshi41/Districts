@@ -50,6 +50,9 @@
         /// <returns></returns>
         public bool IsTheSameObject(BaseFindableObject obj)
         {
+            if (obj == null)
+                return false;
+
             var street = obj.Street;
             var house = obj.HouseNumber;
 
