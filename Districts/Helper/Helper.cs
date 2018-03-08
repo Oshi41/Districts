@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,6 +51,24 @@ namespace Districts.Helper
             while (enumerator.MoveNext())
             {
                 list.Add(enumerator.Current);
+            }
+
+            return list;
+        }
+        /// <summary>
+        /// Записывает в список все элементы этого типа
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumerator"></param>
+        /// <returns></returns>
+        public static IList<T> ToList<T>(this IEnumerator enumerator)
+        {
+            var list = new List<T>();
+
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current is T temp)
+                    list.Add(temp);
             }
 
             return list;

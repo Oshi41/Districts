@@ -20,6 +20,7 @@ namespace Districts.ViewModel
         private string _aggresive;
         private string _noWorried;
         private string _noVisit;
+        private string _comments;
 
         #endregion
 
@@ -69,6 +70,17 @@ namespace Districts.ViewModel
             }
         }
 
+        public string Comments
+        {
+            get { return _comments; }
+            set
+            {
+                if (value == _comments) return;
+                _comments = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand SaveCommand { get; set; }
 
         #endregion
@@ -84,6 +96,7 @@ namespace Districts.ViewModel
             Aggresive = CompressArray(_rule.Aggressive);
             NoVisit = CompressArray(_rule.NoVisit);
             NoWorried = CompressArray(_rule.NoWorried);
+            Comments = _rule.Comments;
 
             SaveCommand = new Command(OnSave);
         }
@@ -93,6 +106,7 @@ namespace Districts.ViewModel
             _rule.Aggressive = ParseSequence(Aggresive);
             _rule.NoVisit = ParseSequence(NoVisit);
             _rule.NoWorried = ParseSequence(NoWorried);
+            _rule.Comments = Comments.RemoveEmptyLines();
 
             Dictionary<int, List<string>> temp = new Dictionary<int, List<string>>();
             foreach (var code in Codes)

@@ -87,11 +87,18 @@ namespace Districts.Helper
         }
         public static Dictionary<string, Card> LoadCards()
         {
-            return LoadSmth<Card>(ApplicationSettings.ReadOrCreate().CardsPath);
+            var temp = LoadSmth<Card>(ApplicationSettings.ReadOrCreate().CardsPath);
+            // сразу сортирую
+            temp = temp.OrderBy(x => x.Value.Number)
+                .ToDictionary(x => x.Key, x => x.Value);
+            return temp;
         }
         public static Dictionary<string, CardManagement> LoadManageElements()
         {
             var result = LoadSmth<CardManagement>(ApplicationSettings.ReadOrCreate().ManageRecordsPath);
+            // сразу сортирую
+            result = result.OrderBy(x => x.Value.Number)
+                .ToDictionary(x => x.Key, x => x.Value);
             return result;
         }
     }

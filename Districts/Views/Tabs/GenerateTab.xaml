@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="Districts.Views.Tabs.GenerateTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Districts.Views.Tabs"
+             xmlns:controls="clr-namespace:Districts.Views.Controls"
+             xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance {x:Type tabsVm:GenerateViewModel}}">
+
+    <DockPanel Dock="Top" Margin="10" LastChildFill="False">
+        <DockPanel.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Padding" Value="2 4"/>
+            </Style>
+        </DockPanel.Resources>
+
+        <Button Content="Сгенерировать участки"
+                Margin="0 0 0 10"
+                Command="{Binding GenerateCommand}"
+                DockPanel.Dock="Top"/>
+
+        <Button Content="Распечатать полученные"
+                DockPanel.Dock="Top"
+                Command="{Binding PrintCommand}"/>
+
+        <TextBlock>
+            <Hyperlink Click="Switch" 
+                       Tag="{Binding RelativeSource={RelativeSource AncestorType=TabControl}}">
+                <Run>Перейти к редактированию настроек</Run>
+            </Hyperlink>
+        </TextBlock>
+
+        <!--<StackPanel DockPanel.Dock="Bottom"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    IsEnabled="{Binding ElementName=ToggleButton, Path=IsChecked}">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Padding" Value="2 4"/>
+                    <Setter Property="Margin" Value="4"/>
+                </Style>
+
+            </StackPanel.Resources>
+            <Button Content="Return to default"
+                    Command="{Binding SaveDefault}"
+                    Click="ClosePopup"/>
+
+            <Button Content="Save"
+                            Command="{Binding SaveCommand}"
+                            Click="ClosePopup"
+                            IsDefault="True"/>
+
+            <Button Content="Close"
+                            IsCancel="True"
+                            Click="ClosePopup"/>
+        </StackPanel>
+
+        <ToggleButton Margin="0 15 0 0"
+                      x:Name="ToggleButton"
+                      DockPanel.Dock="Top"
+                      Command="{Binding LoadConfig}">
+            <ToggleButton.Style>
+                <Style TargetType="ToggleButton">
+                    <Setter Property="Content" Value="Редактировать конфигурацию"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Content" Value="Закрыть редактирование"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding ElementName=Popup, Path=IsOpen}" Value="True">
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
+        </ToggleButton>-->
+
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          IsEnabled="{Binding ElementName=ToggleButton, Path=IsChecked}">
+
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBox">
+                        <Setter Property="IsReadOnly" Value="True" />
+                        <Setter Property="ToolTip"
+                                    Value="{Binding RelativeSource={RelativeSource Self}, Path=Text}" />
+                    </Style>
+                </StackPanel.Resources>
+
+                <Grid IsSharedSizeScope="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="g1" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Кол-во квартир на карточке" Grid.ColumnSpan="2" />
+                    <controls:NumericInput Grid.Row="1" Grid.ColumnSpan="2" MaxLength="3"
+                                               HorizontalAlignment="Left"
+                                               Text="{Binding MaxDoors, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <controls:PathBox Grid.Row="2"
+                                          Header="Путь к домам"
+                                          Value="{Binding BuildingPath}" />
+
+                    <controls:PathBox Grid.Row="3"
+                                          Header="Путь к карточкам"
+                                          Value="{Binding CardsPath}" />
+
+                    <controls:PathBox Grid.Row="4"
+                                          Header="Путь к кодам"
+                                          Value="{Binding CodesPath}" />
+
+                    <controls:PathBox Grid.Row="5"
+                                          Header="Путь к правилам посещений"
+                                          Value="{Binding RestrictionsPath}" />
+
+                    <controls:PathBox Grid.Row="6"
+                                          Header="Путь к логам"
+                                          Value="{Binding LogPath}" />
+
+                    <controls:PathBox Grid.Row="7"
+                                          Header="Путь к истории карточек"
+                                          Value="{Binding ManageRecordsPath}" />
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>-->
+    </DockPanel>
+</UserControl>

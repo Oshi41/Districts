@@ -5,61 +5,140 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Districts.Views.Management"
         xmlns:manage="clr-namespace:Districts.ViewModel.Manage"
+        xmlns:manage1="clr-namespace:Districts.JsonClasses.Manage"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:controls="clr-namespace:Districts.Views.Controls"
         mc:Ignorable="d"
-        Title="ManageView" Height="300" Width="300"
-        d:DataContext="{d:DesignInstance {x:Type manage:ManageViewModel}}">
+        Title="{Binding Number, StringFormat={}Карточка №{0}}" 
+        Height="300" Width="375"
+        d:DataContext="{d:DesignInstance {x:Type manage:ManageRecordEditViewModel}}">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Window.Resources>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type manage1:ActionTypes}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="manage1:ActionTypes"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <controls:EnumToDescrConverter x:Key="DescrConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <DockPanel Dock="Top" 
+               Margin="10"
+               LastChildFill="True">
+
+        <Button Command="{Binding DropCardCommand}"
+                DockPanel.Dock="Top"
+                HorizontalAlignment="Stretch">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Content" Value="Сдать участок"/>
+                    <Setter Property="Padding" Value="4 2"/>
+                    <Setter Property="Margin" Value="0 0 0 20"/>
+                    <Setter Property="Visibility" Value="{Binding IsTaken, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </Style>
+            </Button.Style>
+        </Button>
+
+
+        <CheckBox DockPanel.Dock="Top"
+                HorizontalAlignment="Left"
+                Content="Подтвердить вменяемость"
+                x:Name="Box"/>
+
+        <DockPanel DockPanel.Dock="Top"
+                    Margin="0 10 0 10" 
+                   LastChildFill="True">
+
+            <Button DockPanel.Dock="Right"
+                    Content=" + "
+                    Padding="2 0"
+                    FontFamily="Courier"
+                    Command="{Binding AddAction}"/>
+
+            <Button DockPanel.Dock="Right"
+                    Content=" - "
+                    Padding="2 0"
+                    FontFamily="Courier"
+                    Command="{Binding RemoveAction}"
+                    CommandParameter="{Binding ElementName=Grid, Path=SelectedItem}"
+                    IsEnabled="{Binding ElementName=Box, Path=IsChecked}"/>
+
+
+            <ComboBox Width="Auto" 
+                      IsReadOnly="True"
+                      SelectedItem="{Binding ActionType}"
+                      ItemsSource="{Binding Source={StaticResource dataFromEnum}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <DatePicker Width="Auto" 
+                        SelectedDate="{Binding Date, Mode=TwoWay}"/>
+            <TextBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="Collapsed"/>
+            <ComboBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" 
+                      ItemsSource="{Binding Names}"
+                      IsEditable="True"/>
+
+        </DockPanel>
         
-        <DataGrid ItemsSource="{Binding Managements}">
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="Сохранить"
+                    Padding="4 2"
+                    Margin="5"
+                    Click="ButtonBase_OnClick"/>
+        </StackPanel>
+
+        <DataGrid IsEnabled="{Binding ElementName=Box, Path=IsChecked}"
+                  ItemsSource="{Binding Actions}"
+                  x:Name="Grid"
+                  Margin="10" 
+                  IsSynchronizedWithCurrentItem="True"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserReorderColumns="False"
+                  AutoGenerateColumns="False">
 
             <DataGrid.Columns>
-                <DataGridTextColumn SortMemberPath="Number"
-                                    Binding="{Binding Number}"/>
-                <DataGridTextColumn SortMemberPath="Date"
-                                    Binding="{Binding LastRecord.TakenDate}"/>
-                <DataGridTextColumn SortMemberPath="Date"
-                                    Binding="{Binding Date}"/>
-                <DataGridTextColumn SortMemberPath="Number"
-                                    Binding="{Binding Number}"/>
+                <DataGridTemplateColumn SortMemberPath="ActionType"
+                                        Width="Auto"
+                                        Header="Действие">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedValue="{Binding ActionType}"
+                                      ItemsSource="{Binding Source={StaticResource dataFromEnum}}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}, StringFormat={}Участок {0}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn SortMemberPath="Date"
+                                        Width="Auto"
+                                        Header="Дата">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding Subject}"
+                                    SortMemberPath="Subject"
+                                    Header="Ответственный"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <CheckBox Grid.Row="1"
-                  IsChecked="{Binding IsSorted}"
-                  Content="Сортировать по релевантности"/>
-        
-        <ItemsControl Grid.Column="1" 
-                      ItemsSource="{Binding People}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBox IsReadOnly="True"
-                             Text="{Binding Path=Key, Mode=OneWay}"
-                             ToolTip="{Binding Path=Value}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        
-        <StackPanel Grid.Column="1" Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button Content="OK" 
-                    IsDefault="True"
-                    Command="{Binding SaveCommand}"
-                    Click="CloseWindow"/>
-            <Button Content="Close" 
-                    Margin="10 0"
-                    IsCancel="True"
-                    Click="CloseWindow"/>
-        </StackPanel>
-    </Grid>
+    </DockPanel>
 
 </Window>

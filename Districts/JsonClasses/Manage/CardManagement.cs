@@ -51,8 +51,16 @@ namespace Districts.JsonClasses.Manage
             return find?.Date;
         }
 
-
-
+        /// <summary>
+        /// Возвращает имя владельца, null, если никто не держит карточку на руках
+        /// </summary>
+        /// <returns></returns>
+        public string GetOwner()
+        {
+            return HasOwner()
+                ? Actions.LastOrDefault().Subject
+                : null;
+        }
 
         ///// <summary>
         ///// Владелец в данный момент

@@ -16,57 +16,67 @@ namespace Districts.Settings
         #endregion
 
         /// <summary>
+        /// Будет меняться только базовая папка, остальные создаются внутри этой
+        /// </summary>
+        public string BaseFolder { get; set; } = GetLocalFolder();
+        /// <summary>
         /// Макс кол-во квартир
         /// </summary>
         public int MaxDoors { get; set; } = 25;
         /// <summary>
         /// Путь к домам
         /// </summary>
-        public string BuildingPath { get; set; } = GetLocalFolder() + "\\Buildings";
+        public string BuildingPath => BaseFolder + "\\Buildings";
         /// <summary>
         /// Путь к карточкам участков
         /// </summary>
-        public string CardsPath { get; set; } = GetLocalFolder() + "\\Cards";
+        public string CardsPath => BaseFolder + "\\Cards";
         /// <summary>
         /// Путь к улицам
         /// </summary>
-        public string StreetsPath { get; set; } = GetLocalFolder() + "\\Streets.txt";
+        public string StreetsPath => BaseFolder + "\\Streets.txt";
         /// <summary>
         /// Путь к кодам
         /// </summary>
-        public string CodesPath { get; set; } = GetLocalFolder() + "\\Codes";
+        public string CodesPath => BaseFolder + "\\Codes";
         /// <summary>
         /// Путь к правилам доступа
         /// </summary>
-        public string RestrictionsPath { get; set; } = GetLocalFolder() + "\\Restrictions";
+        public string RestrictionsPath => BaseFolder + "\\Restrictions";
         /// <summary>
         /// Путь для логирования
         /// </summary>
-        public string LogPath { get; set; } = GetLocalFolder() + "\\Logs";
+        public string LogPath => BaseFolder + "\\Logs";
         /// <summary>
         /// Путь для записей о карточке
         /// </summary>
-        public string ManageRecordsPath { get; set; } = GetLocalFolder() + "\\ManageRecords";
+        public string ManageRecordsPath => BaseFolder + "\\ManageRecords";
+        /// <summary>
+        /// Папка с бэкапами
+        /// </summary>
+        public string BackupFolder => BaseFolder + "\\Backups";
+        /// <summary>
+        /// Путь к конфигу всегда один и тот же!!!!
+        /// </summary>
+        public static string ConfigPath => GetLocalFolder() + "\\config";
 
         #region ctor
-
         private ApplicationSettings()
         {
-            
-        }
 
+        }
         #endregion
 
         public static ApplicationSettings ReadOrCreate()
         {
             string localPath = GetLocalFolder();
-
             if (!Directory.Exists(localPath))
                 Directory.CreateDirectory(localPath);
 
             ApplicationSettings settings;
 
-            var path = localPath + "\\config";
+            var path = ConfigPath;
+
             if (File.Exists(path))
             {
                 settings = Read(path);
@@ -74,38 +84,76 @@ namespace Districts.Settings
             else
             {
                 settings = new ApplicationSettings();
-                Write(path, settings);
+                settings.Write();
             }
 
             //Создаю папки, если их нет
             CheckExistance(settings.BuildingPath,
                 settings.CardsPath,
-                settings.CodesPath, 
+                settings.CodesPath,
                 settings.RestrictionsPath,
                 settings.LogPath,
-                settings.ManageRecordsPath);
+                settings.ManageRecordsPath,
+                settings.BackupFolder);
+
+            // создаю файлы, если их нет
+            CheckFileExistance(settings.StreetsPath);
+
             return settings;
+        }
+        private static ApplicationSettings Read(string path)
+        {
+            var json = File.ReadAllText(path);
+            var settings = JsonConvert.DeserializeObject<ApplicationSettings>(json);
+            return settings;
+        }
+        public static ApplicationSettings GetDefault()
+        {
+            return new ApplicationSettings();
+        }
+
+        public void Write()
+        {
+            var path = ConfigPath;
+            var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+            File.WriteAllText(path, json);
         }
 
         private static void CheckExistance(params string[] folders)
         {
             foreach (var folder in folders)
             {
-                if (!Directory.Exists(folder))
-                    Directory.CreateDirectory(folder);
+                if (string.IsNullOrEmpty(folder)) continue;
+                try
+                {
+                    var fullpath = Path.GetFullPath(folder);
+
+                    if (!Directory.Exists(fullpath))
+                        Directory.CreateDirectory(fullpath);
+                }
+                catch
+                {
+                    //igonred
+                }
             }
         }
-        private static void Write(string path, ApplicationSettings settings)
+        private static void CheckFileExistance(params string[] files)
         {
-            var json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-            File.WriteAllText(path, json);
-        }
+            foreach (var file in files)
+            {
+                // файл уже есть
+                if (File.Exists(file))
+                    continue;
 
-        private static ApplicationSettings Read(string path)
-        {
-            var json = File.ReadAllText(path);
-            var settings = JsonConvert.DeserializeObject<ApplicationSettings>(json);
-            return settings;
+                // корневая папка
+                var dict = Path.GetDirectoryName(file);
+                // проверяем ее наличие или создаем
+                CheckExistance(dict);
+                // создаем файл
+                var stream = File.CreateText(file);
+                // закрываем поток создания файла
+                stream.Close();
+            }
         }
     }
 }

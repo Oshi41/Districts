@@ -59,6 +59,7 @@
     <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Printing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -74,6 +75,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfControls">
+      <HintPath>..\..\ClassLibrary1\WpfControls\bin\Debug\WpfControls.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -90,7 +94,10 @@
     <Compile Include="Helper\Helper.cs" />
     <Compile Include="Helper\LoadingWork.cs" />
     <Compile Include="Helper\Logger.cs" />
+    <Compile Include="Helper\MessageHelper.cs" />
+    <Compile Include="Helper\ObservableDictionary.cs" />
     <Compile Include="Helper\Tracer.cs" />
+    <Compile Include="Helper\WpfHelper.cs" />
     <Compile Include="JsonClasses\ForbiddenElement.cs" />
     <Compile Include="JsonClasses\Manage\CardManagement.cs" />
     <Compile Include="JsonClasses\Manage\ManageRecord.cs" />
@@ -99,13 +106,37 @@
     <Compile Include="Settings\ApplicationSettings.cs" />
     <Compile Include="ViewModel\EditHomeInfoViewModel.cs" />
     <Compile Include="ViewModel\EditTreeViewModel.cs" />
+    <Compile Include="ViewModel\Manage\ActionViewModel.cs" />
     <Compile Include="ViewModel\Manage\ManagementRecord.cs" />
-    <Compile Include="ViewModel\Manage\ManageViewModel.cs" />
+    <Compile Include="ViewModel\Manage\ManageRecordEditViewModel.cs" />
     <Compile Include="ViewModel\PrintVM\OneCardSizeViewModel.cs" />
     <Compile Include="ViewModel\PrintVM\PrintableViewMode.cs" />
     <Compile Include="ViewModel\PrintVM\Record.cs" />
     <Compile Include="ViewModel\StreetViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\BackupViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\DownloadViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\GenerateViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\ManageViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\OpenFolderViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\TreeViewModel.cs" />
+    <Compile Include="Views\Controls\DataGridWithCommand.cs" />
+    <Compile Include="Views\Controls\EnumToDescrConverter.cs" />
+    <Compile Include="Views\Controls\FindTextBox.xaml.cs">
+      <DependentUpon>FindTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\NumericInput.cs" />
+    <Compile Include="Views\Controls\PathBox.xaml.cs">
+      <DependentUpon>PathBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\SearchableTextBlock.cs" />
+    <Compile Include="Views\Controls\SearchLineBox.xaml.cs">
+      <DependentUpon>SearchLineBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Converter\BoolToVisConverter.cs" />
+    <Compile Include="Views\Converter\InvertBoolConverter.cs" />
     <Compile Include="Views\Converter\MathConverter.cs" />
+    <Compile Include="Views\Converter\MultiBoolValueConverter.cs" />
     <Compile Include="Views\EditHomeInfo.xaml.cs">
       <DependentUpon>EditHomeInfo.xaml</DependentUpon>
     </Compile>
@@ -120,6 +151,27 @@
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\BackupTab.xaml.cs">
+      <DependentUpon>BackupTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DownloadTab.xaml.cs">
+      <DependentUpon>DownloadTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\EditTreeTab.xaml.cs">
+      <DependentUpon>EditTreeTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\GenerateTab.xaml.cs">
+      <DependentUpon>GenerateTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ManageTab.xaml.cs">
+      <DependentUpon>ManageTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OpenFolderTab.xaml.cs">
+      <DependentUpon>OpenFolderTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SettingsTab.xaml.cs">
+      <DependentUpon>SettingsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TreeTableView.xaml.cs">
       <DependentUpon>TreeTableView.xaml</DependentUpon>
@@ -144,6 +196,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Controls\FindTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\PathBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\SearchLineBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EditHomeInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -161,6 +225,34 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\BackupTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\DownloadTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\EditTreeTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\GenerateTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\ManageTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\OpenFolderTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SettingsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

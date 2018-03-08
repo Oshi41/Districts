@@ -12,8 +12,9 @@ namespace Districts.Views.Management
             InitializeComponent();
         }
 
-        private void CloseWindow(object sender, RoutedEventArgs e)
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
         }
     }

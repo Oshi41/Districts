@@ -1,9 +1,9 @@
-﻿<Application x:Class="Districts.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Districts"
-             StartupUri="Views/MainView.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:local="clr-namespace:Districts" 
+             StartupUri="Views/MainView.xaml"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+    <!--Views/MainView.xaml-->
+    <!--MainWindow.xaml-->
+
 </Application>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Districts.JsonClasses;
 using Districts.ViewModel;
@@ -25,7 +26,33 @@ namespace Districts.Tests
 
             //test.BackUp();
             //test.PrinVisual();
-            test.TestCards();
+            //test.TestCards();
+            test.TestRegex();
+        }
+
+        private void TestRegex()
+        {
+            var regex = new Regex(@"[0-9,\-]");
+            string contains = "123456789-----,,,62162132165";
+            string notContains = "384351dsafgdfg684s6df5vs6dt8jh4d9tu8kif6hu";
+            string totallyNotAontains = "sdfgxgfhxfgh";
+
+            var res1 = regex.Match(contains);
+            var res2 = regex.Match(notContains);
+            var res3 = regex.Match(totallyNotAontains);
+
+            var mathes1 = regex.Matches(contains);
+            var mathes2 = regex.Matches(notContains);
+            var mathes3 = regex.Matches(totallyNotAontains);
+
+            if (int.Parse(res1.Value) != 1)
+                throw new Exception("Must be only one math");
+
+            if (int.Parse(res2.Value) < 2)
+                throw new Exception("Must be only multiple mathes");
+
+            if (!string.IsNullOrEmpty(res3.Value))
+                throw new Exception("Must be only no one math");
         }
 
         public void TestCardJson()

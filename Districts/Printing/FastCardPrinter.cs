@@ -19,7 +19,7 @@ namespace Districts.Printing
         private Size _pageSize;
         private int _count;
 
-        private List<Task<PrintableCard>> _printedCards = new List<Task<PrintableCard>>();
+        private List<PrintableCard> _printedCards = new List<PrintableCard>();
 
         /// <summary>
         /// Отличается тем, что сразу ставит прогружаться кучу контролов.
@@ -33,45 +33,33 @@ namespace Districts.Printing
             _count = (int)Math.Ceiling((decimal)(_cards.Count / 2));
             _printCapabilities = dlg.PrintQueue.GetPrintCapabilities(dlg.PrintTicket);
             _pageSize = new Size((double)_printCapabilities.OrientedPageMediaWidth, (double)_printCapabilities.OrientedPageMediaHeight);
-
-            for (int i = 0; i < PageCount; i++)
-            {
-                PrintableCard Func()
-                {
-                    var first = _cards[i * 2];
-                    var second = i * 2 + 1 >= _cards.Count
-                        ? null
-                        : _cards[i * 2 + 1];
-
-                    var vm = new PrintableViewMode(first, second);
-                    var control = new PrintableCard {DataContext = vm};
-
-                    // Force render
-                    control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-                    control.Arrange(new Rect(_pageSize));
-                    control.UpdateLayout();
-
-                    // ожтдаю отрисовки
-                    Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
-                    return control;
-                }
-
-                var task = new Task<PrintableCard>(Func);
-                _printedCards.Add(task);
-                task.Start();
-            }
         }
 
         public override DocumentPage GetPage(int pageNumber)
         {
-            var task = _printedCards[pageNumber];
-            if (task.Status == TaskStatus.Running)
-                task.Wait();
-
-            var result = new DocumentPage(task.Result);
+            var result = new DocumentPage(Func(pageNumber));
             return result;
         }
 
+        PrintableCard Func(int pageNumber)
+        {
+            var first = _cards[pageNumber * 2];
+            var second = pageNumber * 2 + 1 >= _cards.Count
+                ? null
+                : _cards[pageNumber * 2 + 1];
+
+            var vm = new PrintableViewMode(first, second);
+            var control = new PrintableCard { DataContext = vm };
+
+            // Force render
+            control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            control.Arrange(new Rect(_pageSize));
+            control.UpdateLayout();
+
+            // ожтдаю отрисовки
+            Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+            return control;
+        }
 
         public override bool IsPageCountValid => PageCount <= Math.Ceiling((decimal)(_cards.Count / 2));
         public override int PageCount => _printedCards.Count;

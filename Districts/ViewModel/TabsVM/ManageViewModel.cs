@@ -1,0 +1,237 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Districts.Helper;
+using Districts.JsonClasses;
+using Districts.JsonClasses.Manage;
+using Districts.MVVM;
+using Districts.Settings;
+using Districts.ViewModel.Manage;
+using Newtonsoft.Json;
+
+namespace Districts.ViewModel.TabsVM
+{
+    class ManageViewModel : ObservableObject
+    {
+        #region Fields
+
+        private List<string> _savedNames = new List<string>();
+        private string _searchText;
+        private readonly Dictionary<Card, CardManagement> _mappedCards = new Dictionary<Card, CardManagement>();
+
+        private ObservableCollection<ManageRecordViewModel> _cards = new ObservableCollection<ManageRecordViewModel>();
+
+
+        #endregion
+
+        #region Commands
+
+        public ICommand LoadCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
+        public ICommand CancelSearchCommand { get; set; }
+        public ICommand EditRecord { get; set; }
+
+        #endregion
+
+        #region Properties
+
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                if (value == _searchText) return;
+                _searchText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<ManageRecordViewModel> Cards
+        {
+            get { return _cards; }
+            set
+            {
+                if (Equals(value, _cards)) return;
+                _cards = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        public ManageViewModel()
+        {
+            LoadCommand = new Command(OnLoadCommand);
+            SearchCommand = new Command(OnSearch);
+            CancelSearchCommand = new Command(OnClearSearch);
+            SaveCommand = new Command(OnSave);
+            EditRecord = new Command(OnEdit);
+        }
+
+        /// <summary>
+        /// Нужно для пробрасывания вглубь модели
+        /// </summary>
+        /// <param name="obj"></param>
+        private void OnEdit(object obj)
+        {
+            if (obj is ManageRecordViewModel record)
+            {
+                record.EditCommand?.Execute(_savedNames);
+                // могли добавить имена, переписываем их
+                RewriteNames();
+            }
+        }
+
+        #region Command Handlers
+
+        private void OnClearSearch()
+        {
+            SearchText = null;
+            OnSearch();
+        }
+
+        private void OnSave()
+        {
+            var dictPath = ApplicationSettings.ReadOrCreate().ManageRecordsPath;
+
+            foreach (var record in _mappedCards.Values)
+            {
+                SortByDate(record);
+                var file = Path.Combine(dictPath, record.Number.ToString());
+                var json = JsonConvert.SerializeObject(record, Formatting.Indented);
+                try
+                {
+                    File.WriteAllText(file, json);
+                }
+                catch (Exception e)
+                {
+                    Tracer.WriteError(e);
+                }
+            }
+
+            OnLoadCommand(false);
+        }
+
+        private void OnSearch()
+        {
+            // строки поиска нет, выводим всё
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                Cards = new ObservableCollection<ManageRecordViewModel>(
+                    _mappedCards
+                        .Select(x => new ManageRecordViewModel(x.Value)));
+            }
+            else
+            {
+                var result = new List<ManageRecordViewModel>();
+                foreach (var card in Cards)
+                {
+                    var taken = card.TaskenDate?.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    var dropped = card.DroppedTime?.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                    if (CanFind(SearchText, taken, dropped, card.Number.ToString(), card.LastOwner))
+                        result.Add(card);
+                }
+
+                Cards = new ObservableCollection<ManageRecordViewModel>(result);
+            }
+        }
+
+        private void OnLoadCommand(object obj)
+        {
+            _mappedCards.Clear();
+            Cards.Clear();
+            SearchText = null;
+            _savedNames.Clear();
+
+            if (true.Equals(obj))
+            {
+                var cards = LoadingWork.LoadCards().Select(x => x.Value);
+                var records = LoadingWork.LoadManageElements().Select(x => x.Value);
+
+                foreach (var card in cards)
+                {
+                    var find = records.FirstOrDefault(x => x.Number == card.Number)
+                               ?? new CardManagement { Number = card.Number };
+                    SortByDate(find);
+                    _mappedCards.Add(card, find);
+                }
+
+                //_allcards = records.ToList();
+                Cards = new ObservableCollection<ManageRecordViewModel>(
+                    _mappedCards
+                        .Select(x => new ManageRecordViewModel(x.Value)));
+
+                RewriteNames();
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Содержит ли одно из полей строку поиска
+        /// </summary>
+        /// <param name="search">Что ищем</param>
+        /// <param name="fields">Где ищем</param>
+        /// <returns></returns>
+        private bool CanFind(string search, params string[] fields)
+        {
+            // Подходит все, строка пустая
+            if (string.IsNullOrEmpty(search))
+                return true;
+
+
+            foreach (var field in fields)
+            {
+                if (string.IsNullOrEmpty(field)
+                    || field.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                // что то нашли, выводим результат
+                return true;
+            }
+
+            // ничего не нашли, выходим
+            return false;
+        }
+
+        private void SortByDate(CardManagement record)
+        {
+            if (record == null || !record.Actions.Any())
+                return;
+
+            record.Actions = record.Actions.OrderBy(x => x.Date).ToList();
+        }
+
+        /// <summary>
+        /// Заполняем имена
+        /// </summary>
+        private void RewriteNames()
+        {
+            // заполнили именами
+            var hasSet = new HashSet<string>();
+            foreach (var card in _mappedCards.Values)
+            {
+                foreach (var action in card.Actions)
+                {
+                    var name = action.Subject;
+                    if (string.IsNullOrEmpty(name) || hasSet.Contains(name))
+                        continue;
+
+                    hasSet.Add(name);
+                }
+            }
+
+            _savedNames = new List<string>(hasSet);
+        }
+    }
+}

@@ -72,7 +72,7 @@ namespace Districts.ViewModel.PrintVM
         private void FillModelsF(Card card)
         {
             var number = card.Number;
-            var halfIndex = card.Doors.Count / 2;
+            int halfIndex = card.Doors.Count / 2;
             var firstHalf = card.Doors.GetRange(0, halfIndex);
             var secondHalf = card.Doors.Except(firstHalf).ToList();
 

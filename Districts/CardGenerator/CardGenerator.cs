@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Xps;
+using System.Windows.Xps.Packaging;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.Printing;
 using Districts.Settings;
 using Newtonsoft.Json;
+using PrintDialog = System.Windows.Controls.PrintDialog;
 
 namespace Districts.CardGenerator
 {
@@ -100,7 +107,8 @@ namespace Districts.CardGenerator
                 var temp = new Door(home);
                 temp.Number = i;
                 temp.Entrance = GetEntrance(i, home.Floors, home.Entrances);
-                if (code.AllCodes.ContainsKey(temp.Entrance))
+                var contains = code.AllCodes.ContainsKey(temp.Entrance);
+                if (contains)
                 {
                     temp.Codes.AddRange(code.AllCodes[temp.Entrance]);
                 }
@@ -232,17 +240,23 @@ namespace Districts.CardGenerator
             for (int i = 0; i < cards.Count; i++)
             {
                 var toWrite = JsonConvert.SerializeObject(cards[i], Formatting.Indented);
-                var filepath = Path.Combine(settings.CardsPath, "Карточка № " + i);
+                var filepath = Path.Combine(settings.CardsPath, "Карточка № " + cards[i].Number);
                 File.WriteAllText(filepath, toWrite);
             }
         }
         private void PrintVisual(List<Card> cards)
         {
             PrintDialog printDialog = new PrintDialog();
-
             var paginator = new CustomDocumentPaginator(cards, printDialog);
+            // TODO
+            ShowPreview(paginator);
 
             printDialog.PrintDocument(paginator, "Карточки");
+        }
+
+        private void ShowPreview(DocumentPaginator paginator)
+        {
+            
         }
 
 

@@ -17,6 +17,10 @@ namespace Districts.JsonClasses
         /// Не посещать
         /// </summary>
         public List<int> NoVisit { get; set; } = new List<int>();
+        /// <summary>
+        /// Комментарии
+        /// </summary>
+        public string Comments { get; set; }
 
         public ForbiddenElement(BaseFindableObject obj) : base(obj)
         {

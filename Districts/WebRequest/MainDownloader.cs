@@ -40,6 +40,9 @@ namespace Districts.WebRequest
             {
                 // сортирую те, у которых есть квартиры
                 var witableObj = GetLivingBuilding(task.Result);
+                // записываю в лог пропущенные
+                TraceEmptyBuilding(task.Result, witableObj);
+
                 if (witableObj.Any())
                 {
                     WriteHomes(witableObj);
@@ -107,6 +110,17 @@ namespace Districts.WebRequest
                 .ToList();
             temp.Sort(new HouseNumberComparer());
             return temp;
+        }
+
+        private void TraceEmptyBuilding(List<Building> source, List<Building> added)
+        {
+            var except = source.Except(added);
+            if (!except.Any()) 
+                return;
+
+
+            var json = JsonConvert.SerializeObject(except, Formatting.Indented);
+            Tracer.Write("Следующие дома не попали в общий список:\n" + json);
         }
     }
 }

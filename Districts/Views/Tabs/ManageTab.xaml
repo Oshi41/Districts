@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="Districts.Views.Tabs.ManageTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Districts.Views.Tabs"
+             xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
+             xmlns:controls="clr-namespace:Districts.Views.Controls"
+             xmlns:converter="clr-namespace:Districts.Views.Converter"
+             xmlns:wpfControls="clr-namespace:WpfControls;assembly=WpfControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance {x:Type tabsVm:ManageViewModel}}">
+    
+    <UserControl.Resources>
+        <converter:BoolToVisConverter x:Key="BoolToVisConverter" 
+                                      FalseVisibility="Hidden"/>
+    </UserControl.Resources>
+
+    <DockPanel Dock="Top"
+               LastChildFill="True">
+        <ToggleButton x:Name="ToggleButton"
+                      Command="{Binding LoadCommand}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                      ClickMode="Release"
+                      Checked="BlockTab"
+                      Unchecked="BlockTab"
+                      DockPanel.Dock="Top"
+                      Margin="10 10 10 0">
+            <ToggleButton.Style>
+                <Style TargetType="ToggleButton">
+                    <Setter Property="Content" Value="Загрузить информацию"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Content" Value="Закрыть редактирование"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
+        </ToggleButton>
+
+        <Button Visibility="{Binding ElementName=ToggleButton, Path=IsChecked, Converter={StaticResource BoolToVisConverter}}"
+                DockPanel.Dock="Bottom"
+                HorizontalAlignment="Right"
+                Content="Сохранить"
+                Click="ButtonBase_OnClick"
+                Command="{Binding SaveCommand}"
+                Margin="5" Padding="4 2"/>
+
+
+        <wpfControls:SearchLine IsEnabled="{Binding ElementName=ToggleButton, Path=IsChecked}"
+                                        DockPanel.Dock="Top" 
+                                        HorizontalAlignment="Right"
+                                        Margin="0 10 10 0"
+                                        MinWidth="200"
+                                        MaxHeight="30"
+                                        SearchText="{Binding SearchText}"
+                                        SearchCommand="{Binding SearchCommand}"/>
+
+        <!-- IsSynchronizedWithCurrentItem синхронизирует объект в селекте со связанным листом-->
+        <controls:DataGridWithCommand Margin="10" 
+                                      IsSynchronizedWithCurrentItem="True"
+                                      ItemsSource="{Binding Cards}"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      CanUserReorderColumns="False"
+                                      IsEnabled="{Binding ElementName=ToggleButton, Path=IsChecked}"
+                                      AutoGenerateColumns="False"
+                                      DoubleClickCommand="{Binding EditRecord}">
+            <controls:DataGridWithCommand.Columns>
+                <DataGridTemplateColumn Header="Номер карточки"
+                                        SortMemberPath="Number"
+                                        CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfControls:SearchableTextBlock Text="{Binding Number}"
+                                                SearchText="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SearchText}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!-- d == ShortDateTime -->
+                <DataGridTemplateColumn Header="Дата выдачи на руки"
+                                        SortMemberPath="TaskenDate">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfControls:SearchableTextBlock Text="{Binding TaskenDate, StringFormat={}{0:dd/MM/yyyy}}"
+                                                        SearchText="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SearchText}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Дата сдачи"
+                                        SortMemberPath="DroppedTime">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfControls:SearchableTextBlock Text="{Binding DroppedTime, StringFormat={}{0:dd/MM/yyyy}}"
+                                                        SearchText="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SearchText}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Последний владелец"
+                                        SortMemberPath="LastOwner">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfControls:SearchableTextBlock Text="{Binding LastOwner}"
+                                                        SearchText="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.SearchText}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                </controls:DataGridWithCommand.Columns>
+            </controls:DataGridWithCommand>
+
+        </DockPanel>
+
+</UserControl>

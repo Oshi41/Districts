@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="Districts.Views.Tabs.DownloadTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Districts.Views.Tabs"
+             xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
+             xmlns:converter="clr-namespace:Districts.Views.Converter"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance {x:Type tabsVm:DownloadViewModel}}">
+    
+    <UserControl.Resources>
+        <converter:BoolToVisConverter x:Key="BoolToVisConverter"
+                                      FalseVisibility="Hidden"/>
+    </UserControl.Resources>
+
+    <DockPanel Margin="10" 
+               LastChildFill="False">
+        <Button Content="Скачать информацию о домах" 
+                Margin="0 0 0 10"
+                DockPanel.Dock="Top"
+                Command="{Binding DownloadCommand}"/>
+
+        <StackPanel DockPanel.Dock="Bottom"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Visibility="{Binding ElementName=ToggleButton, Path=IsChecked, Converter={StaticResource BoolToVisConverter}}">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Padding" Value="2 4"/>
+                    <Setter Property="Margin" Value="4"/>
+                </Style>
+
+            </StackPanel.Resources>
+            <Button Content="Сохранить"
+                    Padding="2 4"
+                    Margin="5"
+                    Command="{Binding SaveCommand}"
+                    Click="ClosePopup"
+                    IsDefault="True"/>
+        </StackPanel>
+        
+        
+        <TextBlock>
+            <Hyperlink Click="Switch" 
+                       Tag="{Binding RelativeSource={RelativeSource AncestorType=TabControl}}">
+                <Run>Перейти к редактированию настроек</Run>
+            </Hyperlink>
+        </TextBlock>
+
+        <!--<DockPanel Margin="0 10 0 0">
+            <ToggleButton x:Name="ToggleButton"
+                          ClickMode="Release"
+                          Click="SelectText"
+                          Command="{Binding LoadStreetCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                          DockPanel.Dock="Top">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Content" Value="Редактировать список улиц"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Content" Value="Закрыть редактирование"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+
+            <TextBox Margin="2" 
+                     x:Name="Box"
+                     FontSize="18"
+                     BorderThickness="1"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Stretch"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"
+                     HorizontalScrollBarVisibility="Disabled">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="IsEnabled" Value="{Binding ElementName=ToggleButton, Path=IsChecked}"/>
+                        <Setter Property="Text" Value="{Binding Streets, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+        </DockPanel>-->
+
+    </DockPanel>
+</UserControl>
+

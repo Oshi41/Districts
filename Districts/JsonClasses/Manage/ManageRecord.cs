@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Districts.JsonClasses.Manage
 {
@@ -7,10 +8,12 @@ namespace Districts.JsonClasses.Manage
         /// <summary>
         /// Участок взят
         /// </summary>
+        [Description("взят")]
         Taken,
         /// <summary>
         /// Участок возвращён
         /// </summary>
+        [Description("сдан")]
         Dropped,
     }
 

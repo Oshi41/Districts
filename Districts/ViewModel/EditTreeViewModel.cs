@@ -38,7 +38,7 @@ namespace Districts.ViewModel
             foreach (var street in allHomes)
             {
                 Homes.AddRange(street.Value);
-                AddStreet(street.Value);
+                //AddStreet(street.Value);
                 
             }
             // загрузил правила
@@ -107,20 +107,7 @@ namespace Districts.ViewModel
         {
             var settings = ApplicationSettings.ReadOrCreate();
 
-            Dictionary<string, List<Building>> homes = _mappedCodes.Keys
-                .GroupBy(x => x.Street)
-                .ToDictionary(x => x.Key, x => x.GetEnumerator().ToIEnumerable().ToList());
-
-            // очистил предыдущие значения
-            Helper.Helper.ClearFolder(settings.BuildingPath);
-
-            foreach (var street in homes.Keys)
-            {
-                var writableObj = homes[street];
-                var writableStr = JsonConvert.SerializeObject(writableObj, Formatting.Indented);
-                var filepath = Path.Combine(settings.BuildingPath, street);
-                File.WriteAllText(filepath, writableStr);
-            }
+            
         }
 
         #endregion
@@ -183,11 +170,7 @@ namespace Districts.ViewModel
 
         #region Command handlers
 
-        private void AddStreet(List<Building> homes)
-        {
-            var street = new StreetViewModel(homes);
-            Streets.Add(street);
-        }
+        
 
         private void OnDeleteCommand(object obj)
         {

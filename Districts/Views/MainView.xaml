@@ -4,151 +4,250 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Districts.Views"
+        xmlns:tabs="clr-namespace:Districts.Views.Tabs"
+        xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
         mc:Ignorable="d"
-        Title="Генерация участков" Height="400" Width="280">
+        Title="Генерация участков" Height="500" Width="625">
 
-    <Grid IsSharedSizeScope="True"
-          Width="Auto" 
-          Height="Auto">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+    <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="OverridesDefaultStyle" Value="False"/>
+            <Setter Property="Padding" Value="10 5"/>
+        </Style>
+    </Window.Resources>
+    
+    <TabControl TabStripPlacement="Left">
+        <TabItem Header="Настройки">
+            <TabItem.DataContext>
+                <tabsVm:SettingsViewModel/>
+            </TabItem.DataContext>
+            <tabs:SettingsTab/>
+        </TabItem>
+        <TabItem Header="Сбор информации">
+            <TabItem.DataContext>
+                <tabsVm:DownloadViewModel/> 
+            </TabItem.DataContext>
 
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition SharedSizeGroup="G" 
+            <tabs:DownloadTab/>
+        </TabItem>
+        <TabItem Header="Редактирование информации">
+            <TabItem.DataContext>
+                <tabsVm:TreeViewModel/>
+            </TabItem.DataContext>
+            <tabs:EditTreeTab/>
+        </TabItem>
+        <TabItem Header="Генерация участков">
+            <TabItem.DataContext>
+                <tabsVm:GenerateViewModel/>
+            </TabItem.DataContext>
+
+            <tabs:GenerateTab/>
+        </TabItem>
+        <TabItem Header="Менеджмент">
+            <TabItem.DataContext>
+                <tabsVm:ManageViewModel/>
+            </TabItem.DataContext>
+
+            <tabs:ManageTab/>
+        </TabItem>
+        <TabItem Header="Архивирование">
+            <TabItem.DataContext>
+                <tabsVm:BackupViewModel/>
+            </TabItem.DataContext>
+
+            <tabs:BackupTab/>
+        </TabItem>
+
+        <TabItem Header="Файлы">
+            <TabItem.Style>
+                <Style TargetType="TabItem">
+                    <Style.Triggers>
+                        <Trigger Property="Visibility" Value="Visible">
+                            <Setter Property="DataContext">
+                                <Setter.Value>
+                                    <tabsVm:OpenFolderViewModel/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TabItem.Style>
+            <tabs:OpenFolderTab/>
+        </TabItem>
+    </TabControl>
+
+    <!--<TabControl  TabStripPlacement="Left">
+        <TabItem Header="Сбор информации">
+            <Grid IsSharedSizeScope="True"
+                  Width="Auto" 
+                  Height="Auto">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="G" 
                               Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        
-        <Button Content="Редактировать список улиц"
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Редактировать список улиц"
                 Margin="10" Visibility="Collapsed"
                 Padding="5 0" Click="Button_Click"/>
 
-        <Button Grid.Row="1"
+                <Button Grid.Row="1"
                 Content="Скачать информацию о домах"
                 Margin="10"
                 Padding="5 0" Click="DownloadHomes"/>
-        
-        <Button Grid.Row="2"
+
+                <Button Grid.Row="2"
                 Content="Редактировать информацию"
                 Margin="10"
                 Padding="5 0" Click="EditHomes"/>
 
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"
+                    <Button Grid.Column="0"
                     Content="Генерировать участки"
                     Margin="10"
                     Padding="5 0" Click="GenerateCards" />
-            <Button Grid.Column="1"
+                    <Button Grid.Column="1"
                     Content="На печать"
                     Margin="10"
                     Padding="5 0" 
                     Click="OnPrint" />
-        </Grid>
-        
-        <TextBlock Grid.Row="4"
-                   Margin="10 0"
-                   Padding="5 0">
-            <Hyperlink Click="OpenCardsFolder">
-                <Run Text="Открыть папку с карточками"/>
-            </Hyperlink>
-        </TextBlock>
-
-        <TextBlock Grid.Row="5"
-                   Margin="10 0"
-                   Padding="5 0">
-            <Hyperlink Click="OpenHomesFolder">
-                <Run Text="Открыть папку с домами"/>
-            </Hyperlink>
-        </TextBlock>
-
-        <TextBlock Grid.Row="6"
-                   Margin="10 0"
-                   Padding="5 0">
-            <Hyperlink Click="OpenRulesPath">
-                <Run Text="Открыть папку с правилами посещений"/>
-            </Hyperlink>
-        </TextBlock>
-
-        <TextBlock Grid.Row="7"
-                   Margin="10 0"
-                   Padding="5 0">
-            <Hyperlink Click="OpenCodesPath">
-                <Run Text="Открыть папку с кодами домов"/>
-            </Hyperlink>
-        </TextBlock>
-
-        <ToggleButton Grid.Row="8" 
-                      x:Name="streetredactor" 
-                      Background="Transparent"
-                      BorderThickness="0"
-                      Margin="10"
-                      Padding="5 0">
-            <ToggleButton.Style>
-                <Style TargetType="ToggleButton">
-                    <Setter Property="Content" Value="Редактировать список улиц"/>
-                    <Setter Property="IsChecked" Value="False"/>
-                    <EventSetter Event="Checked" Handler="LoadStreets"/>
-
-                    <Style.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Content" Value="Закрыть редактирование"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ToggleButton.Style>
-        </ToggleButton>
-        
-
-        <Border Grid.Row="9" 
+                </Grid>
+                <Border Grid.Row="9" 
                 Margin="10">
-            <Border.Style>
-                <Style TargetType="Border">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=streetredactor, Path=IsChecked}" Value="false">
-                            <Setter Property="Visibility" Value="Hidden"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-            <DockPanel Dock="Top" LastChildFill="True">
-                <StackPanel Orientation="Horizontal"
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=streetredactor, Path=IsChecked}" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <DockPanel Dock="Top" LastChildFill="True">
+                        <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             DockPanel.Dock="Bottom">
-                    <Button Content="Ok" 
+                            <Button Content="Ok" 
                             Margin="5" 
                             Padding="3"
                             Click="SaveStreets"/>
 
-                    <Button Content="Close" 
+                            <Button Content="Close" 
                             Margin="5" 
                             Padding="3"
                             Click="CancelStreetsEditing"/>
-                </StackPanel>
-                <TextBox HorizontalAlignment="Stretch"
+                        </StackPanel>
+                        <TextBox HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
                          BorderThickness="1"
                          BorderBrush="Black"
                          AcceptsReturn="True"
                          x:Name="streets"/>
-            </DockPanel>
-        </Border>
+                    </DockPanel>
+                </Border>
+
+            </Grid>
+        </TabItem>
         
-    </Grid>
+        <TabItem Header="Генерация">
+            <StackPanel Margin="10">
+                
+                <Button Content="Сгенерировать карточки"
+                        Margin="0 0 0 10"
+                        Click="GenerateCards"/>
+                
+                <Button Content="Печать полученных карточек"
+                        Click="OnPrint"/>
+                
+                <ToggleButton Margin="0 20 0 0"
+                              x:Name="ToggleButton">
+
+                </ToggleButton>
+                
+                <Popup Width="250" Height="200" 
+                       AllowsTransparency="True" 
+                       StaysOpen="False">
+                    <Border BorderThickness="1">
+                        <StackPanel Margin="5">
+                            <TextBlock></TextBlock>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+            </StackPanel>
+        </TabItem>
+
+        <TabItem Header="Локальные файлы">
+            <StackPanel Orientation="Vertical"
+                        Margin="10">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="10 5 10 0"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <TextBlock>
+                    <Hyperlink Click="OpenCardsFolder">
+                        <Run Text="Открыть папку с карточками"/>
+                        </Hyperlink>
+                </TextBlock>
+
+                <TextBlock >
+                    <Hyperlink Click="OpenHomesFolder">
+                        <Run Text="Открыть папку с домами"/>
+                        </Hyperlink>
+                    </TextBlock>
+
+                <TextBlock>
+                    <Hyperlink Click="OpenRulesPath">
+                        <Run Text="Открыть папку с правилами посещений"/>
+                        </Hyperlink>
+                    </TextBlock>
+
+                <TextBlock >
+                    <Hyperlink Click="OpenCodesPath">
+                        <Run Text="Открыть папку с кодами домов"/>
+                        </Hyperlink>
+                </TextBlock>
+
+                <TextBlock >
+                    <Hyperlink Click="OpenCardsHistory">
+                        <Run Text="Открыть папку с историей"/>
+                    </Hyperlink>
+                </TextBlock>
+
+                <TextBlock>
+                    <Hyperlink Click="OpenLogsFolder">
+                        <Run Text="Открыть папку с логами"/>
+                    </Hyperlink>
+                </TextBlock>
+
+                <TextBlock>
+                    <Hyperlink Click="OpenRootFolder">
+                        <Run Text="Открыть корневую папку"/>
+                    </Hyperlink>
+                </TextBlock>
+
+            </StackPanel>
+        </TabItem>
+    </TabControl>-->
 
 </Window>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Districts.Views"
         xmlns:viewModel="clr-namespace:Districts.ViewModel"
         mc:Ignorable="d"
-        Title="EditHomeInfo" Height="300" Width="300"
+        Title="EditHomeInfo" Height="400" Width="300"
     d:DataContext="{d:DesignInstance {x:Type viewModel:EditHomeInfoViewModel}}">
 
 
@@ -20,6 +20,9 @@
 
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
 
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -61,8 +64,16 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
+        
+        <TextBlock Grid.Row="8"
+                   Text="Комментарии"/>
+        <TextBox Grid.Row="9"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 MaxLines="255"
+                 Text="{Binding Comments, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <StackPanel Grid.Row="8" 
+        <StackPanel Grid.Row="10" 
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
             <Button Content="Ok" 
@@ -70,13 +81,13 @@
                     MinWidth="50"
                     Command="{Binding SaveCommand}"
                     IsDefault="True"
-                    Click="ButtonBase_OnClick"/>
+                    Click="SuccessClose"/>
 
             <Button Content="Close" 
                     Margin="5"
                     MinWidth="50"
                     IsCancel="True"
-                    Click="ButtonBase_OnClick"/>
+                    Click="OnClose"/>
         </StackPanel>
     </Grid>
 </Window>

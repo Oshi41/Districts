@@ -80,7 +80,18 @@ namespace Districts.WebRequest
 
                 result = Regex.Replace(result, @"улиц(\w*)", "ул.", RegexOptions.IgnoreCase);
                 result = Regex.Replace(result, @"просп(\w*)", "пр-т", RegexOptions.IgnoreCase);
-                result = Regex.Replace(result, @"бульвар(\w*)", "бул.", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, @"бульвар(\w*)", "б-р", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, @"пос[её]л(\w*)[кн](\w*)", "пос.", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, @"шоссе(\w*)", "ш.", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, @"проезд(\w*)", "пр.", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, @"переул(\w*)к(\w*)", "пер.", RegexOptions.IgnoreCase);
+                result = Regex.Replace(result, @"набережн(\w*)", "пер.", RegexOptions.IgnoreCase);
+
+                // оставил, но это все равно не будет использоваться
+                //result = Regex.Replace(result, @"квартир(\w*)", "кв.", RegexOptions.IgnoreCase);
+                //result = Regex.Replace(result, @"корпус(\w*)", "кор.", RegexOptions.IgnoreCase);
+                //result = Regex.Replace(result, @"дом(\w*)", "д.", RegexOptions.IgnoreCase);
+                //result = Regex.Replace(result, @"строение(\w*)", "стр.", RegexOptions.IgnoreCase);
 
                 return result;
             }

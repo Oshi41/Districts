@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Districts.Views"
              xmlns:printable="clr-namespace:Districts.Views.Printable"
              xmlns:printVm="clr-namespace:Districts.ViewModel.PrintVM"
+             xmlns:converter="clr-namespace:Districts.Views.Converter"
              mc:Ignorable="d" Width="793" Height="1122"
              d:DesignHeight="300" d:DesignWidth="300"
              Background="White"
@@ -27,19 +28,51 @@
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
             </Style>
+            <Style TargetType="Viewbox">
+                <Setter Property="VerticalAlignment" Value="Top"/>
+                <Setter Property="Margin" Value="10 0 0 0"/>
+                <!--<Setter Property="Stretch" Value="UniformToFill"/>
+                <Setter Property="StretchDirection" Value="Both"/>-->
+            </Style>
+
+            <converter:MathConverter x:Key="MathConverter" Divide="5"/>
         </Grid.Resources>
 
-        <Viewbox>
-            <printable:OneCardSide DataContext="{Binding FirstFront}"/>
+        <Viewbox >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                </Grid.RowDefinitions>
+                <printable:OneCardSide DataContext="{Binding FirstFront}"/>
+            </Grid>
         </Viewbox>
-        <Viewbox Grid.Column="2">
-            <printable:OneCardSide DataContext="{Binding FirstBack}"/>
+        <Viewbox Grid.Column="2" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                </Grid.RowDefinitions>
+                <printable:OneCardSide DataContext="{Binding FirstBack}"/>
+            </Grid>
         </Viewbox>
         <Viewbox Grid.Row="2">
-            <printable:OneCardSide DataContext="{Binding SecondFront}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                </Grid.RowDefinitions>
+                <printable:OneCardSide DataContext="{Binding SecondFront}"/>
+            </Grid>
         </Viewbox>
         <Viewbox Grid.Row="2" Grid.Column="2">
-            <printable:OneCardSide DataContext="{Binding SecondBack}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                </Grid.RowDefinitions>
+                <printable:OneCardSide DataContext="{Binding SecondBack}"/>
+            </Grid>
         </Viewbox>
 
         <!-- horizontal -->

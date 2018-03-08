@@ -13,5 +13,21 @@ namespace Districts.MVVM
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        /// <summary>
+        /// Применять с осторожностью, Reflection
+        /// </summary>
+        protected void InvalidateCommands()
+        {
+            var properties = this.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                if (property.PropertyType == typeof(Command))
+                {
+                    var value = (Command) property.GetValue(this);
+                    value?.OnCanExecuteChanged();
+                }
+            }
+        }
     }
 }

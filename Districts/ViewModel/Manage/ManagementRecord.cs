@@ -1,17 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using Districts.JsonClasses.Manage;
 using Districts.MVVM;
+using Districts.Views.Management;
 
 namespace Districts.ViewModel.Manage
 {
-    class ManageRecordViewModel : ObservableObject
+    public class ManageRecordViewModel : ObservableObject
     {
+        #region Fields
         // Сохраняем ссылку на объект, чтобы его же потом и менять
         private readonly CardManagement _card;
-        private DateTime _taskenDate;
+
+        private DateTime? _taskenDate;
         private string _lastOwner;
-        private DateTime _droppedTime;
+        private DateTime? _droppedTime;
         private int _number;
+
+        #endregion
+
+        #region Properties
 
         public int Number
         {
@@ -23,7 +34,7 @@ namespace Districts.ViewModel.Manage
                 OnPropertyChanged();
             }
         }
-        public DateTime TaskenDate
+        public DateTime? TaskenDate
         {
             get { return _taskenDate; }
             set
@@ -33,7 +44,7 @@ namespace Districts.ViewModel.Manage
                 OnPropertyChanged();
             }
         }
-        public DateTime DroppedTime
+        public DateTime? DroppedTime
         {
             get { return _droppedTime; }
             set
@@ -54,35 +65,82 @@ namespace Districts.ViewModel.Manage
             }
         }
 
+        public ICommand EditCommand { get; set; }
+
+        #endregion
 
         public ManageRecordViewModel(CardManagement card)
         {
-            if (_card == null)
+            if (card == null)
                 return;
 
             _card = card;
             Number = _card.Number;
+            UpdateByLastRecord(_card.Actions.LastOrDefault());
+
+            EditCommand = new Command(OnEdit);
         }
 
-        private void UpdateByLastRecord()
-        {
+        #region Methods
 
+        private void UpdateByLastRecord(ManageRecord record)
+        {
+            if (record == null)
+            {
+                LastOwner = null;
+                TaskenDate = null;
+                DroppedTime = null;
+                return;
+            }
+
+            LastOwner = record.Subject;
+            if (record.ActionType == ActionTypes.Dropped)
+            {
+                TaskenDate = _card.GetLastTakenTime(LastOwner);
+                DroppedTime = record.Date;
+            }
+            else
+            {
+                TaskenDate = record.Date;
+                DroppedTime = null;
+            }
         }
 
-        public void OnEdit()
+        /// <summary>
+        /// Нужно для редактирования
+        /// </summary>
+        /// <returns></returns>
+        public CardManagement CopyManagementCard()
         {
-            var copy = _card.Clone();
+            return _card.Clone();
+        }
 
+        public void OnEdit(object param)
+        {
+            var names = param as List<string> ?? new List<string>();
             // показываю окно
+            var vm = new ManageRecordEditViewModel(_card, names);
+            var window = new ManageView{DataContext = vm};
 
-            // if (result == true)
-            _card.Actions = copy.Actions;
+            if (window.ShowDialog() == true)
+            {
+                _card.Actions = vm.Actions.Select(x => x.ToRecord()).ToList();
+                UpdateByLastRecord(_card.Actions.LastOrDefault());
+
+                // Добавляем новые имена
+                //foreach (var action in vm.Actions)
+                //{
+                //    if (!_names.Contains(action.Subject))
+                //        _names.Add(action.Subject);
+                //}
+            }
             // номер все равно изменить не можем
 
         }
 
-
+        #endregion
     }
+
     //public class ManageRecordViewModel : ObservableObject
     //{
     //    private readonly CardManagement _card;
