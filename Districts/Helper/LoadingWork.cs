@@ -81,9 +81,9 @@ namespace Districts.Helper
         {
             return LoadDistinct<ForbiddenElement>(ApplicationSettings.ReadOrCreate().RestrictionsPath);
         }
-        public static Dictionary<string, List<Codes>> LoadCodes()
+        public static Dictionary<string, List<HomeInfo>> LoadCodes()
         {
-            return LoadDistinct<Codes>(ApplicationSettings.ReadOrCreate().CodesPath);
+            return LoadDistinct<HomeInfo>(ApplicationSettings.ReadOrCreate().HomeInfoPath);
         }
         public static Dictionary<string, Card> LoadCards()
         {

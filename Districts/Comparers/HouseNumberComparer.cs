@@ -32,117 +32,113 @@ namespace Districts.Comparers
 
             return first.AfterSlash.CompareTo(second.AfterSlash);
         }
+    }
 
-        #region Nested class
-
+    /// <summary>
+    /// Класс представляющий номер дома
+    /// </summary>
+    public struct HouseNumber
+    {
         /// <summary>
-        /// Класс представляющий номер дома
+        /// Номер дома
         /// </summary>
-        private struct HouseNumber
+        public int Number { get; set; }
+        /// <summary>
+        /// Подъезд
+        /// </summary>
+        public int Housing { get; set; }
+        /// <summary>
+        /// То, что иде т после слеша
+        /// </summary>
+        public int AfterSlash { get; set; }
+
+        public HouseNumber(string text)
         {
-            /// <summary>
-            /// Номер дома
-            /// </summary>
-            public int Number { get; set; }
-            /// <summary>
-            /// Подъезд
-            /// </summary>
-            public int Housing { get; set; }
-            /// <summary>
-            /// То, что иде т после слеша
-            /// </summary>
-            public int AfterSlash { get; set; }
+            Number = -1;
+            Housing = -1;
+            AfterSlash = -1;
 
-            public HouseNumber(string text)
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+
+            Number = ParseHouseNumber(text);
+            Housing = ParseHousing(text);
+            AfterSlash = ParseSlash(text);
+        }
+
+        private int ParseSlash(string text)
+        {
+            var index = text.IndexOf("\\", StringComparison.Ordinal);
+            if (index < 0)
+                index = text.IndexOf("/", StringComparison.Ordinal);
+
+            if (index >= 0)
             {
-                Number = -1;
-                Housing = -1;
-                AfterSlash = -1;
+                String temp = "";
 
-                if (string.IsNullOrWhiteSpace(text))
-                    return;
-
-                Number = ParseHouseNumber(text);
-                Housing = ParseHousing(text);
-                AfterSlash = ParseSlash(text);
-            }
-
-            private int ParseSlash(string text)
-            {
-                var index = text.IndexOf("\\", StringComparison.Ordinal);
-                if (index < 0)
-                    index = text.IndexOf("/", StringComparison.Ordinal);
-
-                if (index >= 0)
-                {
-                    String temp = "";
-
-                    foreach (var c in text.Remove(0, index + 1))
-                    {
-                        if (char.IsDigit(c))
-                            temp += c;
-                        else break;
-                    }
-
-                    if (int.TryParse(temp, out int res))
-                    {
-                        return res;
-                    }
-                }
-                return -1;
-            }
-
-            private int ParseHouseNumber(string text)
-            {
-                string main = string.Empty;
-
-                foreach (var c in text)
+                foreach (var c in text.Remove(0, index + 1))
                 {
                     if (char.IsDigit(c))
-                        main += c;
+                        temp += c;
+                    else break;
+                }
+
+                if (int.TryParse(temp, out int res))
+                {
+                    return res;
+                }
+            }
+            return -1;
+        }
+
+        private int ParseHouseNumber(string text)
+        {
+            string main = string.Empty;
+
+            foreach (var c in text)
+            {
+                if (char.IsDigit(c))
+                    main += c;
+                else
+                {
+                    break;
+                }
+            }
+
+            if (int.TryParse(main, out int temp))
+            {
+                return temp;
+            }
+
+            return -1;
+        }
+
+        private int ParseHousing(string text)
+        {
+            int index = text.IndexOf("к", StringComparison.Ordinal);
+            if (index >= 0)
+            {
+                var tempS = string.Empty;
+                foreach (var c in text.Remove(0, index + 1))
+                {
+                    if (char.IsDigit(c))
+                        tempS += c;
                     else
                     {
                         break;
                     }
                 }
 
-                if (int.TryParse(main, out int temp))
+
+                if (int.TryParse(tempS, out int temp))
                 {
                     return temp;
                 }
 
-                return -1;
+                return 1;
             }
 
-            private int ParseHousing(string text)
-            {
-                int index = text.IndexOf("к", StringComparison.Ordinal);
-                if (index >= 0)
-                {
-                    var tempS = string.Empty;
-                    foreach (var c in text.Remove(0, index + 1))
-                    {
-                        if (char.IsDigit(c))
-                            tempS += c;
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-
-                    if (int.TryParse(tempS, out int temp))
-                    {
-                        return temp;
-                    }
-
-                    return 1;
-                }
-
-                return -1;
-            }
+            return -1;
         }
-
-        #endregion
     }
 }

@@ -6,6 +6,15 @@
              xmlns:local="clr-namespace:Districts.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter"
+                    Command="{Binding SearchCommand}"/>
+
+        <KeyBinding Key="Escape"
+                    Command="{Binding CancelSearchCommand}"/>
+    </UserControl.InputBindings>
+
     <UserControl.Template>
         <ControlTemplate TargetType="local:FindTextBox">
             <DockPanel Dock="Top"
@@ -24,13 +33,13 @@
                          HorizontalAlignment="Stretch"
                          HorizontalContentAlignment="Left"
                          VerticalContentAlignment="Center">
-                    <TextBox.InputBindings>
+                    <!--<TextBox.InputBindings>
                         <KeyBinding Key="Enter"
                                     Command="{TemplateBinding SearchCommand}"/>
 
                         <KeyBinding Key="Escape"
                                     Command="{TemplateBinding CancelSearchCommand}"/>
-                    </TextBox.InputBindings>
+                    </TextBox.InputBindings>-->
                 </TextBox>
             </DockPanel>
         </ControlTemplate>

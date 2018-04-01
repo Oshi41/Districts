@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using Districts.Comparers;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.MVVM;
@@ -13,18 +15,29 @@ namespace Districts.ViewModel
     {
         #region Fields
 
-        private Building _home;
-        private readonly ForbiddenElement _rule;
-        private readonly Codes _code;
+        #region To save check
+
+        private readonly CountingTypes? _sourceAlgorythm;
+        private readonly int _sourceNumber;
+
+        #endregion
+
         private ObservableCollection<CodesViewModel> _codes1 = new ObservableCollection<CodesViewModel>();
         private string _aggresive;
         private string _noWorried;
         private string _noVisit;
         private string _comments;
+        private CountingTypes? _countingAlgorythm;
+        private int _begin;
+        private bool _inheritSettings;
 
         #endregion
 
         #region Props
+
+        public Building Home { get; private set; }
+        public ForbiddenElement ForbiddenElement { get; private set; }
+        public HomeInfo HomeInfo { get; private set; }
 
         public ObservableCollection<CodesViewModel> Codes
         {
@@ -81,32 +94,88 @@ namespace Districts.ViewModel
             }
         }
 
+        public CountingTypes? CountingAlgorythm
+        {
+            get { return _countingAlgorythm; }
+            set
+            {
+                if (value == _countingAlgorythm) return;
+                _countingAlgorythm = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int Begin
+        {
+            get { return _begin; }
+            set
+            {
+                if (value == _begin) return;
+                _begin = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool InheritSettings
+        {
+            get { return _inheritSettings; }
+            set
+            {
+                if (value == _inheritSettings) return;
+                _inheritSettings = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand SaveCommand { get; set; }
+
+
+        public bool CountingChanged => _sourceAlgorythm != CountingAlgorythm
+                                       || _sourceNumber != Begin
+                                       || InheritSettings;
+
+        public int CustomChangedStep => Begin - _sourceNumber;
 
         #endregion
 
-        public EditHomeInfoViewModel(Building home, ForbiddenElement rule, Codes code)
+        public EditHomeInfoViewModel(Building home, ForbiddenElement rule, HomeInfo homeInfo)
         {
-            _home = home;
-            _rule = rule;
-            _code = code;
+            Home = home;
+            ForbiddenElement = rule;
+            HomeInfo = homeInfo;
 
-            SetTabCount(home, code);
+            SetTabCount(home, homeInfo);
 
-            Aggresive = CompressArray(_rule.Aggressive);
-            NoVisit = CompressArray(_rule.NoVisit);
-            NoWorried = CompressArray(_rule.NoWorried);
-            Comments = _rule.Comments;
+            Aggresive = CompressArray(ForbiddenElement.Aggressive);
+            NoVisit = CompressArray(ForbiddenElement.NoVisit);
+            NoWorried = CompressArray(ForbiddenElement.NoWorried);
+            Comments = ForbiddenElement.Comments;
+            Begin = homeInfo.Begin;
 
             SaveCommand = new Command(OnSave);
+
+            var number = new HouseNumber(home.HouseNumber);
+            if (number.Housing > 1)
+            {
+                CountingAlgorythm = Begin == 1
+                    ? CountingTypes.Regular
+                    : CountingTypes.Custom;
+
+            }
+
+            // Для сравнения
+            _sourceAlgorythm = CountingAlgorythm;
+            _sourceNumber = Begin;
         }
+
+        #region Methods
 
         private void OnSave()
         {
-            _rule.Aggressive = ParseSequence(Aggresive);
-            _rule.NoVisit = ParseSequence(NoVisit);
-            _rule.NoWorried = ParseSequence(NoWorried);
-            _rule.Comments = Comments.RemoveEmptyLines();
+            ForbiddenElement.Aggressive = ParseSequence(Aggresive);
+            ForbiddenElement.NoVisit = ParseSequence(NoVisit);
+            ForbiddenElement.NoWorried = ParseSequence(NoWorried);
+            ForbiddenElement.Comments = Comments.RemoveEmptyLines();
 
             Dictionary<int, List<string>> temp = new Dictionary<int, List<string>>();
             foreach (var code in Codes)
@@ -115,21 +184,25 @@ namespace Districts.ViewModel
                 temp.Add(val.Key, val.Value);
             }
 
-            _code.AllCodes = temp;
+            HomeInfo.AllCodes = temp;
+            if (CountingAlgorythm == CountingTypes.Custom)
+                HomeInfo.Begin = Begin;
         }
 
-        private void SetTabCount(Building home, Codes code)
+        private void SetTabCount(Building home, HomeInfo homeInfo)
         {
             for (int i = 1; i <= home.Entrances; i++)
             {
-                if (code.AllCodes.ContainsKey(i))
-                    Codes.Add(new CodesViewModel(new KeyValuePair<int, List<string>>(i, code.AllCodes[i])));
+                if (homeInfo.AllCodes.ContainsKey(i))
+                    Codes.Add(new CodesViewModel(new KeyValuePair<int, List<string>>(i, homeInfo.AllCodes[i])));
                 else
                 {
                     Codes.Add(new CodesViewModel(new KeyValuePair<int, List<string>>(i, new List<string>())));
                 }
             }
         }
+
+
 
         #region Parse Sequense
 
@@ -176,7 +249,7 @@ namespace Districts.ViewModel
             HashSet<int> result = new HashSet<int>();
             if (string.IsNullOrWhiteSpace(text))
                 return result.ToList();
-            
+
             string temp = text.Replace(" ", "");
             string[] splitted = temp.Split(',');
             for (var i = 0; i < splitted.Length; i++)
@@ -220,6 +293,10 @@ namespace Districts.ViewModel
 
         #endregion
 
+        #endregion
+
+        #region Nested
+
         public class CodesViewModel : ObservableObject
         {
             private string _codes;
@@ -258,7 +335,7 @@ namespace Districts.ViewModel
             public KeyValuePair<int, List<string>> ToKeyPairvalue()
             {
                 var lines = HomeCodes.Split(
-                    new[] {Environment.NewLine},
+                    new[] { Environment.NewLine },
                     StringSplitOptions.RemoveEmptyEntries
                 );
 
@@ -266,5 +343,17 @@ namespace Districts.ViewModel
                 return result;
             }
         }
+
+        #endregion
+    }
+
+    public enum CountingTypes
+    {
+        [Description("Обычная нумерация")]
+        Regular,
+        [Description("Продолжать по корпусам")]
+        AutomaticIncrement,
+        [Description("Настроить")]
+        Custom
     }
 }

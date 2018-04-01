@@ -30,7 +30,7 @@
         </TextBlock>
         <TextBlock>
             <Hyperlink Command="{Binding OpenCommand}"
-                       CommandParameter="{Binding Settings.CodesPath}">
+                       CommandParameter="{Binding Settings.HomeInfoPath}">
                 <Run Text="Открыть папку с кодами"/>
             </Hyperlink>
         </TextBlock>

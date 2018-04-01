@@ -128,7 +128,7 @@ namespace Districts.ViewModel.TabsVM
 
             if (SaveCodes)
             {
-                CompressAndSaveFolder(settings.CodesPath, currentFolder + "\\Codes.zip");
+                CompressAndSaveFolder(settings.HomeInfoPath, currentFolder + "\\HomeInfo.zip");
             }
 
             if (SaveManagement)

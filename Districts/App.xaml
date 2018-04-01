@@ -1,9 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns:local="clr-namespace:Districts" 
              StartupUri="Views/MainView.xaml"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
 
     <!--Views/MainView.xaml-->
     <!--MainWindow.xaml-->
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <Canvas x:Key="UpButtonContent" 
+                    x:Shared="False"
+                    Width="24" 
+                    Height="24"
+                    Background="Transparent">
+                <Path Data="M18,16V14.5L12,8.5L6,14.5V16H18M12,11.33L14.67,14H9.33L12,11.33Z"
+                      Fill="{Binding RelativeSource={RelativeSource AncestorType=RepeatButton}, Path=Foreground}" />
+            </Canvas>
+            
+            <Style x:Key="RepeatButtonStyle" TargetType="RepeatButton">
+                <Setter Property="Foreground" Value="#ABADB3"/>
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="DarkBlue"/>
+                        <Setter Property="Opacity" Value="0.7"/>
+                    </Trigger>
+                    
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Opacity" Value="0.7"/>
+                    </Trigger>
+                    
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter Property="Opacity" Value="0.5"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style TargetType="mah:NumericUpDown">
+                <Setter Property="Height" Value="22"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="mah:NumericUpDown">
+                            <Grid Width="{TemplateBinding Width}"
+                                  Height="{TemplateBinding Height}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBox x:Name="PART_TextBox"
+                                         Grid.RowSpan="2"
+                                         VerticalAlignment="Stretch"
+                                         HorizontalAlignment="Stretch"
+                                         HorizontalContentAlignment="Left"
+                                         VerticalContentAlignment="Center"/>
+
+                                <Viewbox Grid.Column="1" 
+                                         Grid.Row="0"
+                                         Stretch="Uniform">
+                                    <RepeatButton x:Name="PART_NumericUp"
+                                                  Style="{StaticResource RepeatButtonStyle}">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="RepeatButton">
+                                                <Border BorderBrush="{TemplateBinding Foreground}"
+                                                        BorderThickness="1">
+                                                    <ContentControl Content="{StaticResource UpButtonContent}" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Viewbox>
+
+                                <Viewbox Grid.Column="1" 
+                                         Grid.Row="1"
+                                         Stretch="Uniform">
+                                    <RepeatButton x:Name="PART_NumericDown"
+                                                  Style="{StaticResource RepeatButtonStyle}">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="RepeatButton">
+                                                <Border BorderBrush="{TemplateBinding Foreground}"
+                                                        BorderThickness="1">
+                                                    <ContentControl Content="{StaticResource UpButtonContent}">
+                                                        <ContentControl.LayoutTransform>
+                                                            <RotateTransform CenterX="12" CenterY="12" Angle="180" />
+                                                        </ContentControl.LayoutTransform>
+                                                    </ContentControl>
+                                                </Border>
+
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Viewbox>
+
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+
+
 
 </Application>

@@ -52,7 +52,7 @@ namespace Districts.Views
 
         //private void OpenCodesPath(object sender, RoutedEventArgs e)
         //{
-        //    Process.Start(settings.CodesPath);
+        //    Process.Start(settings.HomeInfoPath);
         //}
         //private void OpenCardsHistory(object sender, RoutedEventArgs e)
         //{

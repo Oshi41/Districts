@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:wpfControls="clr-namespace:WpfControls;assembly=WpfControls"
              xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls1="clr-namespace:Districts.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:SettingsViewModel}}">
@@ -38,7 +39,7 @@
                 </StackPanel.Resources>
 
                 <HeaderedContentControl Header="Кол-во квартир на карточке">
-                    <wpfControls:NumericInput HorizontalAlignment="Left"
+                    <mah:NumericUpDown HorizontalAlignment="Left"
                                                   Minimum="1"
                                                   Maximum="250"
                                                   Width="50"
@@ -46,32 +47,8 @@
                 </HeaderedContentControl>
 
                 <HeaderedContentControl Header="Путь к базовой папке приложения">
-                    <wpfControls:PathBox Path="{Binding BaseFolderPath}" />
+                    <controls1:PathBox Value="{Binding BaseFolderPath}" />
                 </HeaderedContentControl>
-
-                <!--<HeaderedContentControl Header="Путь к домам">
-                    <wpfControls:PathBox Path="{Binding BuildingPath}" />
-                </HeaderedContentControl>
-
-                <HeaderedContentControl Header="Путь к карточкам">
-                    <wpfControls:PathBox Path="{Binding CardsPath}" />
-                </HeaderedContentControl>
-
-                <HeaderedContentControl Header="Путь к кодам">
-                    <wpfControls:PathBox Path="{Binding CodesPath}" />
-                </HeaderedContentControl>
-
-                <HeaderedContentControl Header="Путь к правилам посещений">
-                    <wpfControls:PathBox Path="{Binding RestrictionsPath}" />
-                </HeaderedContentControl>
-
-                <HeaderedContentControl Header="Путь к логам">
-                    <wpfControls:PathBox Path="{Binding LogPath}" />
-                </HeaderedContentControl>
-
-                <HeaderedContentControl Header="Путь к истории карточек">
-                    <wpfControls:PathBox Path="{Binding ManageRecordsPath}" />
-                </HeaderedContentControl>-->
 
                 <HeaderedContentControl Header="Улицы">
                     <TextBox x:Name="StreetBox"

@@ -5,9 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Districts.Views"
         xmlns:viewModel="clr-namespace:Districts.ViewModel"
-        mc:Ignorable="d"
-        Title="EditHomeInfo" Height="400" Width="300"
-    d:DataContext="{d:DesignInstance {x:Type viewModel:EditHomeInfoViewModel}}">
+        xmlns:enum="clr-namespace:Districts.ViewModel"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:controls="clr-namespace:Districts.Views.Controls"
+        mc:Ignorable="d" Height="400" Width="300"
+        d:DataContext="{d:DesignInstance {x:Type viewModel:EditHomeInfoViewModel}}">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <controls:EnumToDescrConverter x:Key="DescrConverter"/>
+
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type viewModel:CountingTypes}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="viewModel:CountingTypes"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Window.Title>
+        <MultiBinding StringFormat="{}{0} {1}">
+            <Binding Path="Home.Street"/>
+            <Binding Path="Home.HouseNumber"/>
+        </MultiBinding>
+    </Window.Title>
 
 
     <Grid Margin="10">
@@ -30,23 +52,107 @@
             <RowDefinition Height="Auto"/>
 
         </Grid.RowDefinitions>
-        
-        <TextBlock Text="Агрессии"/>
-        <TextBox Grid.Row="1" 
+
+        <UniformGrid Columns="1">
+            <TextBlock Text="Агрессии"/>
+            <TextBox Grid.Row="1" 
                    Text="{Binding Aggresive}"
                  TextChanged="RestrictText"/>
 
-        <TextBlock Grid.Row="2" 
+            <TextBlock Grid.Row="2" 
                    Text="Просили не призодить"/>
-        <TextBox Grid.Row="3"
+            <TextBox Grid.Row="3"
                    Text="{Binding NoWorried}"
                  TextChanged="RestrictText"/>
 
-        <TextBlock Grid.Row="4" 
+            <TextBlock Grid.Row="4" 
                    Text="Не посещать"/>
-        <TextBox Grid.Row="5"
+            <TextBox Grid.Row="5"
                    Text="{Binding NoVisit}"
                  TextChanged="RestrictText"/>
+
+        </UniformGrid>
+
+        <!--UseAlternativeCounting-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible"/>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CountingAlgorythm}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+
+
+            </Grid.Style>
+
+            <ComboBox x:Name="ComboBox"
+                      Margin="0 5 10 5"
+                      HorizontalAlignment="Left"
+                      MinWidth="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth}"
+                      ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+                      ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                      SelectedItem="{Binding CountingAlgorythm}">
+                <ComboBox.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}}"/>
+                    </ItemContainerTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <mah:NumericUpDown Grid.Column="1"
+                               Height="{Binding ElementName=ComboBox, Path=ActualHeight}"
+                               VerticalAlignment="Stretch"
+                               Minimum="1"
+                               NumericInputMode="Decimal"
+                               HorizontalAlignment="Right"
+                               Value="{Binding Begin}">
+                <mah:NumericUpDown.Style>
+                    <Style TargetType="mah:NumericUpDown"
+                           BasedOn="{StaticResource {x:Type mah:NumericUpDown}}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ComboBox, Path=SelectedIndex}"
+                                         Value="2">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mah:NumericUpDown.Style>
+            </mah:NumericUpDown>
+
+            <CheckBox IsChecked="{Binding InheritSettings}"
+                      Grid.Row="1">
+                <CheckBox.Style>
+                    <Style TargetType="CheckBox">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Setter Property="Content" Value="Применить для всех корпусов"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CountingAlgorythm}" 
+                                         Value="{x:Static viewModel:CountingTypes.Custom}">
+                                <Setter Property="Content" Value="Сдвинуть остальные"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </CheckBox.Style>
+            </CheckBox>
+
+        </Grid>
+
+
 
         <TextBlock Grid.Row="6" 
                    Text="Коды"/>
@@ -64,7 +170,7 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        
+
         <TextBlock Grid.Row="8"
                    Text="Комментарии"/>
         <TextBox Grid.Row="9"

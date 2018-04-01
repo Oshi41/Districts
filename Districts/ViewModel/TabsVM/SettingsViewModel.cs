@@ -51,7 +51,7 @@ namespace Districts.ViewModel.TabsVM
         //        OnPropertyChanged();
         //    }
         //}
-        //public string CodesPath
+        //public string HomeInfoPath
         //{
         //    get { return _codesPath; }
         //    set
@@ -149,7 +149,7 @@ namespace Districts.ViewModel.TabsVM
             settings.MaxDoors = (int) MaxDoors;
             //settings.BuildingPath = BuildingPath;
             //settings.CardsPath = CardsPath;
-            //settings.CodesPath = CodesPath;
+            //settings.HomeInfoPath = HomeInfoPath;
             //settings.RestrictionsPath = RestrictionsPath;
             //settings.LogPath = LogPath;
             //settings.ManageRecordsPath = ManageRecordsPath;
@@ -179,7 +179,7 @@ namespace Districts.ViewModel.TabsVM
                 MaxDoors = settings.MaxDoors;
                 //BuildingPath = settings.BuildingPath;
                 //CardsPath = settings.CardsPath;
-                //CodesPath = settings.CodesPath;
+                //HomeInfoPath = settings.HomeInfoPath;
                 //RestrictionsPath = settings.RestrictionsPath;
                 //LogPath = settings.LogPath;
                 //ManageRecordsPath = settings.ManageRecordsPath;
@@ -193,7 +193,7 @@ namespace Districts.ViewModel.TabsVM
                 MaxDoors = 0;
                 //BuildingPath = null;
                 //CardsPath = null;
-                //CodesPath = null;
+                //HomeInfoPath = null;
                 //RestrictionsPath = null;
                 //LogPath = null;
                 //ManageRecordsPath = null;

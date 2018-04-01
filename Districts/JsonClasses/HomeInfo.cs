@@ -7,7 +7,7 @@ namespace Districts.JsonClasses
     /// <summary>
     /// Коды к подъездам
     /// </summary>
-    public class Codes : BaseFindableObject
+    public class HomeInfo : BaseFindableObject
     {
         /// <summary>
         /// Список кодов по подъездам
@@ -15,10 +15,15 @@ namespace Districts.JsonClasses
         public Dictionary<int, List<string>> AllCodes { get; set; } = new Dictionary<int, List<string>>();
 
         /// <summary>
+        /// Используем последовательную нумерацию
+        /// </summary>
+        public int Begin { get; set; } = 1;
+
+        /// <summary>
         /// Возвращает коды по номеру подъезда
         /// </summary>
         /// <param name="entrance"></param>
-        /// <returns></returns>
+        /// <remarks>Не участвует в сравнении!</remarks>>
         public IList<string> GetCodesByEntrance(int entrance)
         {
             if (AllCodes.ContainsKey(entrance))
@@ -28,11 +33,11 @@ namespace Districts.JsonClasses
             return new List<string>();
         }
 
-        public Codes(BaseFindableObject obj) : base(obj)
+        public HomeInfo(BaseFindableObject obj) : base(obj)
         {
         }
 
-        public Codes()
+        public HomeInfo()
         {
             
         }
@@ -44,7 +49,7 @@ namespace Districts.JsonClasses
             if (!base.Equals(obj))
                 return false;
 
-            if (obj is Codes x)
+            if (obj is HomeInfo x)
             {
                 if (x.AllCodes.Count != AllCodes.Count)
                     return false;
@@ -65,7 +70,7 @@ namespace Districts.JsonClasses
             return false;
         }
 
-        public static bool operator ==(Codes x, Codes y)
+        public static bool operator ==(HomeInfo x, HomeInfo y)
         {
             if (ReferenceEquals(x, y))
                 return true;
@@ -76,7 +81,7 @@ namespace Districts.JsonClasses
             return x.Equals(y);
         }
 
-        public static bool operator !=(Codes x, Codes y)
+        public static bool operator !=(HomeInfo x, HomeInfo y)
         {
             return !(x == y);
         }

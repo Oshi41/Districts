@@ -7,6 +7,7 @@
              xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
              xmlns:jsonClasses="clr-namespace:Districts.JsonClasses"
              xmlns:converter="clr-namespace:Districts.Views.Converter"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:TreeViewModel}}">
@@ -52,7 +53,16 @@
                       Margin="0 10 0 0"
                       IsEnabled="{Binding ElementName=ToggleButton, Path=IsChecked}">
 
-            <TreeView ItemsSource="{Binding Streets, Mode=OneWay}">
+            <TreeView ItemsSource="{Binding Streets, Mode=OneWay}"
+                      x:Name="TreeView">
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <i:InvokeCommandAction Command="{Binding SetSelectedItemCommand}"
+                                               CommandParameter="{Binding ElementName=TreeView, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
                 <TreeView.Resources>
                     <!-- Tag below is DataContext -->
                     <ContextMenu x:Key="Menu">
@@ -60,6 +70,11 @@
                                   CommandParameter="{Binding}"
                                   Command="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
                                         Path=PlacementTarget.Tag.DeleteCommand}"/>
+
+                        <!--<MenuItem Header="Использовать последовательную нумерацию квартир"
+                                  CommandParameter="{Binding}"
+                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                        Path=PlacementTarget.Tag.DeleteCommand}"/>-->
                     </ContextMenu>
                 </TreeView.Resources>
 
@@ -105,7 +120,6 @@
                             </DataTrigger>
                         </HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate>
-                    
 
                 </TreeView.ItemTemplate>
             </TreeView>

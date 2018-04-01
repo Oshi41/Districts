@@ -22,6 +22,15 @@
                 Command="{Binding GenerateCommand}"
                 DockPanel.Dock="Top"/>
 
+        <CheckBox DockPanel.Dock="Top"
+                  Content="Все квартиры на карточке из разных домов"
+                  Margin="0 0 0 10"
+                  IsChecked="{Binding BestDistribution}"/>
+        <!--<Button Content="Сгенерировать участки"
+                Margin="0 0 0 10"
+                Command="{Binding GenerateCommand}"
+                DockPanel.Dock="Top"/>-->
+
         <Button Content="Распечатать полученные"
                 DockPanel.Dock="Top"
                 Command="{Binding PrintCommand}"/>

@@ -16,9 +16,21 @@ namespace Districts.ViewModel.TabsVM
     {
         private bool _isGenerating;
         private bool _isPrinting;
+        private bool _bestDistribution;
 
         public ICommand GenerateCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+
+        public bool BestDistribution
+        {
+            get { return _bestDistribution; }
+            set
+            {
+                if (value == _bestDistribution) return;
+                _bestDistribution = value;
+                OnPropertyChanged();
+            }
+        }
 
         public GenerateViewModel()
         {
@@ -46,6 +58,7 @@ namespace Districts.ViewModel.TabsVM
                 MessageHelper.ShowDone();
             }
         }
+
         private async void OnGenerateCommand()
         {
             _isGenerating = true;
@@ -53,7 +66,7 @@ namespace Districts.ViewModel.TabsVM
             try
             {
                 var generator = new CardGenerator.CardGenerator();
-                await Task.Run(() => generator.Generate());
+                await Task.Run(() => generator.GenerateNew(BestDistribution));
             }
             catch (Exception e)
             {

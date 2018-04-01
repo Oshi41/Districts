@@ -76,7 +76,7 @@ namespace Districts.Tests
 
         public void TestCodesJson()
         {
-            var codes = new Codes();
+            var codes = new HomeInfo();
 
             for (int i = 0; i < 7; i++)
             {
@@ -90,8 +90,8 @@ namespace Districts.Tests
 
             string json = JsonConvert.SerializeObject(codes, Formatting.Indented);
 
-            Codes newCodes = JsonConvert.DeserializeObject<Codes>(json);
-            bool equals = newCodes == codes;
+            HomeInfo newHomeInfo = JsonConvert.DeserializeObject<HomeInfo>(json);
+            bool equals = newHomeInfo == codes;
 
             if (!equals)
                 throw new Exception();
@@ -112,7 +112,7 @@ namespace Districts.Tests
 
         public void LoadBuildings()
         {
-            var tree = new EditTreeViewModel();
+            //var tree = new EditTreeViewModel();
         }
 
         public void BackUp()

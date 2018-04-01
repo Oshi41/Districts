@@ -150,20 +150,20 @@ namespace Districts.Helper
         //    return result;
         //}
         //[Obsolete("Используй LoadinWork.")]
-        //public static Dictionary<string, List<Codes>> LoadCodes()
+        //public static Dictionary<string, List<HomeInfo>> LoadCodes()
         //{
         //    var settings = ApplicationSettings.ReadOrCreate();
-        //    var result = new Dictionary<string, List<Codes>>();
+        //    var result = new Dictionary<string, List<HomeInfo>>();
 
         //    var logger = new Logger();
         //    // загузил коды
-        //    var streets = Directory.GetFiles(settings.CodesPath);
+        //    var streets = Directory.GetFiles(settings.HomeInfoPath);
         //    foreach (var street in streets)
         //    {
         //        var json = File.ReadAllText(street);
         //        try
         //        {
-        //            var temp = JsonConvert.DeserializeObject<List<Codes>>(json);
+        //            var temp = JsonConvert.DeserializeObject<List<HomeInfo>>(json);
         //            result.Add(Path.GetFileName(street), temp);
         //        }
         //        catch (Exception e)
@@ -247,6 +247,9 @@ namespace Districts.Helper
         /// <returns></returns>
         public static string RemoveEmptyLines(this string text)
         {
+            if (string.IsNullOrEmpty(text))
+                return string.Empty;
+
             var result = Regex.Replace(text, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
             return result;
         }

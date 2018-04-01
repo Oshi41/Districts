@@ -38,7 +38,7 @@ namespace Districts.Settings
         /// <summary>
         /// Путь к кодам
         /// </summary>
-        public string CodesPath => BaseFolder + "\\Codes";
+        public string HomeInfoPath => BaseFolder + "\\HomeInfo";
         /// <summary>
         /// Путь к правилам доступа
         /// </summary>
@@ -90,7 +90,7 @@ namespace Districts.Settings
             //Создаю папки, если их нет
             CheckExistance(settings.BuildingPath,
                 settings.CardsPath,
-                settings.CodesPath,
+                settings.HomeInfoPath,
                 settings.RestrictionsPath,
                 settings.LogPath,
                 settings.ManageRecordsPath,

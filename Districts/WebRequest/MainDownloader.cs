@@ -80,10 +80,10 @@ namespace Districts.WebRequest
         {
             var settings = ApplicationSettings.ReadOrCreate();
             var writableObj = buildings
-                .Select(x => new Codes(x))
+                .Select(x => new HomeInfo(x))
                 .ToList();
             var writtableStr = JsonConvert.SerializeObject(writableObj, Formatting.Indented);
-            var filePath = Path.Combine(settings.CodesPath, writableObj.First().Street);
+            var filePath = Path.Combine(settings.HomeInfoPath, writableObj.First().Street);
             File.WriteAllText(filePath, writtableStr);
         }
 

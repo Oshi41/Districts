@@ -13,6 +13,7 @@ using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.Printing;
 using Districts.Settings;
+using Districts.ViewModel.TabsVM;
 using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 
@@ -26,7 +27,7 @@ namespace Districts.CardGenerator
         /// <summary>
         /// настройки приложения
         /// </summary>
-        ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
+        readonly ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
 
         #region Public
 
@@ -37,11 +38,24 @@ namespace Districts.CardGenerator
         {
             List<Building> allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
             List<ForbiddenElement> allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
-            List<Codes> allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
+            List<HomeInfo> allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
 
             List<Door> allDoors = GetAllDoors(allHomes, allRules, allCodes);
             List<Card> cards = GenerateCards(allHomes, allRules, allCodes, allDoors);
             Write(cards);
+        }
+
+        public void GenerateNew(bool useBestDistribution = false)
+        {
+            List<Building> allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
+            List<ForbiddenElement> allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
+            List<HomeInfo> allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
+
+            var map = new HomeMap(allHomes, allCodes, allRules);
+            var cards = GenerateCardsNew(map, useBestDistribution);
+            Write(cards);
+            //var doors = GetAllDoorsNew(map);
+
         }
 
         /// <summary>
@@ -67,7 +81,7 @@ namespace Districts.CardGenerator
         /// <returns></returns>
         private List<Door> GetAllDoors(List<Building> allHomes,
             List<ForbiddenElement> allRules,
-            List<Codes> allcodes)
+            List<HomeInfo> allcodes)
         {
             List<Door> result = new List<Door>();
 
@@ -76,7 +90,7 @@ namespace Districts.CardGenerator
                 var rule = allRules.FirstOrDefault(x => home.IsTheSameObject(x))
                            ?? new ForbiddenElement(home);
                 var code = allcodes.FirstOrDefault(x => home.IsTheSameObject(x))
-                           ?? new Codes(home);
+                           ?? new HomeInfo(home);
                 result.AddRange(GetHomeDoors(home, rule, code));
             }
 
@@ -88,10 +102,10 @@ namespace Districts.CardGenerator
         /// </summary>
         /// <param name="home">Дом</param>
         /// <param name="rule">Правила доступо</param>
-        /// <param name="code">Код</param>
+        /// <param name="homeInfo">Код</param>
         /// <returns></returns>
         private IEnumerable<Door> GetHomeDoors(Building home,
-            ForbiddenElement rule, Codes code)
+            ForbiddenElement rule, HomeInfo homeInfo)
         {
             var all = new HashSet<int>(Enumerable.Range(1, home.Doors + 1));
 
@@ -107,10 +121,10 @@ namespace Districts.CardGenerator
                 var temp = new Door(home);
                 temp.Number = i;
                 temp.Entrance = GetEntrance(i, home.Floors, home.Entrances);
-                var contains = code.AllCodes.ContainsKey(temp.Entrance);
+                var contains = homeInfo.AllCodes.ContainsKey(temp.Entrance);
                 if (contains)
                 {
-                    temp.Codes.AddRange(code.AllCodes[temp.Entrance]);
+                    temp.Codes.AddRange(homeInfo.AllCodes[temp.Entrance]);
                 }
                 yield return temp;
             }
@@ -119,14 +133,14 @@ namespace Districts.CardGenerator
         /// <summary>
         /// Высчитывает подъезд, в котором находится 
         /// </summary>
-        /// <param name="floor"></param>
-        /// <param name="total"></param>
-        /// <param name="totalEntrances"></param>
+        /// <param name="floor">Номер квартиры</param>
+        /// <param name="total">Всего квартир</param>
+        /// <param name="totalEntrances">Всего подъездов</param>
         /// <returns></returns>
         private int GetEntrance(int floor, int total, int totalEntrances)
         {
             // квартиры в подъезде
-            var onEntrance = total / totalEntrances;
+            var onEntrance = Math.Ceiling((double)total / totalEntrances);
 
             // прохожу по всем подъездам
             for (int i = 0; i < totalEntrances; i++)
@@ -152,7 +166,7 @@ namespace Districts.CardGenerator
         /// <param name="doors">Полученныедвери</param>
         /// <returns></returns>
         private List<Card> GenerateCards(List<Building> allHomes,
-            List<ForbiddenElement> allRules, List<Codes> allCodes,
+            List<ForbiddenElement> allRules, List<HomeInfo> allCodes,
             List<Door> doors)
         {
             // итеративная переменная для циклической пробежки по всем карточкам
@@ -262,7 +276,114 @@ namespace Districts.CardGenerator
 
         #endregion
 
-        //private void PrintVisualNew(List<Card> cards, List<Codes> codes)
+        #region PrivateNew
+
+        private List<Door> GetAllDoorsNew(HomeMap map)
+        {
+            var result = new List<Door>();
+
+            if (!map.Any())
+                return result;
+
+            foreach (var full in map)
+            {
+                result.AddRange(GetHomeDoorsNew(full, map));
+            }
+
+            return result;
+        }
+
+        private IEnumerable<Door> GetHomeDoorsNew(FullHomeInfo fullInfo,
+            HomeMap source)
+        {
+            // объявляем переменные для краткости
+            var home = fullInfo.Building;
+            var homeInfo = fullInfo.HomeInfo;
+            var rule = fullInfo.ForbiddenElement;
+            var start = homeInfo.Begin;
+
+            var all = new HashSet<int>(Enumerable.Range(start, home.Doors));
+
+            var forbidden = new HashSet<int>();
+            forbidden.UnionWith(rule.Aggressive);
+            forbidden.UnionWith(rule.NoVisit);
+            forbidden.UnionWith(rule.NoWorried);
+
+            all.ExceptWith(forbidden);
+
+            foreach (var i in all)
+            {
+                var temp = new Door(home)
+                {
+                    Number = i,
+                    Entrance = GetEntrance(i - start, home.Doors, home.Entrances)
+                };
+
+                var contains = homeInfo.AllCodes.ContainsKey(temp.Entrance);
+                if (contains)
+                {
+                    temp.Codes.AddRange(homeInfo.AllCodes[temp.Entrance]);
+                }
+
+                yield return temp;
+            }
+        }
+
+        private CardWorker GenerateCardsNew(HomeMap map, bool bestDestribution)
+        {
+            // смапили дома и доступные квартиры
+            var mappedDoors = new DoorsMap();
+            foreach (var full in map)
+            {
+                mappedDoors.Add(full, GetHomeDoorsNew(full, map).ToList());
+            }
+
+            // ограничиваем кол-во карточек
+            CardWorker cards;
+            if (bestDestribution)
+            {
+                // все квартиры из разных домов
+                cards = new CardWorker(mappedDoors.BiggestDoorsContainer);
+            }
+            else
+            {
+                // выделится роно столько, сколько необходимо
+                cards = new CardWorker(GetMaxCardsCount(mappedDoors.DoorsCount, settings.MaxDoors));
+            }
+
+            cards.SetCardCapacity(settings.MaxDoors);
+            
+            // перемешал
+            mappedDoors.Shuffle();
+            
+            while (!mappedDoors.IsEmpty)
+            {
+                var pair = mappedDoors.FirstOrDefault();
+                var full = pair.Key;
+                var doors = pair.Value;
+
+                while (doors.Any())
+                {
+                    var door = doors.FirstOrDefault();
+                    cards.Add(door);
+                    doors.Remove(door);
+                }
+
+                mappedDoors.Remove(full);
+            }
+
+            return cards;
+        }
+
+        private int GetMaxCardsCount(int doors, int capacity)
+        {
+            var result = (double)doors / capacity;
+            return (int) Math.Ceiling(result);
+        }
+
+        #endregion
+
+        //private void PrintVisualNew(List<Card> cards, List<HomeInfo> codes)
         //{
         //    PrintDialog printDlg = new PrintDialog();
 
@@ -391,5 +512,82 @@ namespace Districts.CardGenerator
 
         //    }
         //}
+    }
+
+    class DoorsMap : Dictionary<FullHomeInfo, List<Door>>
+    {
+        public int DoorsCount => this.Aggregate(0, (i, pair) => i + pair.Value.Count);
+        public int BiggestDoorsContainer => this.Max(x => x.Value.Count);
+
+        public void Shuffle()
+        {
+            //
+            // нашел на StackOverFlow отличное решение случайного перемешивания списка
+            // https://stackoverflow.com/questions/273313/randomize-a-listt
+            //
+            var temp = this.OrderBy(x => Guid.NewGuid())
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            Clear();
+
+            foreach (var pair in temp)
+            {
+                Add(pair.Key, pair.Value);
+            }
+        }
+
+        public bool IsEmpty
+        {
+            get
+            {
+                return !this.Any(x => x.Value.Any());
+            }
+        }
+    }
+
+    class CardWorker : List<Card>
+    {
+        private int _innerIndex = 0;
+        private int _capacity;
+
+        private void AddCounter()
+        {
+            // ограничиваем верхние пределы
+            if (_innerIndex >= Count)
+                _innerIndex = 0;
+            else
+                _innerIndex++;
+
+            // нашли ближайшую доступную карточку
+            _innerIndex = this.FindIndex(_innerIndex, x => x.Doors.Count < _capacity);
+
+            // если не нашли выше, ищем по всему массиву
+            if (_innerIndex < 0)
+                _innerIndex = this.FindIndex(x => x.Doors.Count < _capacity);
+        }
+
+        public CardWorker SetCardCapacity(int capacity)
+        {
+            _capacity = capacity;
+            return this;
+        }
+
+        public CardWorker(int count = Int32.MaxValue)
+            : base(count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Add(new Card{Number = i + 1});
+            }
+        }
+
+        public void Add(Door item)
+        {
+            if (_innerIndex < 0)
+                return;
+
+            this[_innerIndex].Doors.Add(item);
+            AddCounter();
+        }
     }
 }
