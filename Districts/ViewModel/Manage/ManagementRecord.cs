@@ -14,6 +14,7 @@ namespace Districts.ViewModel.Manage
         #region Fields
         // Сохраняем ссылку на объект, чтобы его же потом и менять
         private readonly CardManagement _card;
+        private static readonly DateTime _innerTime = DateTime.Now;
 
         private DateTime? _taskenDate;
         private string _lastOwner;
@@ -106,6 +107,9 @@ namespace Districts.ViewModel.Manage
             }
         }
 
+
+        #region Public
+
         /// <summary>
         /// Нужно для редактирования
         /// </summary>
@@ -120,7 +124,7 @@ namespace Districts.ViewModel.Manage
             var names = param as List<string> ?? new List<string>();
             // показываю окно
             var vm = new ManageRecordEditViewModel(_card, names);
-            var window = new ManageView{DataContext = vm};
+            var window = new ManageView { DataContext = vm };
 
             if (window.ShowDialog() == true)
             {
@@ -137,6 +141,24 @@ namespace Districts.ViewModel.Manage
             // номер все равно изменить не можем
 
         }
+
+        public bool HasOwner()
+        {
+            return _card.HasOwner();
+        }
+
+        public bool HasTimeDifference(TimeSpan span, bool nullValue)
+        {
+            if (!TaskenDate.HasValue)
+                return nullValue;
+
+            var droppedTime = DroppedTime ?? _innerTime;
+            return span <= droppedTime - TaskenDate;
+        }
+
+        #endregion
+
+
 
         #endregion
     }
@@ -212,7 +234,7 @@ namespace Districts.ViewModel.Manage
 
     //    private void OnSave()
     //    {
-            
+
     //    }
 
     //    private void OnEdit()

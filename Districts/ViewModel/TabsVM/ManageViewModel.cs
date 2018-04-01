@@ -26,7 +26,7 @@ namespace Districts.ViewModel.TabsVM
         private readonly Dictionary<Card, CardManagement> _mappedCards = new Dictionary<Card, CardManagement>();
 
         private ObservableCollection<ManageRecordViewModel> _cards = new ObservableCollection<ManageRecordViewModel>();
-
+        private SortingType _sortingType = SortingType.All;
 
         #endregion
 
@@ -61,6 +61,19 @@ namespace Districts.ViewModel.TabsVM
                 if (Equals(value, _cards)) return;
                 _cards = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public SortingType SortingType
+        {
+            get { return _sortingType; }
+            set
+            {
+                if (value == _sortingType) return;
+                _sortingType = value;
+                OnPropertyChanged();
+
+                OnSearch();
             }
         }
 
@@ -124,9 +137,7 @@ namespace Districts.ViewModel.TabsVM
             // строки поиска нет, выводим всё
             if (string.IsNullOrEmpty(SearchText))
             {
-                Cards = new ObservableCollection<ManageRecordViewModel>(
-                    _mappedCards
-                        .Select(x => new ManageRecordViewModel(x.Value)));
+                SortByCondition(_mappedCards.Select(x => new ManageRecordViewModel(x.Value)));
             }
             else
             {
@@ -140,7 +151,7 @@ namespace Districts.ViewModel.TabsVM
                         result.Add(card);
                 }
 
-                Cards = new ObservableCollection<ManageRecordViewModel>(result);
+                SortByCondition(result);
             }
         }
 
@@ -210,6 +221,45 @@ namespace Districts.ViewModel.TabsVM
                 return;
 
             record.Actions = record.Actions.OrderBy(x => x.Date).ToList();
+        }
+
+        private void SortByCondition(IEnumerable<ManageRecordViewModel> source)
+        {
+            var result = source;
+
+            // если не стоит флаг "все"
+            if ((SortingType & SortingType.All) != SortingType.All)
+            {
+                // сортируем только несипользуемые
+                if ((this.SortingType & SortingType.Droppd) == SortingType.Droppd)
+                {
+                    result = result.Where(x => !x.HasOwner());
+                }
+
+                // только те, что на руках
+                if ((this.SortingType & SortingType.InUse) == SortingType.InUse)
+                {
+                    result = result.Where(x => x.HasOwner());
+                }
+
+
+                // берем ограничение по времени
+                if ((this.SortingType & SortingType.Diff1Y) == SortingType.Diff1Y)
+                {
+                    var span = TimeSpan.FromDays(365);
+
+                    // пытаемся сделать промежуток максимально мелким
+                    if ((this.SortingType & SortingType.Diff5M) == SortingType.Diff5M)
+                        span = TimeSpan.FromDays(30 * 5);
+
+                    if ((this.SortingType & SortingType.Diff3M) == SortingType.Diff3M)
+                        span = TimeSpan.FromDays(30 * 3);
+
+                    result = result.Where(x => x.HasTimeDifference(span, (this.SortingType & SortingType.Droppd) != 0));
+                }
+            }
+
+            Cards = new ObservableCollection<ManageRecordViewModel>(result);
         }
 
         /// <summary>

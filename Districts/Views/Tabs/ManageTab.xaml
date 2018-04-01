@@ -7,13 +7,44 @@
              xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
              xmlns:controls="clr-namespace:Districts.Views.Controls"
              xmlns:converter="clr-namespace:Districts.Views.Converter"
+             xmlns:manage="clr-namespace:Districts.ViewModel.Manage"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:ManageViewModel}}">
-    
+
     <UserControl.Resources>
         <converter:BoolToVisConverter x:Key="BoolToVisConverter" 
                                       FalseVisibility="Hidden"/>
+
+        <controls:EnumToDescrConverter x:Key="DescrConverter"/>
+
+        <x:Array x:Key="ItemSource"
+                 Type="manage:SortingType">
+            <manage:SortingType>All</manage:SortingType>
+            <manage:SortingType>InUse</manage:SortingType>
+            <manage:SortingType>Droppd</manage:SortingType>
+
+            <manage:SortingType>InUse3M</manage:SortingType>
+            <manage:SortingType>InUse5M</manage:SortingType>
+            <manage:SortingType>InUse1Y</manage:SortingType>
+
+            <manage:SortingType>Droppd3M</manage:SortingType>
+            <manage:SortingType>Droppd5M</manage:SortingType>
+            <manage:SortingType>Droppd1Y</manage:SortingType>
+        </x:Array>
+
+        <!--<ComboBoxItem Content="{x:Static manage:SortingType.All}"/>
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>
+
+
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>
+
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>
+            <ComboBoxItem Content="{x:Static manage:SortingType.}"/>-->
     </UserControl.Resources>
 
     <DockPanel Dock="Top"
@@ -55,6 +86,28 @@
                               MaxHeight="30"
                               SearchText="{Binding SearchText}"
                               SearchCommand="{Binding SearchCommand}"/>
+
+        <DockPanel LastChildFill="True"
+                   DockPanel.Dock="Bottom" >
+
+            <TextBlock Text="Cортировка:" 
+                       Margin="0 0 5 0"
+                       VerticalAlignment="Center"/>
+
+            <ComboBox SelectedValue="{Binding SortingType, Mode=TwoWay}"
+                      ItemsSource="{Binding Source={StaticResource ItemSource}}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Left"
+                      MinWidth="{Binding RelativeSource={RelativeSource Self}, Path=ActualWidth}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+
+            </ComboBox>
+        </DockPanel>
+
 
         <!-- IsSynchronizedWithCurrentItem синхронизирует объект в селекте со связанным листом-->
         <controls:DataGridWithCommand Margin="10" 
@@ -105,9 +158,9 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                </controls:DataGridWithCommand.Columns>
-            </controls:DataGridWithCommand>
+            </controls:DataGridWithCommand.Columns>
+        </controls:DataGridWithCommand>
 
-        </DockPanel>
+    </DockPanel>
 
 </UserControl>

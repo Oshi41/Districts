@@ -88,14 +88,15 @@
 
         </DockPanel>
         
-        <StackPanel DockPanel.Dock="Bottom"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+        <DockPanel DockPanel.Dock="Bottom"
+                   LastChildFill="False">
             <Button Content="Сохранить"
                     Padding="4 2"
+                    DockPanel.Dock="Right"
                     Margin="5"
                     Click="ButtonBase_OnClick"/>
-        </StackPanel>
+        </DockPanel>
+        
 
         <DataGrid IsEnabled="{Binding ElementName=Box, Path=IsChecked}"
                   ItemsSource="{Binding Actions}"
@@ -126,7 +127,8 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn SortMemberPath="Date"
                                         Width="Auto"
-                                        Header="Дата">
+                                        Header="Дата"
+                                        CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}"/>
@@ -138,6 +140,7 @@
                                     Header="Ответственный"/>
             </DataGrid.Columns>
         </DataGrid>
+        
 
     </DockPanel>
 

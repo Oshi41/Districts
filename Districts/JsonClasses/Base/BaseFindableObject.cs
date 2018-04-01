@@ -90,7 +90,7 @@ namespace Districts.JsonClasses.Base
                 return false;
 
             // нужно сравнить слеши
-            if ((findCondition & ReturnConditions.CompareSlash) != 0
+            if ((findCondition & ReturnConditions.CompareSlash) == ReturnConditions.CompareSlash
                 && number.AfterSlash != objNumber.AfterSlash)
             {
                 return false;
@@ -104,19 +104,19 @@ namespace Districts.JsonClasses.Base
             var compare = number.Housing.CompareTo(objNumber.Housing);
 
             // возвращаем, если стоит включать себя
-            if (compare == 0 && (findCondition & ReturnConditions.Self) != 0)
+            if (compare == 0 && (findCondition & ReturnConditions.Self) == ReturnConditions.Self)
             {
                 return true;
             }
 
             // нашли меньше
-            if (compare < 0 && (findCondition & ReturnConditions.LessThen) != 0)
+            if (compare < 0 && (findCondition & ReturnConditions.LessThen) == ReturnConditions.LessThen)
             {
                 return true;
             }
 
             // нашли больше
-            if (compare > 0 && (findCondition & ReturnConditions.MoreThen) != 0)
+            if (compare > 0 && (findCondition & ReturnConditions.MoreThen) == ReturnConditions.MoreThen)
             {
                 return true;
             }

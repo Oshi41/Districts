@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using Districts.JsonClasses.Manage;
@@ -10,6 +11,8 @@ namespace Districts.ViewModel.Manage
 {
     class ManageRecordEditViewModel : ObservableObject
     {
+        #region Fields
+
         private ObservableCollection<ActionViewModel> _actions;
         private DateTime? _date;
         private ActionTypes? _actionType;
@@ -17,7 +20,11 @@ namespace Districts.ViewModel.Manage
         private int _number;
         private bool _isTaken;
         private ObservableCollection<string> _names;
+        private SortingType _sortingType;
 
+        #endregion
+
+        #region Properties
 
         public bool IsTaken
         {
@@ -96,6 +103,7 @@ namespace Districts.ViewModel.Manage
             }
         }
 
+        #endregion
 
         public ManageRecordEditViewModel(CardManagement card, List<string> names)
         {
@@ -177,5 +185,36 @@ namespace Districts.ViewModel.Manage
 
             InvalidateCommands();
         }
+    }
+
+    
+    [Flags]
+    enum SortingType
+    {
+        [Description("Не на руках")]
+        Droppd = 1,
+        [Description("На руках")]
+        InUse = 2,
+
+        Diff3M = 4 | Diff5M,
+        Diff5M = 8 | Diff1Y,
+        Diff1Y = 16,
+
+        [Description("На руках более 3 месяцев")]
+        InUse3M = InUse | Diff3M,
+        [Description("На руках более 5 месяцев")]
+        InUse5M = InUse | Diff5M,
+        [Description("На руках более года")]
+        InUse1Y = InUse | Diff1Y,
+
+        [Description("Брали 3 месяца назад")]
+        Droppd3M = Droppd | Diff3M,
+        [Description("Брали 5 месяцев назад")]
+        Droppd5M = Droppd | Diff5M,
+        [Description("Брали более года назад")]
+        Droppd1Y = Droppd | Diff1Y,
+
+        [Description("Все")]
+        All = Droppd | InUse
     }
 }
