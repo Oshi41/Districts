@@ -6,54 +6,10 @@ namespace Districts.ViewModel.PrintVM
 {
     public class PrintableViewMode : ObservableObject
     {
-        private OneCardSizeViewModel _secondBack;
-        private OneCardSizeViewModel _secondFront;
         private OneCardSizeViewModel _firstBack;
         private OneCardSizeViewModel _firstFront;
-
-        public OneCardSizeViewModel FirstFront
-        {
-            get { return _firstFront; }
-            set
-            {
-                if (Equals(value, _firstFront)) return;
-                _firstFront = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public OneCardSizeViewModel FirstBack
-        {
-            get { return _firstBack; }
-            set
-            {
-                if (Equals(value, _firstBack)) return;
-                _firstBack = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public OneCardSizeViewModel SecondFront
-        {
-            get { return _secondFront; }
-            set
-            {
-                if (Equals(value, _secondFront)) return;
-                _secondFront = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public OneCardSizeViewModel SecondBack
-        {
-            get { return _secondBack; }
-            set
-            {
-                if (Equals(value, _secondBack)) return;
-                _secondBack = value;
-                OnPropertyChanged();
-            }
-        }
+        private OneCardSizeViewModel _secondBack;
+        private OneCardSizeViewModel _secondFront;
 
 
         public PrintableViewMode(Card first, Card second)
@@ -69,10 +25,54 @@ namespace Districts.ViewModel.PrintVM
             //OnPropertyChanged(nameof(SecondFront));
         }
 
+        public OneCardSizeViewModel FirstFront
+        {
+            get => _firstFront;
+            set
+            {
+                if (Equals(value, _firstFront)) return;
+                _firstFront = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public OneCardSizeViewModel FirstBack
+        {
+            get => _firstBack;
+            set
+            {
+                if (Equals(value, _firstBack)) return;
+                _firstBack = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public OneCardSizeViewModel SecondFront
+        {
+            get => _secondFront;
+            set
+            {
+                if (Equals(value, _secondFront)) return;
+                _secondFront = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public OneCardSizeViewModel SecondBack
+        {
+            get => _secondBack;
+            set
+            {
+                if (Equals(value, _secondBack)) return;
+                _secondBack = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void FillModelsF(Card card)
         {
             var number = card.Number;
-            int halfIndex = card.Doors.Count / 2;
+            var halfIndex = card.Doors.Count / 2;
             var firstHalf = card.Doors.GetRange(0, halfIndex);
             var secondHalf = card.Doors.Except(firstHalf).ToList();
 
@@ -92,8 +92,8 @@ namespace Districts.ViewModel.PrintVM
         }
 
         private void FillModels(Card card,
-             ref OneCardSizeViewModel first,
-             ref OneCardSizeViewModel second)
+            ref OneCardSizeViewModel first,
+            ref OneCardSizeViewModel second)
         {
             var number = card.Number;
             var halfIndex = card.Doors.Count / 2;

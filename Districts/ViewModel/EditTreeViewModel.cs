@@ -1,16 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Windows.Input;
-using Districts.Helper;
-using Districts.JsonClasses;
-using Districts.MVVM;
-using Districts.Settings;
-using Districts.Views;
-using Newtonsoft.Json;
-
-namespace Districts.ViewModel
+﻿namespace Districts.ViewModel
 {
     //public class EditTreeViewModel : ObservableObject
     //{
@@ -39,7 +27,7 @@ namespace Districts.ViewModel
     //        {
     //            Homes.AddRange(street.Value);
     //            //AddStreet(street.Value);
-                
+
     //        }
     //        // загрузил правила
     //        var allRules = LoadingWork.LoadRules();
@@ -75,7 +63,7 @@ namespace Districts.ViewModel
     //        Dictionary<string, List<HomeInfo>> HomeInfo = _mappedHomeInfo.Values
     //            .GroupBy(x => x.Street)
     //            .ToDictionary(x => x.Key, x => x.GetEnumerator().ToIEnumerable().ToList());
-            
+
     //        // очистил предыдущие значения
     //        Helper.Helper.ClearFolder(settings.HomeInfoPath);
 
@@ -107,7 +95,7 @@ namespace Districts.ViewModel
     //    {
     //        var settings = ApplicationSettings.ReadOrCreate();
 
-            
+
     //    }
 
     //    #endregion
@@ -158,7 +146,7 @@ namespace Districts.ViewModel
     //    {
     //        if (CurrentHome == null)
     //            return;
-            
+
     //        var home = CurrentHome;
     //        var rule = _mappedRules[home];
     //        var code = _mappedHomeInfo[home];
@@ -170,7 +158,6 @@ namespace Districts.ViewModel
 
     //    #region Command handlers
 
-        
 
     //    private void OnDeleteCommand(object obj)
     //    {

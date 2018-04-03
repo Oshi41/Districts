@@ -11,51 +11,51 @@
 
     <Window.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="OverridesDefaultStyle" Value="False"/>
-            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="OverridesDefaultStyle" Value="False" />
+            <Setter Property="Padding" Value="10 5" />
         </Style>
     </Window.Resources>
-    
+
     <TabControl TabStripPlacement="Left">
         <TabItem Header="Настройки">
             <TabItem.DataContext>
-                <tabsVm:SettingsViewModel/>
+                <tabsVm:SettingsViewModel />
             </TabItem.DataContext>
-            <tabs:SettingsTab/>
+            <tabs:SettingsTab />
         </TabItem>
         <TabItem Header="Сбор информации">
             <TabItem.DataContext>
-                <tabsVm:DownloadViewModel/> 
+                <tabsVm:DownloadViewModel />
             </TabItem.DataContext>
 
-            <tabs:DownloadTab/>
+            <tabs:DownloadTab />
         </TabItem>
         <TabItem Header="Редактирование информации">
             <TabItem.DataContext>
-                <tabsVm:TreeViewModel/>
+                <tabsVm:TreeViewModel />
             </TabItem.DataContext>
-            <tabs:EditTreeTab/>
+            <tabs:EditTreeTab />
         </TabItem>
         <TabItem Header="Генерация участков">
             <TabItem.DataContext>
-                <tabsVm:GenerateViewModel/>
+                <tabsVm:GenerateViewModel />
             </TabItem.DataContext>
 
-            <tabs:GenerateTab/>
+            <tabs:GenerateTab />
         </TabItem>
         <TabItem Header="Менеджмент">
             <TabItem.DataContext>
-                <tabsVm:ManageViewModel/>
+                <tabsVm:ManageViewModel />
             </TabItem.DataContext>
 
-            <tabs:ManageTab/>
+            <tabs:ManageTab />
         </TabItem>
         <TabItem Header="Архивирование">
             <TabItem.DataContext>
-                <tabsVm:BackupViewModel/>
+                <tabsVm:BackupViewModel />
             </TabItem.DataContext>
 
-            <tabs:BackupTab/>
+            <tabs:BackupTab />
         </TabItem>
 
         <TabItem Header="Файлы">
@@ -65,14 +65,14 @@
                         <Trigger Property="Visibility" Value="Visible">
                             <Setter Property="DataContext">
                                 <Setter.Value>
-                                    <tabsVm:OpenFolderViewModel/>
+                                    <tabsVm:OpenFolderViewModel />
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </TabItem.Style>
-            <tabs:OpenFolderTab/>
+            <tabs:OpenFolderTab />
         </TabItem>
     </TabControl>
 

@@ -8,32 +8,6 @@ namespace Districts.ViewModel.PrintVM
 {
     public class OneCardSizeViewModel : ObservableObject
     {
-        #region Fields
-
-        private string _number;
-        private ObservableCollection<Record> _records = new ObservableCollection<Record>();
-        
-        #endregion
-        public string Number
-        {
-            get { return _number; }
-            set
-            {
-                if (value == _number) return;
-                _number = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<Record> Records
-        {
-            get { return _records; }
-            set
-            {
-                if (Equals(value, _records)) return;
-                _records = value;
-                OnPropertyChanged();
-            }
-        }
         public OneCardSizeViewModel(int number, List<Door> doors)
         {
             Number = number.ToString();
@@ -48,6 +22,34 @@ namespace Districts.ViewModel.PrintVM
                 Records.Add(record);
             }
         }
+
+        public string Number
+        {
+            get => _number;
+            set
+            {
+                if (value == _number) return;
+                _number = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Record> Records
+        {
+            get => _records;
+            set
+            {
+                if (Equals(value, _records)) return;
+                _records = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #region Fields
+
+        private string _number;
+        private ObservableCollection<Record> _records = new ObservableCollection<Record>();
+
+        #endregion
     }
-    
 }

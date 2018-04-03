@@ -12,48 +12,8 @@ namespace Districts.WebRequest
 {
     public class StreetDownloader
     {
-        private static string BaseUri = "http://www.dom.mos.ru/Lookups/GetSearchAutoComplete?term=";
-        private static string FindHousePrefix = "&section=Buildings";
-
-        #region Web Request
-
-        public async Task<List<Building>> DownloadStreet(string street)
-        {
-            var sendRequest = GetUri(street);
-            var json = await GetJsonResponse(sendRequest);
-            var result = new List<Building>();
-
-            var value = JsonConvert.DeserializeObject<List<HomeJson>>(json);
-            foreach (var oneHome in value)
-            {
-                var homeDownloader = new HomeDownloader();
-                var home = new Building(oneHome.GetStreetName(), oneHome.GetHouseNumber());
-                home = await homeDownloader.ParseProperties(home, oneHome.url);
-                result.Add(home);
-            }
-
-            return result;
-        }
-
-        private string GetUri(string rusName)
-        {
-            var request = HttpUtility.UrlEncode(rusName);
-            return BaseUri + request + FindHousePrefix;
-        }
-
-        private async Task<string> GetJsonResponse(string uri)
-        {
-            string result;
-            using (var client = new WebClient())
-            {
-                client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-                client.Encoding = Encoding.UTF8;
-                result = await client.DownloadStringTaskAsync(uri);
-            }
-
-            return result;
-        }
-        #endregion
+        private static readonly string BaseUri = "http://www.dom.mos.ru/Lookups/GetSearchAutoComplete?term=";
+        private static readonly string FindHousePrefix = "&section=Buildings";
 
         #region Nested class
 
@@ -99,23 +59,19 @@ namespace Districts.WebRequest
             public string GetHouseNumber()
             {
                 var text = label.Replace(",", "");
-                string[] spitted = text.Split(' ');
-                var  result = string.Empty;
+                var spitted = text.Split(' ');
+                var result = string.Empty;
 
-                foreach (var  element in spitted)
+                foreach (var element in spitted)
                 {
-                    string i = TryParse(element);
+                    var i = TryParse(element);
                     // ошибка парсинга
                     if (i == null) continue;
 
                     if (string.IsNullOrWhiteSpace(result))
-                    {
                         result += i;
-                    }
                     else
-                    {
                         result += "к" + i;
-                    }
                 }
 
                 return result;
@@ -126,15 +82,54 @@ namespace Districts.WebRequest
             {
                 // может прийти значение типа "14/89"
                 foreach (var c in text)
-                {
                     if (!char.IsDigit(c)
                         && c != '\\'
                         && c != '/')
                         return null;
-                }
 
                 return text;
             }
+        }
+
+        #endregion
+
+        #region Web Request
+
+        public async Task<List<Building>> DownloadStreet(string street)
+        {
+            var sendRequest = GetUri(street);
+            var json = await GetJsonResponse(sendRequest);
+            var result = new List<Building>();
+
+            var value = JsonConvert.DeserializeObject<List<HomeJson>>(json);
+            foreach (var oneHome in value)
+            {
+                var homeDownloader = new HomeDownloader();
+                var home = new Building(oneHome.GetStreetName(), oneHome.GetHouseNumber());
+                home = await homeDownloader.ParseProperties(home, oneHome.url);
+                result.Add(home);
+            }
+
+            return result;
+        }
+
+        private string GetUri(string rusName)
+        {
+            var request = HttpUtility.UrlEncode(rusName);
+            return BaseUri + request + FindHousePrefix;
+        }
+
+        private async Task<string> GetJsonResponse(string uri)
+        {
+            string result;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                client.Encoding = Encoding.UTF8;
+                result = await client.DownloadStringTaskAsync(uri);
+            }
+
+            return result;
         }
 
         #endregion

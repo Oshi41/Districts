@@ -4,50 +4,31 @@ using Districts.Comparers;
 namespace Districts.JsonClasses.Base
 {
     /// <summary>
-    /// Базовый класс-родитель для квартир и домов
+    ///     Базовый класс-родитель для квартир и домов
     /// </summary>
     public class BaseFindableObject
     {
-        #region Properties
+        #region Nested
 
-        /// <summary>
-        /// Имя улицы
-        /// </summary>
-        public string Street { get; set; }
-
-        /// <summary>
-        /// Имя дома
-        /// </summary>
-        public string HouseNumber { get; set; }
-
-        #endregion
-
-        #region Constructors
-
-        public BaseFindableObject(BaseFindableObject obj)
+        [Flags]
+        public enum ReturnConditions
         {
-            if (obj == null)
-                return;
+            LessThen = 1,
+            MoreThen = 2,
+            Self = 4,
+            CompareSlash = 8,
 
-            Street = obj.Street;
-            HouseNumber = obj.HouseNumber;
-        }
+            LessThenInclude = LessThen | Self,
+            MoreThenInclude = MoreThen | Self,
 
-        /// <summary>
-        /// Нужен открытый конструктор для сериализации
-        /// </summary>
-        /// <param name="street"></param>
-        /// <param name="houseNumber"></param>
-        public BaseFindableObject(string street = "", string houseNumber = "")
-        {
-            Street = street;
-            HouseNumber = houseNumber;
+            All = LessThen | LessThenInclude | MoreThen | MoreThenInclude,
+            AllWithSlashCheck = All | CompareSlash
         }
 
         #endregion
 
         /// <summary>
-        /// Ищет совпадение по объектам
+        ///     Ищет совпадение по объектам
         /// </summary>
         /// <param name="obj">Объект, с которым сверяем</param>
         /// <returns></returns>
@@ -65,7 +46,7 @@ namespace Districts.JsonClasses.Base
         }
 
         /// <summary>
-        /// Возвращает тот же дом, только не учитывает корпус
+        ///     Возвращает тот же дом, только не учитывает корпус
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="findCondition">Условия поиска</param>
@@ -92,9 +73,7 @@ namespace Districts.JsonClasses.Base
             // нужно сравнить слеши
             if ((findCondition & ReturnConditions.CompareSlash) == ReturnConditions.CompareSlash
                 && number.AfterSlash != objNumber.AfterSlash)
-            {
                 return false;
-            }
 
             // возвращаем что угодно
             if ((findCondition & ReturnConditions.All) == ReturnConditions.All)
@@ -104,22 +83,13 @@ namespace Districts.JsonClasses.Base
             var compare = number.Housing.CompareTo(objNumber.Housing);
 
             // возвращаем, если стоит включать себя
-            if (compare == 0 && (findCondition & ReturnConditions.Self) == ReturnConditions.Self)
-            {
-                return true;
-            }
+            if (compare == 0 && (findCondition & ReturnConditions.Self) == ReturnConditions.Self) return true;
 
             // нашли меньше
-            if (compare < 0 && (findCondition & ReturnConditions.LessThen) == ReturnConditions.LessThen)
-            {
-                return true;
-            }
+            if (compare < 0 && (findCondition & ReturnConditions.LessThen) == ReturnConditions.LessThen) return true;
 
             // нашли больше
-            if (compare > 0 && (findCondition & ReturnConditions.MoreThen) == ReturnConditions.MoreThen)
-            {
-                return true;
-            }
+            if (compare > 0 && (findCondition & ReturnConditions.MoreThen) == ReturnConditions.MoreThen) return true;
 
             return false;
         }
@@ -129,37 +99,52 @@ namespace Districts.JsonClasses.Base
             if (string.IsNullOrWhiteSpace(street))
                 return false;
 
-            bool sameStreet = Street.Contains(street) || street.Contains(Street);
+            var sameStreet = Street.Contains(street) || street.Contains(Street);
             return sameStreet;
         }
 
 
         public override bool Equals(object obj)
         {
-            if (obj is BaseFindableObject x)
-            {
-                return x.Street == Street && x.HouseNumber == HouseNumber;
-            }
+            if (obj is BaseFindableObject x) return x.Street == Street && x.HouseNumber == HouseNumber;
 
             return false;
         }
 
+        #region Properties
 
-        #region Nested
+        /// <summary>
+        ///     Имя улицы
+        /// </summary>
+        public string Street { get; set; }
 
-        [Flags]
-        public enum ReturnConditions
+        /// <summary>
+        ///     Имя дома
+        /// </summary>
+        public string HouseNumber { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        public BaseFindableObject(BaseFindableObject obj)
         {
-            LessThen = 1,
-            MoreThen = 2,
-            Self = 4,
-            CompareSlash = 8,
+            if (obj == null)
+                return;
 
-            LessThenInclude = LessThen | Self,
-            MoreThenInclude = MoreThen | Self,
+            Street = obj.Street;
+            HouseNumber = obj.HouseNumber;
+        }
 
-            All = LessThen | LessThenInclude | MoreThen | MoreThenInclude,
-            AllWithSlashCheck = All | CompareSlash,
+        /// <summary>
+        ///     Нужен открытый конструктор для сериализации
+        /// </summary>
+        /// <param name="street"></param>
+        /// <param name="houseNumber"></param>
+        public BaseFindableObject(string street = "", string houseNumber = "")
+        {
+            Street = street;
+            HouseNumber = houseNumber;
         }
 
         #endregion

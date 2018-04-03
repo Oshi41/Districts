@@ -9,7 +9,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:controls="clr-namespace:Districts.Views.Controls"
         mc:Ignorable="d"
-        Title="{Binding Number, StringFormat={}Карточка №{0}}" 
+        Title="{Binding Number, StringFormat={}Карточка №{0}}"
         Height="300" Width="375"
         d:DataContext="{d:DesignInstance {x:Type manage:ManageRecordEditViewModel}}">
 
@@ -17,15 +17,15 @@
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type manage1:ActionTypes}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="manage1:ActionTypes"/>
+                <x:Type TypeName="manage1:ActionTypes" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
-        <controls:EnumToDescrConverter x:Key="DescrConverter"/>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <controls:EnumToDescrConverter x:Key="DescrConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
 
-    <DockPanel Dock="Top" 
+    <DockPanel Dock="Top"
                Margin="10"
                LastChildFill="True">
 
@@ -34,29 +34,67 @@
                 HorizontalAlignment="Stretch">
             <Button.Style>
                 <Style TargetType="Button">
-                    <Setter Property="Content" Value="Сдать участок"/>
-                    <Setter Property="Padding" Value="4 2"/>
-                    <Setter Property="Margin" Value="0 0 0 20"/>
-                    <Setter Property="Visibility" Value="{Binding IsTaken, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Setter Property="Content" Value="Сдать участок" />
+                    <Setter Property="Padding" Value="4 2" />
+                    <Setter Property="Margin" Value="0 0 0 20" />
+                    <Setter Property="Visibility"
+                            Value="{Binding IsTaken, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Style>
             </Button.Style>
         </Button>
 
 
         <CheckBox DockPanel.Dock="Top"
-                HorizontalAlignment="Left"
-                Content="Подтвердить вменяемость"
-                x:Name="Box"/>
+                  HorizontalAlignment="Left"
+                  Content="Подтвердить вменяемость"
+                  x:Name="Box" />
 
         <DockPanel DockPanel.Dock="Top"
-                    Margin="0 10 0 10" 
-                   LastChildFill="True">
+                   Margin="0 10 0 10"
+                   LastChildFill="True"
+                   Height="25">
 
             <Button DockPanel.Dock="Right"
                     Content=" + "
                     Padding="2 0"
                     FontFamily="Courier"
-                    Command="{Binding AddAction}"/>
+                    Command="{Binding AddAction}">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Viewbox Stretch="Uniform">
+                            <Canvas Width="24" Height="24"
+                                    Background="Transparent">
+                                <Path
+                                    Data="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z"
+                                    Fill="{TemplateBinding Foreground}" />
+                            </Canvas>
+                        </Viewbox>
+                    </ControlTemplate>
+                </Button.Template>
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Foreground" Value="Green" />
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Green" />
+                                <Setter Property="Opacity" Value="0.7" />
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="DarkGreen" />
+                                <Setter Property="Margin" Value="-2" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="Gray" />
+                            </Trigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
             <Button DockPanel.Dock="Right"
                     Content=" - "
@@ -64,44 +102,80 @@
                     FontFamily="Courier"
                     Command="{Binding RemoveAction}"
                     CommandParameter="{Binding ElementName=Grid, Path=SelectedItem}"
-                    IsEnabled="{Binding ElementName=Box, Path=IsChecked}"/>
+                    IsEnabled="{Binding ElementName=Box, Path=IsChecked}">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Viewbox Stretch="Uniform">
+                            <Canvas Width="24" Background="Transparent"
+                                    Height="24">
+                                <Path
+                                    Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+                                    Fill="{TemplateBinding Foreground}" />
+                            </Canvas>
+                        </Viewbox>
+                    </ControlTemplate>
+                </Button.Template>
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Foreground" Value="Red" />
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.7" />
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="DarkRed" />
+                                <Setter Property="Margin" Value="-2" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="Gray" />
+                            </Trigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
 
-            <ComboBox Width="Auto" 
+            <ComboBox Width="Auto"
                       IsReadOnly="True"
                       SelectedItem="{Binding ActionType}"
                       ItemsSource="{Binding Source={StaticResource dataFromEnum}}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}}"/>
+                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <DatePicker Width="Auto" 
-                        SelectedDate="{Binding Date, Mode=TwoWay}"/>
+            <DatePicker Width="Auto"
+                        SelectedDate="{Binding Date, Mode=TwoWay}" />
             <TextBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}"
-                     Visibility="Collapsed"/>
-            <ComboBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" 
+                     Visibility="Collapsed" />
+            <ComboBox Text="{Binding Subject, UpdateSourceTrigger=PropertyChanged}"
                       ItemsSource="{Binding Names}"
-                      IsEditable="True"/>
+                      IsEditable="True" />
 
         </DockPanel>
-        
+
         <DockPanel DockPanel.Dock="Bottom"
                    LastChildFill="False">
             <Button Content="Сохранить"
                     Padding="4 2"
                     DockPanel.Dock="Right"
                     Margin="5"
-                    Click="ButtonBase_OnClick"/>
+                    Click="ButtonBase_OnClick" />
         </DockPanel>
-        
+
 
         <DataGrid IsEnabled="{Binding ElementName=Box, Path=IsChecked}"
                   ItemsSource="{Binding Actions}"
+                  SelectedItem="{Binding SelectedAction}"
                   x:Name="Grid"
-                  Margin="10" 
+                  Margin="10"
                   IsSynchronizedWithCurrentItem="True"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
@@ -118,7 +192,8 @@
                                       ItemsSource="{Binding Source={StaticResource dataFromEnum}}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}, StringFormat={}Участок {0}}"/>
+                                        <TextBlock
+                                            Text="{Binding Converter={StaticResource DescrConverter}, StringFormat={}Участок {0}}" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -131,16 +206,16 @@
                                         CanUserSort="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}"/>
+                            <DatePicker SelectedDate="{Binding Date, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding Subject}"
                                     SortMemberPath="Subject"
-                                    Header="Ответственный"/>
+                                    Header="Ответственный" />
             </DataGrid.Columns>
         </DataGrid>
-        
+
 
     </DockPanel>
 

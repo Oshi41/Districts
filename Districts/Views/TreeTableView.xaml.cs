@@ -3,7 +3,7 @@
 namespace Districts.Views
 {
     /// <summary>
-    /// Логика взаимодействия для TreeTableView.xaml
+    ///     Логика взаимодействия для TreeTableView.xaml
     /// </summary>
     public partial class TreeTableView : Window
     {

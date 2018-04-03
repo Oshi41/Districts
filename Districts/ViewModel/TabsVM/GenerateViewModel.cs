@@ -1,41 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Districts.Helper;
 using Districts.MVVM;
-using Districts.Settings;
-using MessageBox = System.Windows.MessageBox;
 
 namespace Districts.ViewModel.TabsVM
 {
-    class GenerateViewModel : ObservableObject
+    internal class GenerateViewModel : ObservableObject
     {
+        private bool _bestDistribution;
         private bool _isGenerating;
         private bool _isPrinting;
-        private bool _bestDistribution;
+
+        public GenerateViewModel()
+        {
+            GenerateCommand = new Command(OnGenerateCommand, () => !_isGenerating);
+            PrintCommand = new Command(OnPrintCommand, () => !_isPrinting);
+        }
 
         public ICommand GenerateCommand { get; set; }
         public ICommand PrintCommand { get; set; }
 
         public bool BestDistribution
         {
-            get { return _bestDistribution; }
+            get => _bestDistribution;
             set
             {
                 if (value == _bestDistribution) return;
                 _bestDistribution = value;
                 OnPropertyChanged();
             }
-        }
-
-        public GenerateViewModel()
-        {
-            GenerateCommand = new Command(OnGenerateCommand, () => !_isGenerating);
-            PrintCommand = new Command(OnPrintCommand, () => !_isPrinting);
         }
 
         private void OnPrintCommand()
@@ -79,5 +73,4 @@ namespace Districts.ViewModel.TabsVM
             }
         }
     }
-
 }

@@ -11,23 +11,23 @@ using Newtonsoft.Json;
 namespace Districts.WebRequest
 {
     /// <summary>
-    /// Скачивает всю информаию об улицах
+    ///     Скачивает всю информаию об улицах
     /// </summary>
     public class MainDownloader
     {
         public async Task DownloadInfo()
         {
-            ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
-            
-             if (!CheckIfStreetFileExist(settings))
+            var settings = ApplicationSettings.ReadOrCreate();
+
+            if (!CheckIfStreetFileExist(settings))
             {
                 Tracer.Write("Улицы не были заполнены");
                 return;
             }
-            
+
 
             var streets = File.ReadAllLines(settings.StreetsPath);
-            List<Task<List<Building>>> allTasks = new List<Task<List<Building>>>();
+            var allTasks = new List<Task<List<Building>>>();
             foreach (var street in streets)
             {
                 var downloader = new StreetDownloader();
@@ -50,6 +50,41 @@ namespace Districts.WebRequest
                     WriteCodes(witableObj);
                 }
             }
+        }
+
+        /// <summary>
+        ///     Проверяет налчие файла улиц
+        /// </summary>
+        /// <param name="settings"></param>
+        private bool CheckIfStreetFileExist(ApplicationSettings settings)
+        {
+            if (!File.Exists(settings.StreetsPath))
+            {
+                var stream = File.CreateText(settings.StreetsPath);
+                stream.Close();
+                return false;
+            }
+
+            return true;
+        }
+
+        private List<Building> GetLivingBuilding(List<Building> buildings)
+        {
+            var temp = buildings.Where(x => x.Floors > 0)
+                .ToList();
+            temp.Sort(new HouseNumberComparer());
+            return temp;
+        }
+
+        private void TraceEmptyBuilding(List<Building> source, List<Building> added)
+        {
+            var except = source.Except(added);
+            if (!except.Any())
+                return;
+
+
+            var json = JsonConvert.SerializeObject(except, Formatting.Indented);
+            Tracer.Write("Следующие дома не попали в общий список:\n" + json);
         }
 
         #region Write
@@ -88,39 +123,5 @@ namespace Districts.WebRequest
         }
 
         #endregion
-
-        /// <summary>
-        /// Проверяет налчие файла улиц
-        /// </summary>
-        /// <param name="settings"></param>
-        private bool CheckIfStreetFileExist(ApplicationSettings settings)
-        {
-            if (!File.Exists(settings.StreetsPath))
-            {
-                var stream = File.CreateText(settings.StreetsPath);
-                stream.Close();
-                return false;
-            }
-            return true;
-        }
-
-        private List<Building> GetLivingBuilding(List<Building> buildings)
-        {
-            var temp = buildings.Where(x => x.Floors > 0)
-                .ToList();
-            temp.Sort(new HouseNumberComparer());
-            return temp;
-        }
-
-        private void TraceEmptyBuilding(List<Building> source, List<Building> added)
-        {
-            var except = source.Except(added);
-            if (!except.Any()) 
-                return;
-
-
-            var json = JsonConvert.SerializeObject(except, Formatting.Indented);
-            Tracer.Write("Следующие дома не попали в общий список:\n" + json);
-        }
     }
 }

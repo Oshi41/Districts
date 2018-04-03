@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Districts.Helper
 {
     /// <summary>
-    /// Обозреваемая коллекция на основе Dictionary
+    ///     Обозреваемая коллекция на основе Dictionary
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
@@ -19,7 +17,6 @@ namespace Districts.Helper
 
         public ObservableDictionary()
         {
-            
         }
 
         public ObservableDictionary(IDictionary<TKey, TValue> source)
@@ -48,7 +45,7 @@ namespace Districts.Helper
         public void Clear()
         {
             _innerDictionary.Clear();
-            
+
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -63,20 +60,19 @@ namespace Districts.Helper
                 throw new ArgumentNullException(nameof(array));
 
             if (arrayIndex < 0 || arrayIndex > array.Length)
-                throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, "Индекс меньше нуля или выходит за пределы массива");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex,
+                    "Индекс меньше нуля или выходит за пределы массива");
 
-            if (array.Length - arrayIndex < this.Count)
+            if (array.Length - arrayIndex < Count)
                 throw new ArgumentException("Массив имеет недостаточную длину", nameof(arrayIndex));
 
-            int count = this.Count;
+            var count = Count;
 
             var entries = _innerDictionary.ToArray();
 
-            for (int i = 0; i < count; ++i)
-            {
+            for (var i = 0; i < count; ++i)
                 if (entries[i].GetHashCode() >= 0)
                     array[i++] = new KeyValuePair<TKey, TValue>(entries[i].Key, entries[i].Value);
-            }
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
@@ -86,6 +82,7 @@ namespace Districts.Helper
 
         public int Count => _innerDictionary.Count;
         public bool IsReadOnly => false;
+
         public bool ContainsKey(TKey key)
         {
             return _innerDictionary.ContainsKey(key);
@@ -102,10 +99,10 @@ namespace Districts.Helper
         {
             var result = _innerDictionary.Remove(key);
             if (result)
-                CollectionChanged?.Invoke(key, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
+                CollectionChanged?.Invoke(key,
+                    new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
 
             return result;
-
         }
 
         public bool TryGetValue(TKey key, out TValue value)
@@ -115,7 +112,7 @@ namespace Districts.Helper
 
         public TValue this[TKey key]
         {
-            get { return _innerDictionary[key]; }
+            get => _innerDictionary[key];
             set
             {
                 var contains = _innerDictionary.ContainsKey(key);

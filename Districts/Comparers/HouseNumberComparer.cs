@@ -5,12 +5,12 @@ using Districts.JsonClasses;
 namespace Districts.Comparers
 {
     /// <summary>
-    /// Сравнивает дома по номеру
+    ///     Сравнивает дома по номеру
     /// </summary>
     public class HouseNumberComparer : IComparer<Building>
     {
         /// <summary>
-        /// Сравнивает два дома
+        ///     Сравнивает два дома
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -35,20 +35,22 @@ namespace Districts.Comparers
     }
 
     /// <summary>
-    /// Класс представляющий номер дома
+    ///     Класс представляющий номер дома
     /// </summary>
     public struct HouseNumber
     {
         /// <summary>
-        /// Номер дома
+        ///     Номер дома
         /// </summary>
         public int Number { get; set; }
+
         /// <summary>
-        /// Подъезд
+        ///     Подъезд
         /// </summary>
         public int Housing { get; set; }
+
         /// <summary>
-        /// То, что иде т после слеша
+        ///     То, что иде т после слеша
         /// </summary>
         public int AfterSlash { get; set; }
 
@@ -74,66 +76,49 @@ namespace Districts.Comparers
 
             if (index >= 0)
             {
-                String temp = "";
+                var temp = "";
 
                 foreach (var c in text.Remove(0, index + 1))
-                {
                     if (char.IsDigit(c))
                         temp += c;
-                    else break;
-                }
+                    else
+                        break;
 
-                if (int.TryParse(temp, out int res))
-                {
-                    return res;
-                }
+                if (int.TryParse(temp, out var res)) return res;
             }
+
             return -1;
         }
 
         private int ParseHouseNumber(string text)
         {
-            string main = string.Empty;
+            var main = string.Empty;
 
             foreach (var c in text)
-            {
                 if (char.IsDigit(c))
                     main += c;
                 else
-                {
                     break;
-                }
-            }
 
-            if (int.TryParse(main, out int temp))
-            {
-                return temp;
-            }
+            if (int.TryParse(main, out var temp)) return temp;
 
             return -1;
         }
 
         private int ParseHousing(string text)
         {
-            int index = text.IndexOf("к", StringComparison.Ordinal);
+            var index = text.IndexOf("к", StringComparison.Ordinal);
             if (index >= 0)
             {
                 var tempS = string.Empty;
                 foreach (var c in text.Remove(0, index + 1))
-                {
                     if (char.IsDigit(c))
                         tempS += c;
                     else
-                    {
                         break;
-                    }
-                }
 
 
-                if (int.TryParse(tempS, out int temp))
-                {
-                    return temp;
-                }
+                if (int.TryParse(tempS, out var temp)) return temp;
 
                 return 1;
             }

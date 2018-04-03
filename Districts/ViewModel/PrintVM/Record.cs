@@ -4,15 +4,15 @@ namespace Districts.ViewModel.PrintVM
 {
     public class Record : ObservableObject
     {
-        private string _street;
-        private string _number;
         private string _codes;
         private string _floor;
+        private string _number;
+        private string _street;
 
 
         public string Street
         {
-            get { return _street; }
+            get => _street;
             set
             {
                 if (value == _street) return;
@@ -20,9 +20,10 @@ namespace Districts.ViewModel.PrintVM
                 OnPropertyChanged();
             }
         }
+
         public string Number
         {
-            get { return _number; }
+            get => _number;
             set
             {
                 if (value == _number) return;
@@ -30,9 +31,10 @@ namespace Districts.ViewModel.PrintVM
                 OnPropertyChanged();
             }
         }
+
         public string Floor
         {
-            get { return _floor; }
+            get => _floor;
             set
             {
                 if (value == _floor) return;
@@ -40,9 +42,10 @@ namespace Districts.ViewModel.PrintVM
                 OnPropertyChanged();
             }
         }
+
         public string Codes
         {
-            get { return _codes; }
+            get => _codes;
             set
             {
                 if (value == _codes) return;

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -11,13 +10,21 @@ using Districts.JsonClasses.Base;
 using Districts.MVVM;
 using Districts.Settings;
 using Districts.Views;
-using iTextSharp.text.xml;
 using Newtonsoft.Json;
 
 namespace Districts.ViewModel.TabsVM
 {
-    class TreeViewModel : ObservableObject
+    internal class TreeViewModel : ObservableObject
     {
+        public TreeViewModel()
+        {
+            LoadCommand = new Command(OnLoad);
+            SaveCommand = new Command(SaveNew, () => CanSave);
+            DeleteCommand = new Command(OnDelete);
+            EditCommand = new Command(OnEdit);
+            SetSelectedItemCommand = new Command(SetSelectedItem);
+        }
+
         #region Fields
 
         //public List<Building> Homes { get; } = new List<Building>();
@@ -37,7 +44,8 @@ namespace Districts.ViewModel.TabsVM
 
         #region Properties
 
-        public ObservableCollection<StreetViewModel> Streets { get; set; } = new ObservableCollection<StreetViewModel>();
+        public ObservableCollection<StreetViewModel> Streets { get; set; } =
+            new ObservableCollection<StreetViewModel>();
 
         public Command SaveCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
@@ -47,7 +55,7 @@ namespace Districts.ViewModel.TabsVM
 
         public Building SelectedBuilding
         {
-            get { return _selectedBuilding; }
+            get => _selectedBuilding;
             set
             {
                 if (Equals(value, _selectedBuilding)) return;
@@ -58,7 +66,7 @@ namespace Districts.ViewModel.TabsVM
 
         public HomeInfo SelectedHomeInfo
         {
-            get { return _selectedHomeInfo; }
+            get => _selectedHomeInfo;
             set
             {
                 if (Equals(value, _selectedHomeInfo)) return;
@@ -69,7 +77,7 @@ namespace Districts.ViewModel.TabsVM
 
         public ForbiddenElement SelectedForbiddenElement
         {
-            get { return _selectedForbiddenElement; }
+            get => _selectedForbiddenElement;
             set
             {
                 if (Equals(value, _selectedForbiddenElement)) return;
@@ -80,7 +88,7 @@ namespace Districts.ViewModel.TabsVM
 
         private bool CanSave
         {
-            get { return _canSave; }
+            get => _canSave;
             set
             {
                 if (Equals(value, _canSave)) return;
@@ -93,21 +101,12 @@ namespace Districts.ViewModel.TabsVM
 
         #endregion
 
-        public TreeViewModel()
-        {
-            LoadCommand = new Command(OnLoad);
-            SaveCommand = new Command(SaveNew, () => CanSave);
-            DeleteCommand = new Command(OnDelete);
-            EditCommand = new Command(OnEdit);
-            SetSelectedItemCommand = new Command(SetSelectedItem);
-        }
-
         #region Methods
 
         private void OnEdit(object obj)
         {
             var vm = new EditHomeInfoViewModel(SelectedBuilding, SelectedForbiddenElement, SelectedHomeInfo);
-            var window = new EditHomeInfo { DataContext = vm };
+            var window = new EditHomeInfo {DataContext = vm};
             window.ShowDialog();
 
             if (window.DialogResult == true)
@@ -144,19 +143,10 @@ namespace Districts.ViewModel.TabsVM
 
             // загружаем с нуля
             if (param.Equals(true))
-            {
                 Load();
-            }
             // очищаем все
             else
-            {
                 _map.Clear();
-                //_mappedHomeInfo.Clear();
-                //_mappedRules.Clear();
-                //Homes.Clear();
-                //Codes.Clear();
-                //Rules.Clear();
-            }
         }
 
         private void SetSelectedItem(object obj)
@@ -174,7 +164,6 @@ namespace Districts.ViewModel.TabsVM
 
                 //if (_map.ContainsKey(home))
                 SelectedForbiddenElement = _map.GetRule(home);
-
             }
         }
 
@@ -188,9 +177,7 @@ namespace Districts.ViewModel.TabsVM
                 /* настроили для одного здания, изменения УЖЕ сохранены
                 // и не нуждаются в дальнейших действиях
                 || algorythm == CountingTypes.Custom*/)
-            {
                 return;
-            }
 
             // смещаем номера 
             if (algorythm.Value == CountingTypes.Custom && vm.InheritSettings)
@@ -199,10 +186,7 @@ namespace Districts.ViewModel.TabsVM
                 var affectedList = _map.FindSameHouseNumber(SelectedBuilding, findCondition);
                 var step = vm.CustomChangedStep;
 
-                foreach (var full in affectedList)
-                {
-                    full.HomeInfo.Begin += step;
-                }
+                foreach (var full in affectedList) full.HomeInfo.Begin += step;
             }
 
             // умный счетчик номеров для всех корпусов
@@ -229,10 +213,7 @@ namespace Districts.ViewModel.TabsVM
                     : BaseFindableObject.ReturnConditions.Self;
 
                 var affectedList = _map.FindSameHouseNumber(SelectedBuilding, findCondition);
-                foreach (var full in affectedList)
-                {
-                    full.HomeInfo.Begin = 1;
-                }
+                foreach (var full in affectedList) full.HomeInfo.Begin = 1;
             }
         }
 
@@ -249,23 +230,17 @@ namespace Districts.ViewModel.TabsVM
             {
                 homes.AddRange(street.Value);
                 AddStreet(street.Value);
-
             }
+
             // загрузил правила
             var allRules = LoadingWork.LoadRules();
             var rules = new List<ForbiddenElement>();
-            foreach (var street in allRules)
-            {
-                rules.AddRange(street.Value);
-            }
+            foreach (var street in allRules) rules.AddRange(street.Value);
 
             // загрузил коды
             var allCodes = LoadingWork.LoadCodes();
             var codes = new List<HomeInfo>();
-            foreach (var street in allCodes)
-            {
-                codes.AddRange(street.Value);
-            }
+            foreach (var street in allCodes) codes.AddRange(street.Value);
 
             // смапировал
             foreach (var home in homes)
@@ -326,39 +301,27 @@ namespace Districts.ViewModel.TabsVM
             var street = new StreetViewModel(homes);
             Streets.Add(street);
         }
+
         #endregion
     }
 
-    class HomeMap : List<FullHomeInfo>
+    internal class HomeMap : List<FullHomeInfo>
     {
-        public ForbiddenElement GetRule(Building home)
+        public HomeMap()
         {
-            var find = this.FirstOrDefault(x => Equals(x.Building, home));
-            return find?.ForbiddenElement;
         }
 
-        public HomeInfo GetHomeInfo(Building home)
+        public HomeMap(IEnumerable<Building> homes,
+            IEnumerable<HomeInfo> homeInfos,
+            IEnumerable<ForbiddenElement> rules)
         {
-            var find = this.FirstOrDefault(x => Equals(x.Building, home));
-            return find?.HomeInfo;
-        }
-
-        public bool Remove(Building home)
-        {
-            var find = this.FirstOrDefault(x => Equals(x.Building, home));
-            return Remove(find);
-        }
-
-        public void Add(Building home, ForbiddenElement element = null, HomeInfo info = null)
-        {
-            var full = new FullHomeInfo
+            foreach (var home in homes)
             {
-                Building = home,
-                HomeInfo = info,
-                ForbiddenElement = element
-            };
+                var rule = rules.FirstOrDefault(x => x.IsTheSameObject(home)) ?? new ForbiddenElement(home);
+                var homeInfo = homeInfos.FirstOrDefault(x => x.IsTheSameObject(home)) ?? new HomeInfo(home);
 
-            Add(full);
+                Add(home, rule, homeInfo);
+            }
         }
 
         public List<HomeInfo> GetHomeInfoValues
@@ -443,8 +406,38 @@ namespace Districts.ViewModel.TabsVM
 
         public int DoorsCount => this.Aggregate(0, (i, info) => i + info.Building.Doors);
 
+        public ForbiddenElement GetRule(Building home)
+        {
+            var find = this.FirstOrDefault(x => Equals(x.Building, home));
+            return find?.ForbiddenElement;
+        }
+
+        public HomeInfo GetHomeInfo(Building home)
+        {
+            var find = this.FirstOrDefault(x => Equals(x.Building, home));
+            return find?.HomeInfo;
+        }
+
+        public bool Remove(Building home)
+        {
+            var find = this.FirstOrDefault(x => Equals(x.Building, home));
+            return Remove(find);
+        }
+
+        public void Add(Building home, ForbiddenElement element = null, HomeInfo info = null)
+        {
+            var full = new FullHomeInfo
+            {
+                Building = home,
+                HomeInfo = info,
+                ForbiddenElement = element
+            };
+
+            Add(full);
+        }
+
         /// <summary>
-        /// Returns sorted!!!!
+        ///     Returns sorted!!!!
         /// </summary>
         /// <param name="home"></param>
         /// <param name="all"></param>
@@ -468,27 +461,9 @@ namespace Districts.ViewModel.TabsVM
             var result = new HomeMap(homes, infos, rules);
             return result;
         }
-
-        public HomeMap()
-        {
-            
-        }
-
-        public HomeMap(IEnumerable<Building> homes,
-            IEnumerable<HomeInfo> homeInfos,
-            IEnumerable<ForbiddenElement> rules)
-        {
-            foreach (var home in homes)
-            {
-                var rule = rules.FirstOrDefault(x => x.IsTheSameObject(home)) ?? new ForbiddenElement(home);
-                var homeInfo = homeInfos.FirstOrDefault(x => x.IsTheSameObject(home)) ?? new HomeInfo(home);
-
-                Add(home, rule, homeInfo);
-            }
-        }
     }
 
-    class FullHomeInfo
+    internal class FullHomeInfo
     {
         public Building Building { get; set; }
         public ForbiddenElement ForbiddenElement { get; set; }

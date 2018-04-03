@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Districts.Helper;
 using Districts.MVVM;
 using Districts.Settings;
@@ -14,19 +10,25 @@ namespace Districts.ViewModel.TabsVM
 {
     public class BackupViewModel : ObservableObject
     {
+        private bool _saveCards;
+        private bool _saveCodes;
+        private bool _saveHomes;
         private bool _saveLogs;
         private bool _saveManagement;
         private bool _saveRestrictions;
-        private bool _saveCodes;
-        private bool _saveCards;
-        private bool _saveHomes;
+
+
+        public BackupViewModel()
+        {
+            BackupCommand = new Command(OnBackUp, OnCanBackup);
+        }
 
 
         public Command BackupCommand { get; set; }
 
         public bool SaveHomes
         {
-            get { return _saveHomes; }
+            get => _saveHomes;
             set
             {
                 if (value == _saveHomes) return;
@@ -37,7 +39,7 @@ namespace Districts.ViewModel.TabsVM
 
         public bool SaveCards
         {
-            get { return _saveCards; }
+            get => _saveCards;
             set
             {
                 if (value == _saveCards) return;
@@ -48,7 +50,7 @@ namespace Districts.ViewModel.TabsVM
 
         public bool SaveCodes
         {
-            get { return _saveCodes; }
+            get => _saveCodes;
             set
             {
                 if (value == _saveCodes) return;
@@ -59,7 +61,7 @@ namespace Districts.ViewModel.TabsVM
 
         public bool SaveRestrictions
         {
-            get { return _saveRestrictions; }
+            get => _saveRestrictions;
             set
             {
                 if (value == _saveRestrictions) return;
@@ -70,7 +72,7 @@ namespace Districts.ViewModel.TabsVM
 
         public bool SaveManagement
         {
-            get { return _saveManagement; }
+            get => _saveManagement;
             set
             {
                 if (value == _saveManagement) return;
@@ -81,19 +83,13 @@ namespace Districts.ViewModel.TabsVM
 
         public bool SaveLogs
         {
-            get { return _saveLogs; }
+            get => _saveLogs;
             set
             {
                 if (value == _saveLogs) return;
                 _saveLogs = value;
                 OnPropertyChanged();
             }
-        }
-
-
-        public BackupViewModel()
-        {
-            BackupCommand = new Command(OnBackUp, OnCanBackup);
         }
 
 
@@ -116,35 +112,19 @@ namespace Districts.ViewModel.TabsVM
             var currentFolder = settings.BackupFolder + "\\" + currentTime.ToString("F").Replace(":", "-");
             Directory.CreateDirectory(currentFolder);
 
-            if (SaveHomes)
-            {
-                CompressAndSaveFolder(settings.BuildingPath, currentFolder + "\\Homes.zip");
-            }
+            if (SaveHomes) CompressAndSaveFolder(settings.BuildingPath, currentFolder + "\\Homes.zip");
 
-            if (SaveCards)
-            {
-                CompressAndSaveFolder(settings.CardsPath, currentFolder + "\\Cards.zip");
-            }
+            if (SaveCards) CompressAndSaveFolder(settings.CardsPath, currentFolder + "\\Cards.zip");
 
-            if (SaveCodes)
-            {
-                CompressAndSaveFolder(settings.HomeInfoPath, currentFolder + "\\HomeInfo.zip");
-            }
+            if (SaveCodes) CompressAndSaveFolder(settings.HomeInfoPath, currentFolder + "\\HomeInfo.zip");
 
             if (SaveManagement)
-            {
                 CompressAndSaveFolder(settings.ManageRecordsPath, currentFolder + "\\Management Recods.zip");
-            }
 
             if (SaveRestrictions)
-            {
                 CompressAndSaveFolder(settings.RestrictionsPath, currentFolder + "\\Restrictions.zip");
-            }
 
-            if (SaveLogs)
-            {
-                CompressAndSaveFolder(settings.LogPath, currentFolder + "\\Logs.zip");
-            }
+            if (SaveLogs) CompressAndSaveFolder(settings.LogPath, currentFolder + "\\Logs.zip");
 
             MessageHelper.ShowDoneBubble();
         }
@@ -156,6 +136,7 @@ namespace Districts.ViewModel.TabsVM
                 Tracer.Write("Нет папки для сохранения");
                 return;
             }
+
             using (var zip = new ZipFile())
             {
                 //
@@ -164,10 +145,7 @@ namespace Districts.ViewModel.TabsVM
                 zip.AlternateEncodingUsage = ZipOption.Always;
                 zip.AlternateEncoding = Encoding.GetEncoding(866);
 
-                foreach (var file in Directory.GetFiles(toCopy))
-                {
-                    zip.AddFile(file, "");
-                }
+                foreach (var file in Directory.GetFiles(toCopy)) zip.AddFile(file, "");
                 zip.Save(archiveName);
             }
         }

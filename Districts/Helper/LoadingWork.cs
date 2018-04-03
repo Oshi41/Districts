@@ -14,7 +14,7 @@ namespace Districts.Helper
     public static class LoadingWork
     {
         /// <summary>
-        /// Загружаю все файлы из папки и сериализую их из json формата
+        ///     Загружаю все файлы из папки и сериализую их из json формата
         /// </summary>
         /// <typeparam name="T">Тип элементов</typeparam>
         /// <param name="folder">Путь к папке</param>
@@ -46,17 +46,18 @@ namespace Districts.Helper
 
             return result;
         }
+
         /// <summary>
-        /// Загружаю только ункуальные значния
+        ///     Загружаю только ункуальные значния
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="folder"></param>
         /// <returns></returns>
-        private static Dictionary<string, List<T>> LoadDistinct<T>(string folder) 
+        private static Dictionary<string, List<T>> LoadDistinct<T>(string folder)
             where T : BaseFindableObject
         {
             // загрузл все объекты
-            Dictionary<string, List<T>> loaded = LoadSmth<List<T>>(folder);
+            var loaded = LoadSmth<List<T>>(folder);
             // сохранил их в большой список
             var allHomes = loaded.SelectMany(x => x.Value).ToList();
             // выбрал только уникальные
@@ -70,21 +71,21 @@ namespace Districts.Helper
         public static Dictionary<string, List<Building>> LoadSortedHomes()
         {
             var result = LoadDistinct<Building>(ApplicationSettings.ReadOrCreate().BuildingPath);
-            foreach (var keyValuePair in result)
-            {
-                keyValuePair.Value.Sort(new HouseNumberComparer());
-            }
+            foreach (var keyValuePair in result) keyValuePair.Value.Sort(new HouseNumberComparer());
 
             return result;
         }
+
         public static Dictionary<string, List<ForbiddenElement>> LoadRules()
         {
             return LoadDistinct<ForbiddenElement>(ApplicationSettings.ReadOrCreate().RestrictionsPath);
         }
+
         public static Dictionary<string, List<HomeInfo>> LoadCodes()
         {
             return LoadDistinct<HomeInfo>(ApplicationSettings.ReadOrCreate().HomeInfoPath);
         }
+
         public static Dictionary<string, Card> LoadCards()
         {
             var temp = LoadSmth<Card>(ApplicationSettings.ReadOrCreate().CardsPath);
@@ -93,6 +94,7 @@ namespace Districts.Helper
                 .ToDictionary(x => x.Key, x => x.Value);
             return temp;
         }
+
         public static Dictionary<string, CardManagement> LoadManageElements()
         {
             var result = LoadSmth<CardManagement>(ApplicationSettings.ReadOrCreate().ManageRecordsPath);

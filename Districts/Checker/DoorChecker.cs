@@ -7,12 +7,12 @@ using Districts.JsonClasses;
 namespace Districts.Checker
 {
     /// <summary>
-    /// Класс для проверки созданных карточек на повторения квартир
+    ///     Класс для проверки созданных карточек на повторения квартир
     /// </summary>
-    class DoorChecker
+    internal class DoorChecker
     {
         /// <summary>
-        /// Возвращает список повторяющихся дверей
+        ///     Возвращает список повторяющихся дверей
         /// </summary>
         /// <returns></returns>
         public List<Door> FindRepeated()

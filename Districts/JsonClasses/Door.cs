@@ -4,33 +4,34 @@ using Districts.JsonClasses.Base;
 namespace Districts.JsonClasses
 {
     /// <summary>
-    /// Класс описывающий квартиру
+    ///     Класс описывающий квартиру
     /// </summary>
     public class Door : BaseFindableObject
     {
-        /// <summary>
-        /// Номер квартиры
-        /// </summary>
-        public int Number { get; set; }
-        /// <summary>
-        /// Примерный подъезд
-        /// </summary>
-        public int Entrance { get; set; }
-        /// <summary>
-        /// Коды
-        /// </summary>
-        public List<string> Codes { get; set; } = new List<string>();
-
         public Door(BaseFindableObject obj) : base(obj)
         {
         }
 
         public Door()
         {
-            
         }
 
-       
+        /// <summary>
+        ///     Номер квартиры
+        /// </summary>
+        public int Number { get; set; }
+
+        /// <summary>
+        ///     Примерный подъезд
+        /// </summary>
+        public int Entrance { get; set; }
+
+        /// <summary>
+        ///     Коды
+        /// </summary>
+        public List<string> Codes { get; set; } = new List<string>();
+
+
         #region Overrided
 
         public override bool Equals(object obj)
@@ -38,10 +39,7 @@ namespace Districts.JsonClasses
             if (!base.Equals(obj))
                 return false;
 
-            if (obj is Door x)
-            {
-                return x.Number == Number;
-            }
+            if (obj is Door x) return x.Number == Number;
 
             return false;
         }
@@ -68,7 +66,5 @@ namespace Districts.JsonClasses
         }
 
         #endregion
-
-
     }
 }

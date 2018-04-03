@@ -1,13 +1,24 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Windows;
 using System.Windows.Data;
 
 namespace Districts.Views.Converter
 {
     public class MultiBoolValueConverter : IMultiValueConverter
     {
+        #region Nested
+
+        public enum ConverterTypes
+        {
+            AllTrue,
+            AllFalse,
+            AnyTrue,
+            AnyFalse
+        }
+
+        #endregion
+
         public ConverterTypes ConverterType { get; set; } = ConverterTypes.AllTrue;
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -34,7 +45,7 @@ namespace Districts.Views.Converter
                     var allTrue = boolVals.All(x => x);
                     return allTrue
                         ? false
-                        : (object)null;
+                        : (object) null;
                 }
 
                 case ConverterTypes.AnyTrue:
@@ -43,8 +54,8 @@ namespace Districts.Views.Converter
                 case ConverterTypes.AnyFalse:
                     return boolVals.Any(x => !x);
 
-                    default:
-                        return false;
+                default:
+                    return false;
             }
         }
 
@@ -53,27 +64,12 @@ namespace Districts.Views.Converter
             if (value is bool val)
             {
                 var toReturn = new object[targetTypes.Length];
-                for (int i = 0; i < toReturn.Length; i++)
-                {
-                    toReturn[i] = val;
-                }
+                for (var i = 0; i < toReturn.Length; i++) toReturn[i] = val;
 
                 return toReturn;
             }
 
             return null;
         }
-
-        #region Nested
-
-        public enum ConverterTypes
-        {
-            AllTrue,
-            AllFalse,
-            AnyTrue,
-            AnyFalse
-        }
-
-        #endregion
     }
 }

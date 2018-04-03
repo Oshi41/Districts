@@ -4,8 +4,71 @@ using Newtonsoft.Json;
 
 namespace Districts.Settings
 {
-    class ApplicationSettings
+    internal class ApplicationSettings
     {
+        #region ctor
+
+        private ApplicationSettings()
+        {
+        }
+
+        #endregion
+
+        /// <summary>
+        ///     Будет меняться только базовая папка, остальные создаются внутри этой
+        /// </summary>
+        public string BaseFolder { get; set; } = GetLocalFolder();
+
+        /// <summary>
+        ///     Макс кол-во квартир
+        /// </summary>
+        public int MaxDoors { get; set; } = 25;
+
+        /// <summary>
+        ///     Путь к домам
+        /// </summary>
+        public string BuildingPath => BaseFolder + "\\Buildings";
+
+        /// <summary>
+        ///     Путь к карточкам участков
+        /// </summary>
+        public string CardsPath => BaseFolder + "\\Cards";
+
+        /// <summary>
+        ///     Путь к улицам
+        /// </summary>
+        public string StreetsPath => BaseFolder + "\\Streets.txt";
+
+        /// <summary>
+        ///     Путь к кодам
+        /// </summary>
+        public string HomeInfoPath => BaseFolder + "\\HomeInfo";
+
+        /// <summary>
+        ///     Путь к правилам доступа
+        /// </summary>
+        public string RestrictionsPath => BaseFolder + "\\Restrictions";
+
+        /// <summary>
+        ///     Путь для логирования
+        /// </summary>
+        public string LogPath => BaseFolder + "\\Logs";
+
+        /// <summary>
+        ///     Путь для записей о карточке
+        /// </summary>
+        public string ManageRecordsPath => BaseFolder + "\\ManageRecords";
+
+        /// <summary>
+        ///     Папка с бэкапами
+        /// </summary>
+        public string BackupFolder => BaseFolder + "\\Backups";
+
+        /// <summary>
+        ///     Путь к конфигу всегда один и тот же!!!!
+        /// </summary>
+        public static string ConfigPath => GetLocalFolder() + "\\config";
+
         #region Helping
 
         private static string GetLocalFolder()
@@ -15,61 +78,9 @@ namespace Districts.Settings
 
         #endregion
 
-        /// <summary>
-        /// Будет меняться только базовая папка, остальные создаются внутри этой
-        /// </summary>
-        public string BaseFolder { get; set; } = GetLocalFolder();
-        /// <summary>
-        /// Макс кол-во квартир
-        /// </summary>
-        public int MaxDoors { get; set; } = 25;
-        /// <summary>
-        /// Путь к домам
-        /// </summary>
-        public string BuildingPath => BaseFolder + "\\Buildings";
-        /// <summary>
-        /// Путь к карточкам участков
-        /// </summary>
-        public string CardsPath => BaseFolder + "\\Cards";
-        /// <summary>
-        /// Путь к улицам
-        /// </summary>
-        public string StreetsPath => BaseFolder + "\\Streets.txt";
-        /// <summary>
-        /// Путь к кодам
-        /// </summary>
-        public string HomeInfoPath => BaseFolder + "\\HomeInfo";
-        /// <summary>
-        /// Путь к правилам доступа
-        /// </summary>
-        public string RestrictionsPath => BaseFolder + "\\Restrictions";
-        /// <summary>
-        /// Путь для логирования
-        /// </summary>
-        public string LogPath => BaseFolder + "\\Logs";
-        /// <summary>
-        /// Путь для записей о карточке
-        /// </summary>
-        public string ManageRecordsPath => BaseFolder + "\\ManageRecords";
-        /// <summary>
-        /// Папка с бэкапами
-        /// </summary>
-        public string BackupFolder => BaseFolder + "\\Backups";
-        /// <summary>
-        /// Путь к конфигу всегда один и тот же!!!!
-        /// </summary>
-        public static string ConfigPath => GetLocalFolder() + "\\config";
-
-        #region ctor
-        private ApplicationSettings()
-        {
-
-        }
-        #endregion
-
         public static ApplicationSettings ReadOrCreate()
         {
-            string localPath = GetLocalFolder();
+            var localPath = GetLocalFolder();
             if (!Directory.Exists(localPath))
                 Directory.CreateDirectory(localPath);
 
@@ -101,12 +112,14 @@ namespace Districts.Settings
 
             return settings;
         }
+
         private static ApplicationSettings Read(string path)
         {
             var json = File.ReadAllText(path);
             var settings = JsonConvert.DeserializeObject<ApplicationSettings>(json);
             return settings;
         }
+
         public static ApplicationSettings GetDefault()
         {
             return new ApplicationSettings();
@@ -137,6 +150,7 @@ namespace Districts.Settings
                 }
             }
         }
+
         private static void CheckFileExistance(params string[] files)
         {
             foreach (var file in files)

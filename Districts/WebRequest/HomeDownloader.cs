@@ -7,39 +7,38 @@ using Districts.JsonClasses;
 namespace Districts.WebRequest
 {
     /// <summary>
-    /// Получает инф-у о доме
+    ///     Получает инф-у о доме
     /// </summary>
     public class HomeDownloader
     {
         #region HTML node names
 
-        private string _floorsKey = "Количество этажей";
-        private string _doorsKey = "Количество жилых помещений";
-        private string _elevatorKey = "Количество лифтов";
-        private string _enteranceKey = "Количество подъездов";
-        private string _childrenTag = "наибольшее";
-
+        private readonly string _floorsKey = "Количество этажей";
+        private readonly string _doorsKey = "Количество жилых помещений";
+        private readonly string _elevatorKey = "Количество лифтов";
+        private readonly string _enteranceKey = "Количество подъездов";
+        private readonly string _childrenTag = "наибольшее";
 
         #endregion
 
         #region Fields
 
         /// <summary>
-        /// Начало запроса
+        ///     Начало запроса
         /// </summary>
         private static readonly string HomeBaseUri = "http://www.dom.mos.ru/Building/Passport?pk=";
+
         /// <summary>
-        /// То, что заменяем
+        ///     То, что заменяем
         /// </summary>
         private string ReplaceblePrefix = "&section=Buildings";
-
 
         #endregion
 
         #region WebRequest
 
         /// <summary>
-        /// Заполняет информаци о домах
+        ///     Заполняет информаци о домах
         /// </summary>
         /// <param name="source">Дом, в который положим всю инфу</param>
         /// <param name="partOfUri">Часть url, которая приходит с запросом на улицу</param>
@@ -70,7 +69,7 @@ namespace Districts.WebRequest
         }
 
         /// <summary>
-        /// Возвраащет строку в виде HTML
+        ///     Возвраащет строку в виде HTML
         /// </summary>
         /// <param name="uri">URI информации о доме</param>
         /// <returns></returns>
@@ -87,20 +86,19 @@ namespace Districts.WebRequest
             return result;
         }
 
-
         #endregion
 
         #region Parse work
 
         /// <summary>
-        /// Находит значене по имени ноды
+        ///     Находит значене по имени ноды
         /// </summary>
         /// <param name="document">HTML документ</param>
         /// <param name="nodeName">Название ноды</param>
         /// <returns></returns>
         private string FindValueTag(string document, string nodeName)
         {
-            int index = document.IndexOf(nodeName, StringComparison.OrdinalIgnoreCase);
+            var index = document.IndexOf(nodeName, StringComparison.OrdinalIgnoreCase);
             if (index < 0)
                 return string.Empty;
 
@@ -110,7 +108,7 @@ namespace Districts.WebRequest
         }
 
         /// <summary>
-        /// Находит нужную ноду, после чего ищет дочернюю и выцепляет её значение
+        ///     Находит нужную ноду, после чего ищет дочернюю и выцепляет её значение
         /// </summary>
         /// <param name="document">HTML документ</param>
         /// <param name="baseNode">Основная нода - родитель</param>
@@ -118,7 +116,7 @@ namespace Districts.WebRequest
         /// <returns></returns>
         private string FindValueTag(string document, string baseNode, string childNode)
         {
-            int index = document.IndexOf(baseNode, StringComparison.Ordinal);
+            var index = document.IndexOf(baseNode, StringComparison.Ordinal);
             if (index < 0)
                 return "";
             index += baseNode.Length;
@@ -134,7 +132,7 @@ namespace Districts.WebRequest
         }
 
         /// <summary>
-        /// Находит значение ближайшей ноды к индексу
+        ///     Находит значение ближайшей ноды к индексу
         /// </summary>
         /// <param name="document">HTML документ</param>
         /// <param name="findIndex">Индекс ноды</param>
@@ -142,24 +140,25 @@ namespace Districts.WebRequest
         private string GetValueNode(string document, int findIndex)
         {
             // Нашли закрывающийся таг
-            int valueTagIndex = document.IndexOf("<", findIndex, StringComparison.Ordinal);
+            var valueTagIndex = document.IndexOf("<", findIndex, StringComparison.Ordinal);
 
             // Нашли открывающийся таг значения
             // Больше на 1, так как ищем следующее попадание
             valueTagIndex = document.IndexOf("<", valueTagIndex + 1, StringComparison.Ordinal);
 
             // индекс закрывающейся кавыки прямо перед значением
-            int beforeValue = document.IndexOf(">", valueTagIndex, StringComparison.Ordinal);
+            var beforeValue = document.IndexOf(">", valueTagIndex, StringComparison.Ordinal);
             // индекс открывающейся кавычки сразу после значения
-            int afterValue = document.IndexOf("<", beforeValue, StringComparison.Ordinal);
+            var afterValue = document.IndexOf("<", beforeValue, StringComparison.Ordinal);
 
             // Обрезаем, тка как попадаем на скобку
-            int start = beforeValue + 1;
-            int count = afterValue - start;
+            var start = beforeValue + 1;
+            var count = afterValue - start;
             var value = document.Substring(start, count).Replace(" ", "");
 
             return value;
         }
+
         #endregion
     }
 }

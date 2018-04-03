@@ -13,85 +13,85 @@
         d:DataContext="{d:DesignInstance {x:Type viewModel:EditHomeInfoViewModel}}">
 
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <controls:EnumToDescrConverter x:Key="DescrConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <controls:EnumToDescrConverter x:Key="DescrConverter" />
 
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type viewModel:CountingTypes}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="viewModel:CountingTypes"/>
+                <x:Type TypeName="viewModel:CountingTypes" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
 
     <Window.Title>
         <MultiBinding StringFormat="{}{0} {1}">
-            <Binding Path="Home.Street"/>
-            <Binding Path="Home.HouseNumber"/>
+            <Binding Path="Home.Street" />
+            <Binding Path="Home.HouseNumber" />
         </MultiBinding>
     </Window.Title>
 
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
 
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
 
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
 
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
 
         </Grid.RowDefinitions>
 
         <UniformGrid Columns="1">
-            <TextBlock Text="Агрессии"/>
-            <TextBox Grid.Row="1" 
-                   Text="{Binding Aggresive}"
-                 TextChanged="RestrictText"/>
+            <TextBlock Text="Агрессии" />
+            <TextBox Grid.Row="1"
+                     Text="{Binding Aggresive}"
+                     TextChanged="RestrictText" />
 
-            <TextBlock Grid.Row="2" 
-                   Text="Просили не призодить"/>
+            <TextBlock Grid.Row="2"
+                       Text="Просили не призодить" />
             <TextBox Grid.Row="3"
-                   Text="{Binding NoWorried}"
-                 TextChanged="RestrictText"/>
+                     Text="{Binding NoWorried}"
+                     TextChanged="RestrictText" />
 
-            <TextBlock Grid.Row="4" 
-                   Text="Не посещать"/>
+            <TextBlock Grid.Row="4"
+                       Text="Не посещать" />
             <TextBox Grid.Row="5"
-                   Text="{Binding NoVisit}"
-                 TextChanged="RestrictText"/>
+                     Text="{Binding NoVisit}"
+                     TextChanged="RestrictText" />
 
         </UniformGrid>
 
         <!--UseAlternativeCounting-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            
+
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="Visibility" Value="Visible" />
 
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding CountingAlgorythm}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -108,7 +108,7 @@
                       SelectedItem="{Binding CountingAlgorythm}">
                 <ComboBox.ItemTemplate>
                     <ItemContainerTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}}"/>
+                        <TextBlock Text="{Binding Converter={StaticResource DescrConverter}}" />
                     </ItemContainerTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -123,11 +123,11 @@
                 <mah:NumericUpDown.Style>
                     <Style TargetType="mah:NumericUpDown"
                            BasedOn="{StaticResource {x:Type mah:NumericUpDown}}">
-                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=ComboBox, Path=SelectedIndex}"
                                          Value="2">
-                                <Setter Property="Visibility" Value="Visible"/>
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -138,12 +138,12 @@
                       Grid.Row="1">
                 <CheckBox.Style>
                     <Style TargetType="CheckBox">
-                        <Setter Property="Visibility" Value="Visible"/>
-                        <Setter Property="Content" Value="Применить для всех корпусов"/>
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Content" Value="Применить для всех корпусов" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding CountingAlgorythm}" 
+                            <DataTrigger Binding="{Binding CountingAlgorythm}"
                                          Value="{x:Static viewModel:CountingTypes.Custom}">
-                                <Setter Property="Content" Value="Сдвинуть остальные"/>
+                                <Setter Property="Content" Value="Сдвинуть остальные" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -153,47 +153,46 @@
         </Grid>
 
 
-
-        <TextBlock Grid.Row="6" 
-                   Text="Коды"/>
+        <TextBlock Grid.Row="6"
+                   Text="Коды" />
         <TabControl Grid.Row="7"
                     ItemsSource="{Binding Codes}">
             <TabControl.ItemContainerStyle>
                 <Style TargetType="TabItem">
-                    <Setter Property="Header" Value="{Binding Number, StringFormat={}{0} под.}"/>
+                    <Setter Property="Header" Value="{Binding Number, StringFormat={}{0} под.}" />
                 </Style>
             </TabControl.ItemContainerStyle>
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <TextBox Text="{Binding Path=HomeCodes,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             AcceptsReturn="True"/>
+                             AcceptsReturn="True" />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
 
         <TextBlock Grid.Row="8"
-                   Text="Комментарии"/>
+                   Text="Комментарии" />
         <TextBox Grid.Row="9"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
                  MaxLines="255"
-                 Text="{Binding Comments, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding Comments, UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Grid.Row="10" 
+        <StackPanel Grid.Row="10"
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
-            <Button Content="Ok" 
+            <Button Content="Ok"
                     Margin="5"
                     MinWidth="50"
                     Command="{Binding SaveCommand}"
                     IsDefault="True"
-                    Click="SuccessClose"/>
+                    Click="SuccessClose" />
 
-            <Button Content="Close" 
+            <Button Content="Close"
                     Margin="5"
                     MinWidth="50"
                     IsCancel="True"
-                    Click="OnClose"/>
+                    Click="OnClose" />
         </StackPanel>
     </Grid>
 </Window>

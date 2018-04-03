@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.Helper;
 using Districts.JsonClasses;
@@ -17,8 +15,119 @@ using Newtonsoft.Json;
 
 namespace Districts.ViewModel.TabsVM
 {
-    class ManageViewModel : ObservableObject
+    internal class ManageViewModel : ObservableObject
     {
+        public ManageViewModel()
+        {
+            LoadCommand = new Command(OnLoadCommand);
+            SearchCommand = new Command(OnSearch);
+            CancelSearchCommand = new Command(OnClearSearch);
+            SaveCommand = new Command(OnSave);
+            EditRecord = new Command(OnEdit);
+        }
+
+        /// <summary>
+        ///     Нужно для пробрасывания вглубь модели
+        /// </summary>
+        /// <param name="obj"></param>
+        private void OnEdit(object obj)
+        {
+            if (obj is ManageRecordViewModel record)
+            {
+                record.EditCommand?.Execute(_savedNames);
+                // могли добавить имена, переписываем их
+                RewriteNames();
+            }
+        }
+
+        /// <summary>
+        ///     Содержит ли одно из полей строку поиска
+        /// </summary>
+        /// <param name="search">Что ищем</param>
+        /// <param name="fields">Где ищем</param>
+        /// <returns></returns>
+        private bool CanFind(string search, params string[] fields)
+        {
+            // Подходит все, строка пустая
+            if (string.IsNullOrEmpty(search))
+                return true;
+
+
+            foreach (var field in fields)
+            {
+                if (string.IsNullOrEmpty(field)
+                    || field.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) < 0)
+                    continue;
+
+                // что то нашли, выводим результат
+                return true;
+            }
+
+            // ничего не нашли, выходим
+            return false;
+        }
+
+        private void SortByDate(CardManagement record)
+        {
+            if (record == null || !record.Actions.Any())
+                return;
+
+            record.Actions = record.Actions.OrderBy(x => x.Date).ToList();
+        }
+
+        private void SortByCondition(IEnumerable<ManageRecordViewModel> source)
+        {
+            var result = source;
+
+            // если не стоит флаг "все"
+            if ((SortingType & SortingType.All) != SortingType.All)
+            {
+                // сортируем только несипользуемые
+                if ((SortingType & SortingType.Droppd) == SortingType.Droppd) result = result.Where(x => !x.HasOwner());
+
+                // только те, что на руках
+                if ((SortingType & SortingType.InUse) == SortingType.InUse) result = result.Where(x => x.HasOwner());
+
+
+                // берем ограничение по времени
+                if ((SortingType & SortingType.Diff1Y) == SortingType.Diff1Y)
+                {
+                    var span = TimeSpan.FromDays(365);
+
+                    // пытаемся сделать промежуток максимально мелким
+                    if ((SortingType & SortingType.Diff5M) == SortingType.Diff5M)
+                        span = TimeSpan.FromDays(30 * 5);
+
+                    if ((SortingType & SortingType.Diff3M) == SortingType.Diff3M)
+                        span = TimeSpan.FromDays(30 * 3);
+
+                    result = result.Where(x => x.HasTimeDifference(span, (SortingType & SortingType.Droppd) != 0));
+                }
+            }
+
+            Cards = new ObservableCollection<ManageRecordViewModel>(result);
+        }
+
+        /// <summary>
+        ///     Заполняем имена
+        /// </summary>
+        private void RewriteNames()
+        {
+            // заполнили именами
+            var hasSet = new HashSet<string>();
+            foreach (var card in _mappedCards.Values)
+            foreach (var action in card.Actions)
+            {
+                var name = action.Subject;
+                if (string.IsNullOrEmpty(name) || hasSet.Contains(name))
+                    continue;
+
+                hasSet.Add(name);
+            }
+
+            _savedNames = new List<string>(hasSet);
+        }
+
         #region Fields
 
         private List<string> _savedNames = new List<string>();
@@ -44,7 +153,7 @@ namespace Districts.ViewModel.TabsVM
 
         public string SearchText
         {
-            get { return _searchText; }
+            get => _searchText;
             set
             {
                 if (value == _searchText) return;
@@ -55,7 +164,7 @@ namespace Districts.ViewModel.TabsVM
 
         public ObservableCollection<ManageRecordViewModel> Cards
         {
-            get { return _cards; }
+            get => _cards;
             set
             {
                 if (Equals(value, _cards)) return;
@@ -66,7 +175,7 @@ namespace Districts.ViewModel.TabsVM
 
         public SortingType SortingType
         {
-            get { return _sortingType; }
+            get => _sortingType;
             set
             {
                 if (value == _sortingType) return;
@@ -78,29 +187,6 @@ namespace Districts.ViewModel.TabsVM
         }
 
         #endregion
-
-        public ManageViewModel()
-        {
-            LoadCommand = new Command(OnLoadCommand);
-            SearchCommand = new Command(OnSearch);
-            CancelSearchCommand = new Command(OnClearSearch);
-            SaveCommand = new Command(OnSave);
-            EditRecord = new Command(OnEdit);
-        }
-
-        /// <summary>
-        /// Нужно для пробрасывания вглубь модели
-        /// </summary>
-        /// <param name="obj"></param>
-        private void OnEdit(object obj)
-        {
-            if (obj is ManageRecordViewModel record)
-            {
-                record.EditCommand?.Execute(_savedNames);
-                // могли добавить имена, переписываем их
-                RewriteNames();
-            }
-        }
 
         #region Command Handlers
 
@@ -170,7 +256,7 @@ namespace Districts.ViewModel.TabsVM
                 foreach (var card in cards)
                 {
                     var find = records.FirstOrDefault(x => x.Number == card.Number)
-                               ?? new CardManagement { Number = card.Number };
+                               ?? new CardManagement {Number = card.Number};
                     SortByDate(find);
                     _mappedCards.Add(card, find);
                 }
@@ -185,103 +271,5 @@ namespace Districts.ViewModel.TabsVM
         }
 
         #endregion
-
-        /// <summary>
-        /// Содержит ли одно из полей строку поиска
-        /// </summary>
-        /// <param name="search">Что ищем</param>
-        /// <param name="fields">Где ищем</param>
-        /// <returns></returns>
-        private bool CanFind(string search, params string[] fields)
-        {
-            // Подходит все, строка пустая
-            if (string.IsNullOrEmpty(search))
-                return true;
-
-
-            foreach (var field in fields)
-            {
-                if (string.IsNullOrEmpty(field)
-                    || field.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) < 0)
-                {
-                    continue;
-                }
-
-                // что то нашли, выводим результат
-                return true;
-            }
-
-            // ничего не нашли, выходим
-            return false;
-        }
-
-        private void SortByDate(CardManagement record)
-        {
-            if (record == null || !record.Actions.Any())
-                return;
-
-            record.Actions = record.Actions.OrderBy(x => x.Date).ToList();
-        }
-
-        private void SortByCondition(IEnumerable<ManageRecordViewModel> source)
-        {
-            var result = source;
-
-            // если не стоит флаг "все"
-            if ((SortingType & SortingType.All) != SortingType.All)
-            {
-                // сортируем только несипользуемые
-                if ((this.SortingType & SortingType.Droppd) == SortingType.Droppd)
-                {
-                    result = result.Where(x => !x.HasOwner());
-                }
-
-                // только те, что на руках
-                if ((this.SortingType & SortingType.InUse) == SortingType.InUse)
-                {
-                    result = result.Where(x => x.HasOwner());
-                }
-
-
-                // берем ограничение по времени
-                if ((this.SortingType & SortingType.Diff1Y) == SortingType.Diff1Y)
-                {
-                    var span = TimeSpan.FromDays(365);
-
-                    // пытаемся сделать промежуток максимально мелким
-                    if ((this.SortingType & SortingType.Diff5M) == SortingType.Diff5M)
-                        span = TimeSpan.FromDays(30 * 5);
-
-                    if ((this.SortingType & SortingType.Diff3M) == SortingType.Diff3M)
-                        span = TimeSpan.FromDays(30 * 3);
-
-                    result = result.Where(x => x.HasTimeDifference(span, (this.SortingType & SortingType.Droppd) != 0));
-                }
-            }
-
-            Cards = new ObservableCollection<ManageRecordViewModel>(result);
-        }
-
-        /// <summary>
-        /// Заполняем имена
-        /// </summary>
-        private void RewriteNames()
-        {
-            // заполнили именами
-            var hasSet = new HashSet<string>();
-            foreach (var card in _mappedCards.Values)
-            {
-                foreach (var action in card.Actions)
-                {
-                    var name = action.Subject;
-                    if (string.IsNullOrEmpty(name) || hasSet.Contains(name))
-                        continue;
-
-                    hasSet.Add(name);
-                }
-            }
-
-            _savedNames = new List<string>(hasSet);
-        }
     }
 }

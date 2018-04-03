@@ -3,7 +3,7 @@
 namespace Districts.Views.Management
 {
     /// <summary>
-    /// Логика взаимодействия для ManageView.xaml
+    ///     Логика взаимодействия для ManageView.xaml
     /// </summary>
     public partial class ManageView : Window
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 
@@ -22,8 +17,8 @@ namespace Districts.Helper
         }
 
         public static void ShowDoneBubble(string header = "Завершение работы",
-                                          string text = "Готово",
-                                          int seconds = 2)
+            string text = "Готово",
+            int seconds = 2)
         {
             var icon = new NotifyIcon
             {
@@ -31,7 +26,7 @@ namespace Districts.Helper
                 BalloonTipIcon = ToolTipIcon.Info,
                 BalloonTipText = text,
                 BalloonTipTitle = header,
-                Visible = true,
+                Visible = true
             };
             icon.ShowBalloonTip(1000 * seconds);
         }

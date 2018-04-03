@@ -14,28 +14,39 @@ using Districts.Views;
 namespace Districts.Printing
 {
     /// <summary>
-    /// Печать кучи карточек в один многостраничный файл
+    ///     Печать кучи карточек в один многостраничный файл
     /// </summary>
-    class CustomDocumentPaginator : DocumentPaginator
+    internal class CustomDocumentPaginator : DocumentPaginator
     {
         private readonly List<Card> _cards;
         private readonly PrintCapabilities _printCapabilities;
         private Size _pageSize;
-        private int _count;
 
         /// <summary>
-        /// Создаю документ на основе карточек и настроек принтера
+        ///     Создаю документ на основе карточек и настроек принтера
         /// </summary>
         /// <param name="cards"></param>
         /// <param name="dlg"></param>
         public CustomDocumentPaginator(List<Card> cards, PrintDialog dlg)
         {
             _cards = cards;
-            _count = (int)Math.Ceiling((decimal)(_cards.Count / 2));
+            PageCount = (int) Math.Ceiling((decimal) (_cards.Count / 2));
             _printCapabilities = dlg.PrintQueue.GetPrintCapabilities(dlg.PrintTicket);
 
             SetSize(_printCapabilities);
         }
+
+
+        public override bool IsPageCountValid => PageCount <= Math.Ceiling((decimal) (_cards.Count / 2));
+        public override int PageCount { get; }
+
+        public override Size PageSize
+        {
+            get => _pageSize;
+            set => _pageSize = value;
+        }
+
+        public override IDocumentPaginatorSource Source => null;
 
         private void SetSize(PrintCapabilities capabilities)
         {
@@ -75,7 +86,7 @@ namespace Districts.Printing
                 : _cards[pageNumber * 2 + 1];
 
             var vm = new PrintableViewMode(first, second);
-            var control = new PrintableCard { DataContext = vm };
+            var control = new PrintableCard {DataContext = vm};
 
             // Force render
             control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
@@ -89,17 +100,5 @@ namespace Districts.Printing
 
             return result;
         }
-
-
-        public override bool IsPageCountValid => PageCount <= Math.Ceiling((decimal)(_cards.Count / 2));
-        public override int PageCount => _count;
-
-        public override Size PageSize
-        {
-            get { return _pageSize; }
-            set { _pageSize = value; }
-        }
-
-        public override IDocumentPaginatorSource Source => null;
     }
 }

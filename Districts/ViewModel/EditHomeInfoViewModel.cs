@@ -13,6 +13,84 @@ namespace Districts.ViewModel
 {
     public class EditHomeInfoViewModel : ObservableObject
     {
+        public EditHomeInfoViewModel(Building home, ForbiddenElement rule, HomeInfo homeInfo)
+        {
+            Home = home;
+            ForbiddenElement = rule;
+            HomeInfo = homeInfo;
+
+            SetTabCount(home, homeInfo);
+
+            Aggresive = CompressArray(ForbiddenElement.Aggressive);
+            NoVisit = CompressArray(ForbiddenElement.NoVisit);
+            NoWorried = CompressArray(ForbiddenElement.NoWorried);
+            Comments = ForbiddenElement.Comments;
+            Begin = homeInfo.Begin;
+
+            SaveCommand = new Command(OnSave);
+
+            var number = new HouseNumber(home.HouseNumber);
+            if (number.Housing > 1)
+                CountingAlgorythm = Begin == 1
+                    ? CountingTypes.Regular
+                    : CountingTypes.Custom;
+
+            // Для сравнения
+            _sourceAlgorythm = CountingAlgorythm;
+            _sourceNumber = Begin;
+        }
+
+        #region Nested
+
+        public class CodesViewModel : ObservableObject
+        {
+            private string _codes;
+            private int _number;
+
+
+            public CodesViewModel(KeyValuePair<int, List<string>> codes)
+            {
+                HomeCodes = codes.Value.Aggregate(string.Empty, (x, y) => x += Environment.NewLine + y)
+                    .RemoveEmptyLines();
+                Number = codes.Key;
+            }
+
+            public string HomeCodes
+            {
+                get => _codes;
+                set
+                {
+                    if (Equals(value, _codes)) return;
+                    _codes = value;
+                    OnPropertyChanged();
+                }
+            }
+
+            public int Number
+            {
+                get => _number;
+                set
+                {
+                    if (value == _number) return;
+                    _number = value;
+                    OnPropertyChanged();
+                }
+            }
+
+            public KeyValuePair<int, List<string>> ToKeyPairvalue()
+            {
+                var lines = HomeCodes.Split(
+                    new[] {Environment.NewLine},
+                    StringSplitOptions.RemoveEmptyEntries
+                );
+
+                var result = new KeyValuePair<int, List<string>>(Number, new List<string>(lines));
+                return result;
+            }
+        }
+
+        #endregion
+
         #region Fields
 
         #region To save check
@@ -35,13 +113,13 @@ namespace Districts.ViewModel
 
         #region Props
 
-        public Building Home { get; private set; }
-        public ForbiddenElement ForbiddenElement { get; private set; }
-        public HomeInfo HomeInfo { get; private set; }
+        public Building Home { get; }
+        public ForbiddenElement ForbiddenElement { get; }
+        public HomeInfo HomeInfo { get; }
 
         public ObservableCollection<CodesViewModel> Codes
         {
-            get { return _codes1; }
+            get => _codes1;
             set
             {
                 if (Equals(value, _codes1)) return;
@@ -52,7 +130,7 @@ namespace Districts.ViewModel
 
         public string Aggresive
         {
-            get { return _aggresive; }
+            get => _aggresive;
             set
             {
                 if (value == _aggresive) return;
@@ -63,7 +141,7 @@ namespace Districts.ViewModel
 
         public string NoWorried
         {
-            get { return _noWorried; }
+            get => _noWorried;
             set
             {
                 if (Equals(value, _noWorried)) return;
@@ -74,7 +152,7 @@ namespace Districts.ViewModel
 
         public string NoVisit
         {
-            get { return _noVisit; }
+            get => _noVisit;
             set
             {
                 if (value == _noVisit) return;
@@ -85,7 +163,7 @@ namespace Districts.ViewModel
 
         public string Comments
         {
-            get { return _comments; }
+            get => _comments;
             set
             {
                 if (value == _comments) return;
@@ -96,7 +174,7 @@ namespace Districts.ViewModel
 
         public CountingTypes? CountingAlgorythm
         {
-            get { return _countingAlgorythm; }
+            get => _countingAlgorythm;
             set
             {
                 if (value == _countingAlgorythm) return;
@@ -107,7 +185,7 @@ namespace Districts.ViewModel
 
         public int Begin
         {
-            get { return _begin; }
+            get => _begin;
             set
             {
                 if (value == _begin) return;
@@ -118,7 +196,7 @@ namespace Districts.ViewModel
 
         public bool InheritSettings
         {
-            get { return _inheritSettings; }
+            get => _inheritSettings;
             set
             {
                 if (value == _inheritSettings) return;
@@ -138,36 +216,6 @@ namespace Districts.ViewModel
 
         #endregion
 
-        public EditHomeInfoViewModel(Building home, ForbiddenElement rule, HomeInfo homeInfo)
-        {
-            Home = home;
-            ForbiddenElement = rule;
-            HomeInfo = homeInfo;
-
-            SetTabCount(home, homeInfo);
-
-            Aggresive = CompressArray(ForbiddenElement.Aggressive);
-            NoVisit = CompressArray(ForbiddenElement.NoVisit);
-            NoWorried = CompressArray(ForbiddenElement.NoWorried);
-            Comments = ForbiddenElement.Comments;
-            Begin = homeInfo.Begin;
-
-            SaveCommand = new Command(OnSave);
-
-            var number = new HouseNumber(home.HouseNumber);
-            if (number.Housing > 1)
-            {
-                CountingAlgorythm = Begin == 1
-                    ? CountingTypes.Regular
-                    : CountingTypes.Custom;
-
-            }
-
-            // Для сравнения
-            _sourceAlgorythm = CountingAlgorythm;
-            _sourceNumber = Begin;
-        }
-
         #region Methods
 
         private void OnSave()
@@ -177,7 +225,7 @@ namespace Districts.ViewModel
             ForbiddenElement.NoWorried = ParseSequence(NoWorried);
             ForbiddenElement.Comments = Comments.RemoveEmptyLines();
 
-            Dictionary<int, List<string>> temp = new Dictionary<int, List<string>>();
+            var temp = new Dictionary<int, List<string>>();
             foreach (var code in Codes)
             {
                 var val = code.ToKeyPairvalue();
@@ -191,17 +239,12 @@ namespace Districts.ViewModel
 
         private void SetTabCount(Building home, HomeInfo homeInfo)
         {
-            for (int i = 1; i <= home.Entrances; i++)
-            {
+            for (var i = 1; i <= home.Entrances; i++)
                 if (homeInfo.AllCodes.ContainsKey(i))
                     Codes.Add(new CodesViewModel(new KeyValuePair<int, List<string>>(i, homeInfo.AllCodes[i])));
                 else
-                {
                     Codes.Add(new CodesViewModel(new KeyValuePair<int, List<string>>(i, new List<string>())));
-                }
-            }
         }
-
 
 
         #region Parse Sequense
@@ -225,19 +268,13 @@ namespace Districts.ViewModel
                     groupEnd = ints[i + 1];
                     i++;
                 }
+
                 // если группа меньше двух, добавляю через запятую
                 if (groupEnd - groupStart < 2)
-                {
                     for (var j = groupStart; j <= groupEnd; j++)
-                    {
                         values.Add(j.ToString());
-                    }
-                }
                 else
-                {   // добавляю список
                     values.Add(groupStart + "-" + groupEnd);
-                }
-
             }
 
             var result = values.Aggregate(string.Empty, (s, s1) => s += s1 + ",");
@@ -246,15 +283,15 @@ namespace Districts.ViewModel
 
         private List<int> ParseSequence(string text)
         {
-            HashSet<int> result = new HashSet<int>();
+            var result = new HashSet<int>();
             if (string.IsNullOrWhiteSpace(text))
                 return result.ToList();
 
-            string temp = text.Replace(" ", "");
-            string[] splitted = temp.Split(',');
+            var temp = text.Replace(" ", "");
+            var splitted = temp.Split(',');
             for (var i = 0; i < splitted.Length; i++)
             {
-                string number = splitted[i].Replace("\u0000", "");
+                var number = splitted[i].Replace("\u0000", "");
 
                 if (number.Contains("-"))
                 {
@@ -262,10 +299,7 @@ namespace Districts.ViewModel
                 }
                 else
                 {
-                    if (int.TryParse(number, out var parsed))
-                    {
-                        result.Add(parsed);
-                    }
+                    if (int.TryParse(number, out var parsed)) result.Add(parsed);
                 }
             }
 
@@ -277,15 +311,12 @@ namespace Districts.ViewModel
         private List<int> getRange(string element)
         {
             element = element.Trim();
-            string[] splitted = element.Split('-');
+            var splitted = element.Split('-');
 
             int.TryParse(splitted[0], out var first);
             int.TryParse(splitted[splitted.Length - 1], out var second);
 
-            if (second < first || second < 1)
-            {
-                return new List<int>();
-            }
+            if (second < first || second < 1) return new List<int>();
 
             //Включаем значение последнего, поэтому плюс один
             return Enumerable.Range(first, second - first + 1).ToList();
@@ -294,66 +325,14 @@ namespace Districts.ViewModel
         #endregion
 
         #endregion
-
-        #region Nested
-
-        public class CodesViewModel : ObservableObject
-        {
-            private string _codes;
-            private int _number;
-
-            public string HomeCodes
-            {
-                get { return _codes; }
-                set
-                {
-                    if (Equals(value, _codes)) return;
-                    _codes = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            public int Number
-            {
-                get { return _number; }
-                set
-                {
-                    if (value == _number) return;
-                    _number = value;
-                    OnPropertyChanged();
-                }
-            }
-
-
-            public CodesViewModel(KeyValuePair<int, List<string>> codes)
-            {
-                HomeCodes = codes.Value.Aggregate(string.Empty, (x, y) => x += Environment.NewLine + y)
-                    .RemoveEmptyLines();
-                Number = codes.Key;
-            }
-
-            public KeyValuePair<int, List<string>> ToKeyPairvalue()
-            {
-                var lines = HomeCodes.Split(
-                    new[] { Environment.NewLine },
-                    StringSplitOptions.RemoveEmptyEntries
-                );
-
-                var result = new KeyValuePair<int, List<string>>(Number, new List<string>(lines));
-                return result;
-            }
-        }
-
-        #endregion
     }
 
     public enum CountingTypes
     {
-        [Description("Обычная нумерация")]
-        Regular,
+        [Description("Обычная нумерация")] Regular,
+
         [Description("Продолжать по корпусам")]
         AutomaticIncrement,
-        [Description("Настроить")]
-        Custom
+        [Description("Настроить")] Custom
     }
 }

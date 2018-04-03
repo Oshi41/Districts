@@ -1,61 +1,61 @@
 ﻿<UserControl x:Class="Districts.Views.Tabs.OpenFolderTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Districts.Views.Tabs"
              xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:OpenFolderViewModel}}">
 
     <StackPanel Margin="10">
         <StackPanel.Resources>
             <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="0 0 0 10"/>
+                <Setter Property="Margin" Value="0 0 0 10" />
             </Style>
 
         </StackPanel.Resources>
-            <TextBlock>
-                <Hyperlink Command="{Binding OpenCommand}"
-                           CommandParameter="{Binding Settings.BuildingPath}">
-                    <Run Text="Открыть папку с домами"/>
-                </Hyperlink>
-            </TextBlock>
+        <TextBlock>
+            <Hyperlink Command="{Binding OpenCommand}"
+                       CommandParameter="{Binding Settings.BuildingPath}">
+                <Run Text="Открыть папку с домами" />
+            </Hyperlink>
+        </TextBlock>
         <TextBlock>
             <Hyperlink Command="{Binding OpenCommand}"
                        CommandParameter="{Binding Settings.CardsPath}">
-                <Run Text="Открыть папку с карточками"/>
+                <Run Text="Открыть папку с карточками" />
             </Hyperlink>
         </TextBlock>
         <TextBlock>
             <Hyperlink Command="{Binding OpenCommand}"
                        CommandParameter="{Binding Settings.HomeInfoPath}">
-                <Run Text="Открыть папку с кодами"/>
+                <Run Text="Открыть папку с кодами" />
             </Hyperlink>
         </TextBlock>
         <TextBlock>
             <Hyperlink Command="{Binding OpenCommand}"
                        CommandParameter="{Binding Settings.RestrictionsPath}">
-                <Run Text="Открыть папку с правилами доступа"/>
+                <Run Text="Открыть папку с правилами доступа" />
             </Hyperlink>
         </TextBlock>
         <TextBlock>
             <Hyperlink Command="{Binding OpenCommand}"
                        CommandParameter="{Binding Settings.ManageRecordsPath}">
-                <Run Text="Открыть папку с историей участков"/>
+                <Run Text="Открыть папку с историей участков" />
             </Hyperlink>
         </TextBlock>
         <TextBlock>
             <Hyperlink Command="{Binding OpenCommand}"
                        CommandParameter="{Binding Settings.LogPath}">
-                <Run Text="Открыть папку с логами"/>
+                <Run Text="Открыть папку с логами" />
             </Hyperlink>
         </TextBlock>
         <TextBlock>
             <Hyperlink Command="{Binding OpenCommand}"
                        CommandParameter="{Binding Settings.BackupFolder}">
-                <Run Text="Открыть папку с резервным копированием"/>
+                <Run Text="Открыть папку с резервным копированием" />
             </Hyperlink>
         </TextBlock>
     </StackPanel>

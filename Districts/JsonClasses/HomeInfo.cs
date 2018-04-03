@@ -5,25 +5,34 @@ using Districts.JsonClasses.Base;
 namespace Districts.JsonClasses
 {
     /// <summary>
-    /// Коды к подъездам
+    ///     Коды к подъездам
     /// </summary>
     public class HomeInfo : BaseFindableObject
     {
+        public HomeInfo(BaseFindableObject obj) : base(obj)
+        {
+        }
+
+        public HomeInfo()
+        {
+        }
+
         /// <summary>
-        /// Список кодов по подъездам
+        ///     Список кодов по подъездам
         /// </summary>
         public Dictionary<int, List<string>> AllCodes { get; set; } = new Dictionary<int, List<string>>();
 
         /// <summary>
-        /// Используем последовательную нумерацию
+        ///     Используем последовательную нумерацию
         /// </summary>
         public int Begin { get; set; } = 1;
 
         /// <summary>
-        /// Возвращает коды по номеру подъезда
+        ///     Возвращает коды по номеру подъезда
         /// </summary>
         /// <param name="entrance"></param>
-        /// <remarks>Не участвует в сравнении!</remarks>>
+        /// <remarks>Не участвует в сравнении!</remarks>
+        /// >
         public IList<string> GetCodesByEntrance(int entrance)
         {
             if (AllCodes.ContainsKey(entrance))
@@ -31,15 +40,6 @@ namespace Districts.JsonClasses
 
 
             return new List<string>();
-        }
-
-        public HomeInfo(BaseFindableObject obj) : base(obj)
-        {
-        }
-
-        public HomeInfo()
-        {
-            
         }
 
         #region Override
@@ -85,7 +85,6 @@ namespace Districts.JsonClasses
         {
             return !(x == y);
         }
-
 
         #endregion
     }

@@ -1,13 +1,20 @@
-﻿
-
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Districts.Views.Controls
 {
-    class DataGridWithCommand : DataGrid
+    internal class DataGridWithCommand : DataGrid
     {
+        public static readonly DependencyProperty DoubleClickCommandProperty = DependencyProperty.Register(
+            "DoubleClickCommand", typeof(ICommand), typeof(DataGridWithCommand),
+            new PropertyMetadata(default(ICommand)));
+
+        public ICommand DoubleClickCommand
+        {
+            get => (ICommand) GetValue(DoubleClickCommandProperty);
+            set => SetValue(DoubleClickCommandProperty, value);
+        }
 
         protected override void OnLoadingRow(DataGridRowEventArgs e)
         {
@@ -25,20 +32,7 @@ namespace Districts.Views.Controls
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (sender is DataGridRow row)
-            {
-                DoubleClickCommand?.Execute(row.DataContext);
-            }
-        }
-
-
-        public static readonly DependencyProperty DoubleClickCommandProperty = DependencyProperty.Register(
-            "DoubleClickCommand", typeof(ICommand), typeof(DataGridWithCommand), new PropertyMetadata(default(ICommand)));
-
-        public ICommand DoubleClickCommand
-        {
-            get { return (ICommand) GetValue(DoubleClickCommandProperty); }
-            set { SetValue(DoubleClickCommandProperty, value); }
+            if (sender is DataGridRow row) DoubleClickCommand?.Execute(row.DataContext);
         }
     }
 }

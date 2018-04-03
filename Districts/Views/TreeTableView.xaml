@@ -10,71 +10,70 @@
         mc:Ignorable="d"
         Title="TreeTableView" Height="500" Width="400"
         d:DataContext="{d:DesignInstance {x:Type viewModel:EditTreeViewModel}}">
-    
-    
+
 
     <Grid Margin="15" x:Name="Grid">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TreeView ItemsSource="{Binding Streets}" 
+        <TreeView ItemsSource="{Binding Streets}"
                   x:Name="tree">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Homes}">
                     <Grid>
                         <Grid.InputBindings>
-                            <MouseBinding MouseAction="LeftDoubleClick" 
-                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.EditCommand}"/>
+                            <MouseBinding MouseAction="LeftDoubleClick"
+                                          Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.EditCommand}" />
                         </Grid.InputBindings>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock>
-                            <Run Text="{Binding Street, Mode=OneWay}"/>
-                            <Run Text="{Binding HouseNumber, Mode=OneWay}"/>
+                            <Run Text="{Binding Street, Mode=OneWay}" />
+                            <Run Text="{Binding HouseNumber, Mode=OneWay}" />
                         </TextBlock>
-                        
+
                         <TextBlock Grid.Column="1"
                                    Margin="5 0 0 0"
                                    FontStyle="Italic"
-                                   Text="{Binding Doors, StringFormat={}всего {0} кв.}"/>
+                                   Text="{Binding Doors, StringFormat={}всего {0} кв.}" />
                     </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-            
+
             <TreeView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="{Binding Path=DeleteHome}"
-                              Header="Удалить дом"/>
+                              Header="Удалить дом" />
                 </ContextMenu>
             </TreeView.ContextMenu>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedItemChanged">
                     <i:InvokeCommandAction Command="{Binding UpdateSelectedItem}"
-                                           CommandParameter="{Binding ElementName=tree, Path=SelectedItem}"/>
+                                           CommandParameter="{Binding ElementName=tree, Path=SelectedItem}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>
-        
-        <StackPanel Orientation="Horizontal" 
-                    Grid.Row="1" 
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="1"
                     HorizontalAlignment="Right">
-            <Button MinWidth="50" 
+            <Button MinWidth="50"
                     Content="Ok"
                     Margin="5"
                     Command="{Binding SaveCommand}"
                     IsDefault="True"
-                    Click="ButtonBase_OnClick"/>
+                    Click="ButtonBase_OnClick" />
 
-            <Button MinWidth="50" 
+            <Button MinWidth="50"
                     Content="Close"
                     Margin="5"
                     IsCancel="True"
-                    Click="ButtonBase_OnClick"/>
+                    Click="ButtonBase_OnClick" />
         </StackPanel>
     </Grid>
 </Window>

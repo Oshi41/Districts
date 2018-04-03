@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using Districts.JsonClasses.Manage;
 using Districts.MVVM;
@@ -11,7 +10,20 @@ namespace Districts.ViewModel.Manage
 {
     public class ManageRecordViewModel : ObservableObject
     {
+        public ManageRecordViewModel(CardManagement card)
+        {
+            if (card == null)
+                return;
+
+            _card = card;
+            Number = _card.Number;
+            UpdateByLastRecord(_card.Actions.LastOrDefault());
+
+            EditCommand = new Command(OnEdit);
+        }
+
         #region Fields
+
         // Сохраняем ссылку на объект, чтобы его же потом и менять
         private readonly CardManagement _card;
         private static readonly DateTime _innerTime = DateTime.Now;
@@ -27,7 +39,7 @@ namespace Districts.ViewModel.Manage
 
         public int Number
         {
-            get { return _number; }
+            get => _number;
             set
             {
                 if (value == _number) return;
@@ -35,9 +47,10 @@ namespace Districts.ViewModel.Manage
                 OnPropertyChanged();
             }
         }
+
         public DateTime? TaskenDate
         {
-            get { return _taskenDate; }
+            get => _taskenDate;
             set
             {
                 if (value.Equals(_taskenDate)) return;
@@ -45,9 +58,10 @@ namespace Districts.ViewModel.Manage
                 OnPropertyChanged();
             }
         }
+
         public DateTime? DroppedTime
         {
-            get { return _droppedTime; }
+            get => _droppedTime;
             set
             {
                 if (value.Equals(_droppedTime)) return;
@@ -55,9 +69,10 @@ namespace Districts.ViewModel.Manage
                 OnPropertyChanged();
             }
         }
+
         public string LastOwner
         {
-            get { return _lastOwner; }
+            get => _lastOwner;
             set
             {
                 if (value == _lastOwner) return;
@@ -69,18 +84,6 @@ namespace Districts.ViewModel.Manage
         public ICommand EditCommand { get; set; }
 
         #endregion
-
-        public ManageRecordViewModel(CardManagement card)
-        {
-            if (card == null)
-                return;
-
-            _card = card;
-            Number = _card.Number;
-            UpdateByLastRecord(_card.Actions.LastOrDefault());
-
-            EditCommand = new Command(OnEdit);
-        }
 
         #region Methods
 
@@ -111,7 +114,7 @@ namespace Districts.ViewModel.Manage
         #region Public
 
         /// <summary>
-        /// Нужно для редактирования
+        ///     Нужно для редактирования
         /// </summary>
         /// <returns></returns>
         public CardManagement CopyManagementCard()
@@ -124,7 +127,7 @@ namespace Districts.ViewModel.Manage
             var names = param as List<string> ?? new List<string>();
             // показываю окно
             var vm = new ManageRecordEditViewModel(_card, names);
-            var window = new ManageView { DataContext = vm };
+            var window = new ManageView {DataContext = vm};
 
             if (window.ShowDialog() == true)
             {
@@ -138,8 +141,8 @@ namespace Districts.ViewModel.Manage
                 //        _names.Add(action.Subject);
                 //}
             }
-            // номер все равно изменить не можем
 
+            // номер все равно изменить не можем
         }
 
         public bool HasOwner()
@@ -157,8 +160,6 @@ namespace Districts.ViewModel.Manage
         }
 
         #endregion
-
-
 
         #endregion
     }

@@ -6,12 +6,28 @@ using System.Windows.Media;
 
 namespace Districts.Views.Controls
 {
-    class SearchableTextBlock : TextBlock
+    internal class SearchableTextBlock : TextBlock
     {
-
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
-            "SearchText", typeof(string), typeof(SearchableTextBlock), 
+            "SearchText", typeof(string), typeof(SearchableTextBlock),
             new FrameworkPropertyMetadata(null, AfterSearch));
+
+
+        public static readonly DependencyProperty SelectedBrushProperty = DependencyProperty.Register(
+            "SelectedBrush", typeof(Brush), typeof(SearchableTextBlock),
+            new PropertyMetadata(Brushes.Yellow));
+
+        public string SearchText
+        {
+            get => (string) GetValue(SearchTextProperty);
+            set => SetValue(SearchTextProperty, value);
+        }
+
+        public Brush SelectedBrush
+        {
+            get => (Brush) GetValue(SelectedBrushProperty);
+            set => SetValue(SelectedBrushProperty, value);
+        }
 
         private static void AfterSearch(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -65,23 +81,5 @@ namespace Districts.Views.Controls
             Inlines.Clear();
             Text = text;
         }
-
-        public string SearchText
-        {
-            get { return (string) GetValue(SearchTextProperty); }
-            set { SetValue(SearchTextProperty, value); }
-        }
-
-
-        public static readonly DependencyProperty SelectedBrushProperty = DependencyProperty.Register(
-            "SelectedBrush", typeof(Brush), typeof(SearchableTextBlock), 
-            new PropertyMetadata(Brushes.Yellow));
-
-        public Brush SelectedBrush
-        {
-            get { return (Brush) GetValue(SelectedBrushProperty); }
-            set { SetValue(SelectedBrushProperty, value); }
-        }
-
     }
 }

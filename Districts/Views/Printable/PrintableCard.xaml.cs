@@ -3,7 +3,7 @@
 namespace Districts.Views
 {
     /// <summary>
-    /// Логика взаимодействия для PrintableCard.xaml
+    ///     Логика взаимодействия для PrintableCard.xaml
     /// </summary>
     public partial class PrintableCard : UserControl
     {

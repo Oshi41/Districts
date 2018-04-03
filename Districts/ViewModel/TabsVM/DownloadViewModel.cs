@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Windows;
 using System.Windows.Input;
 using Districts.Helper;
 using Districts.MVVM;
@@ -9,16 +8,23 @@ using Districts.WebRequest;
 
 namespace Districts.ViewModel.TabsVM
 {
-    class DownloadViewModel : ObservableObject
+    internal class DownloadViewModel : ObservableObject
     {
-        private string _streets;
         private bool _isLoading;
         private bool _isPropChanged1;
+        private string _streets;
+
+        public DownloadViewModel()
+        {
+            DownloadCommand = new Command(OnDownload, o => !_isLoading);
+            LoadStreetCommand = new Command(OnLoadStreet);
+            SaveCommand = new Command(OnSave, () => IsPropChanged);
+        }
 
 
         private bool IsPropChanged
         {
-            get { return _isPropChanged1; }
+            get => _isPropChanged1;
             set
             {
                 if (_isPropChanged1 != value)
@@ -33,9 +39,10 @@ namespace Districts.ViewModel.TabsVM
         public ICommand DownloadCommand { get; set; }
         public ICommand LoadStreetCommand { get; set; }
         public Command SaveCommand { get; set; }
+
         public string Streets
         {
-            get { return _streets; }
+            get => _streets;
             set
             {
                 if (value == _streets) return;
@@ -44,13 +51,6 @@ namespace Districts.ViewModel.TabsVM
 
                 IsPropChanged = true;
             }
-        }
-
-        public DownloadViewModel()
-        {
-            DownloadCommand = new Command(OnDownload, o => !_isLoading);
-            LoadStreetCommand = new Command(OnLoadStreet);
-            SaveCommand = new Command(OnSave, () => IsPropChanged);
         }
 
 
@@ -85,7 +85,6 @@ namespace Districts.ViewModel.TabsVM
             {
                 Streets = string.Empty;
             }
-
         }
 
         private async void OnDownload(object obj)
@@ -106,7 +105,6 @@ namespace Districts.ViewModel.TabsVM
                 _isLoading = false;
                 MessageHelper.ShowDone();
             }
-
         }
     }
 }

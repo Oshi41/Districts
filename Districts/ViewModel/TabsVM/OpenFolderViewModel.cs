@@ -6,14 +6,20 @@ using Districts.Settings;
 
 namespace Districts.ViewModel.TabsVM
 {
-    class OpenFolderViewModel : ObservableObject
+    internal class OpenFolderViewModel : ObservableObject
     {
         private ApplicationSettings _settings = ApplicationSettings.ReadOrCreate();
+
+        public OpenFolderViewModel()
+        {
+            OpenCommand = new Command(OpenFolder);
+        }
+
         public ICommand OpenCommand { get; set; }
 
         public ApplicationSettings Settings
         {
-            get { return _settings; }
+            get => _settings;
             set
             {
                 if (Equals(value, _settings)) return;
@@ -22,19 +28,11 @@ namespace Districts.ViewModel.TabsVM
             }
         }
 
-        public OpenFolderViewModel()
-        {
-            OpenCommand = new Command(OpenFolder);
-        }
-
         private void OpenFolder(object obj)
         {
             if (obj is string path)
             {
-                if (Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
+                if (Directory.Exists(path)) Directory.CreateDirectory(path);
 
                 Process.Start(path);
             }

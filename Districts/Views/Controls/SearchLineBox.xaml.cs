@@ -5,7 +5,7 @@ using System.Windows.Input;
 namespace Districts.Views.Controls
 {
     /// <summary>
-    /// Interaction logic for SearchLineBox.xaml
+    ///     Interaction logic for SearchLineBox.xaml
     /// </summary>
     public partial class SearchLineBox : UserControl
     {
@@ -21,8 +21,8 @@ namespace Districts.Views.Controls
 
         public string SearchText
         {
-            get { return (string) GetValue(SearchTextProperty); }
-            set { SetValue(SearchTextProperty, value); }
+            get => (string) GetValue(SearchTextProperty);
+            set => SetValue(SearchTextProperty, value);
         }
 
         public static readonly DependencyProperty SearchCommandProperty = DependencyProperty.Register(
@@ -30,8 +30,8 @@ namespace Districts.Views.Controls
 
         public ICommand SearchCommand
         {
-            get { return (ICommand) GetValue(SearchCommandProperty); }
-            set { SetValue(SearchCommandProperty, value); }
+            get => (ICommand) GetValue(SearchCommandProperty);
+            set => SetValue(SearchCommandProperty, value);
         }
 
         public static readonly DependencyProperty CancelSearchCommandProperty = DependencyProperty.Register(
@@ -39,8 +39,8 @@ namespace Districts.Views.Controls
 
         public ICommand CancelSearchCommand
         {
-            get { return (ICommand) GetValue(CancelSearchCommandProperty); }
-            set { SetValue(CancelSearchCommandProperty, value); }
+            get => (ICommand) GetValue(CancelSearchCommandProperty);
+            set => SetValue(CancelSearchCommandProperty, value);
         }
 
         #endregion

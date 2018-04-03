@@ -10,9 +10,15 @@ namespace Districts.ViewModel
     {
         private ObservableCollection<Building> _homes;
 
+
+        public StreetViewModel(IList<Building> homes)
+        {
+            Homes = new ObservableCollection<Building>(homes);
+        }
+
         public ObservableCollection<Building> Homes
         {
-            get { return _homes; }
+            get => _homes;
             set
             {
                 if (Equals(value, _homes)) return;
@@ -22,12 +28,5 @@ namespace Districts.ViewModel
         }
 
         public string Street => _homes.FirstOrDefault()?.Street ?? string.Empty;
-
-
-        public StreetViewModel(IList<Building> homes)
-        {
-            Homes = new ObservableCollection<Building>(homes);
-
-        }
     }
 }

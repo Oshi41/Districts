@@ -1,23 +1,22 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Districts.Views.Controls
 {
-    class NumericInput : TextBox
+    internal class NumericInput : TextBox
     {
         public NumericInput()
         {
             PreviewTextInput += OnPreviewTextInput;
-            this.AddHandler(DataObject.PastingEvent, new DataObjectPastingEventHandler(OnPaste));
+            AddHandler(DataObject.PastingEvent, new DataObjectPastingEventHandler(OnPaste));
         }
 
         private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
-            if (e.DataObject.GetDataPresent(typeof(String)))
+            if (e.DataObject.GetDataPresent(typeof(string)))
             {
-                String text = (String)e.DataObject.GetData(typeof(String));
+                var text = (string) e.DataObject.GetData(typeof(string));
                 SetText(text);
                 e.Handled = true;
             }
@@ -35,15 +34,13 @@ namespace Districts.Views.Controls
 
         private void SetText(string input)
         {
-            Int32 selectionStart = this.SelectionStart;
-            Int32 selectionLength = this.SelectionLength;
+            var selectionStart = SelectionStart;
+            var selectionLength = SelectionLength;
 
-            String newText = String.Empty;
-            foreach (Char c in input)
-            {
-                if (Char.IsDigit(c) || Char.IsControl(c))
+            var newText = string.Empty;
+            foreach (var c in input)
+                if (char.IsDigit(c) || char.IsControl(c))
                     newText += c;
-            }
 
             Text = newText;
 

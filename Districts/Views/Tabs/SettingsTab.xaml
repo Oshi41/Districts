@@ -1,37 +1,37 @@
 ﻿<UserControl x:Class="Districts.Views.Tabs.SettingsTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:controls1="clr-namespace:Districts.Views.Controls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:SettingsViewModel}}">
 
     <ScrollViewer>
-        <StackPanel >
+        <StackPanel>
             <ToggleButton x:Name="SettingsButton"
-                              Command="{Binding Path=ToggleSettingsLoad}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}">
+                          Command="{Binding Path=ToggleSettingsLoad}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}">
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton">
-                        <Setter Property="Content" Value="Редактировать настройки"/>
-                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Content" Value="Редактировать настройки" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
 
                         <Style.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Content" Value="Закрыть редактирование"/>
+                                <Setter Property="Content" Value="Закрыть редактирование" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </ToggleButton.Style>
             </ToggleButton>
 
-            <StackPanel IsEnabled="{Binding ElementName=SettingsButton, Path=IsChecked}" 
-                            Margin="0 14 0 0"
-                            Orientation="Vertical">
+            <StackPanel IsEnabled="{Binding ElementName=SettingsButton, Path=IsChecked}"
+                        Margin="0 14 0 0"
+                        Orientation="Vertical">
                 <StackPanel.Resources>
                     <Style TargetType="HeaderedContentControl">
                         <Setter Property="Margin" Value="2 5 0 0" />
@@ -40,10 +40,10 @@
 
                 <HeaderedContentControl Header="Кол-во квартир на карточке">
                     <mah:NumericUpDown HorizontalAlignment="Left"
-                                                  Minimum="1"
-                                                  Maximum="250"
-                                                  Width="50"
-                                                  Value="{Binding MaxDoors, UpdateSourceTrigger=PropertyChanged}" />
+                                       Minimum="1"
+                                       Maximum="250"
+                                       Width="50"
+                                       Value="{Binding MaxDoors, UpdateSourceTrigger=PropertyChanged}" />
                 </HeaderedContentControl>
 
                 <HeaderedContentControl Header="Путь к базовой папке приложения">
@@ -52,36 +52,36 @@
 
                 <HeaderedContentControl Header="Улицы">
                     <TextBox x:Name="StreetBox"
-                                 Padding="0 5 0 0"
-                                 FontSize="18"
-                                 Height="200"
-                                 Text="{Binding Streets}"
-                                 BorderThickness="1"
-                                 TextWrapping="Wrap"
-                                 VerticalAlignment="Stretch"
-                                 AcceptsReturn="True"
-                                 VerticalScrollBarVisibility="Auto"
-                                 HorizontalScrollBarVisibility="Disabled" />
+                             Padding="0 5 0 0"
+                             FontSize="18"
+                             Height="200"
+                             Text="{Binding Streets}"
+                             BorderThickness="1"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Stretch"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Disabled" />
                 </HeaderedContentControl>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <Button Content="По умолчанию"
-                                Margin="5"
-                                Padding="4 2"
-                                Command="{Binding Path=SaveDefault}"
-                                Click="CloseSettingsEdit" />
+                            Margin="5"
+                            Padding="4 2"
+                            Command="{Binding Path=SaveDefault}"
+                            Click="CloseSettingsEdit" />
 
                     <Button Grid.Column="1"
-                                Content="Сохранить"
-                                Margin="5"
-                                Padding="4 2"
-                                Command="{Binding SaveSettings}"
-                                Click="CloseSettingsEdit" />
+                            Content="Сохранить"
+                            Margin="5"
+                            Padding="4 2"
+                            Command="{Binding SaveSettings}"
+                            Click="CloseSettingsEdit" />
 
                 </Grid>
 
@@ -90,6 +90,3 @@
     </ScrollViewer>
 
 </UserControl>
-
-
-

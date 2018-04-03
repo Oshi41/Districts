@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Districts.JsonClasses.Manage;
 using Districts.MVVM;
 
 namespace Districts.ViewModel.Manage
 {
-    class ActionViewModel : ObservableObject
+    internal class ActionViewModel : ObservableObject
     {
         private ActionTypes _actionType;
         private DateTime _date;
@@ -38,7 +34,7 @@ namespace Districts.ViewModel.Manage
 
         public string Subject
         {
-            get { return _subject; }
+            get => _subject;
             set
             {
                 if (value == _subject) return;
@@ -49,7 +45,7 @@ namespace Districts.ViewModel.Manage
 
         public DateTime Date
         {
-            get { return _date; }
+            get => _date;
             set
             {
                 if (value.Equals(_date)) return;
@@ -60,7 +56,7 @@ namespace Districts.ViewModel.Manage
 
         public ActionTypes ActionType
         {
-            get { return _actionType; }
+            get => _actionType;
             set
             {
                 if (value == _actionType) return;

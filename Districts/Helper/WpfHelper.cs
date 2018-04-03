@@ -6,12 +6,12 @@ namespace Districts.Helper
     public static class WpfHelper
     {
         public static T GetFirstParentByType<T>(DependencyObject child)
-        where T : DependencyObject
+            where T : DependencyObject
         {
             var parent = VisualTreeHelper.GetParent(child);
             while (parent != null)
             {
-                if ((parent is T result))
+                if (parent is T result)
                     return result;
                 parent = VisualTreeHelper.GetParent(parent);
             }

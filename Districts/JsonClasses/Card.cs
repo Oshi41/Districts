@@ -4,16 +4,17 @@ using System.Linq;
 namespace Districts.JsonClasses
 {
     /// <summary>
-    /// Информацияч о карточке
+    ///     Информацияч о карточке
     /// </summary>
     public class Card
     {
         /// <summary>
-        /// Hомер кварточки
+        ///     Hомер кварточки
         /// </summary>
         public int Number { get; set; }
+
         /// <summary>
-        /// Список всеХ квартир в участке
+        ///     Список всеХ квартир в участке
         /// </summary>
         public List<Door> Doors { get; set; } = new List<Door>();
 
@@ -22,10 +23,8 @@ namespace Districts.JsonClasses
         public override bool Equals(object obj)
         {
             if (obj is Card x)
-            {
                 return x.Number == Number
                        && Doors.SequenceEqual(x.Doors);
-            }
 
             return false;
         }

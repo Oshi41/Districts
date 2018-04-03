@@ -4,7 +4,7 @@ using Districts.JsonClasses;
 namespace Districts.Comparers
 {
     /// <summary>
-    /// Компаратор для сравнения дверей
+    ///     Компаратор для сравнения дверей
     /// </summary>
     public class DoorComparer : IEqualityComparer<Door>
     {

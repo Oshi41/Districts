@@ -1,22 +1,24 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Windows.Data;
 
 namespace Districts.Views.Controls
 {
-    class EnumToDescrConverter : IValueConverter
+    internal class EnumToDescrConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value != null)
             {
-                FieldInfo fi = value.GetType().GetField(value.ToString());
+                var fi = value.GetType().GetField(value.ToString());
                 if (fi != null)
                 {
-                    var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                    return ((attributes.Length > 0) && (!String.IsNullOrEmpty(attributes[0].Description))) ? attributes[0].Description : value.ToString();
+                    var attributes =
+                        (DescriptionAttribute[]) fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                    return attributes.Length > 0 && !string.IsNullOrEmpty(attributes[0].Description)
+                        ? attributes[0].Description
+                        : value.ToString();
                 }
             }
 

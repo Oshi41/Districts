@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.Helper;
 using Districts.MVVM;
@@ -11,8 +7,9 @@ using Districts.Settings;
 
 namespace Districts.ViewModel.TabsVM
 {
-    class SettingsViewModel : ObservableObject
+    internal class SettingsViewModel : ObservableObject
     {
+        private string _baseFolderPath;
         // оставил, моэет пригодится
         //private string _manageRecordsPath;
         //private string _logPath;
@@ -21,9 +18,16 @@ namespace Districts.ViewModel.TabsVM
         //private string _cardsPath;
         //private string _buildingPath;
 
-        private Double _maxDoors;
+        private double _maxDoors;
         private string _streets;
-        private string _baseFolderPath;
+
+
+        public SettingsViewModel()
+        {
+            ToggleSettingsLoad = new Command(SettingsLoadSave);
+            SaveSettings = new Command(OnSaveSettings);
+            SaveDefault = new Command(OnSaveDefault);
+        }
 
         public ICommand ToggleSettingsLoad { get; set; }
         public ICommand SaveSettings { get; set; }
@@ -92,9 +96,9 @@ namespace Districts.ViewModel.TabsVM
         //    }
         //}
 
-        public Double MaxDoors
+        public double MaxDoors
         {
-            get { return _maxDoors; }
+            get => _maxDoors;
             set
             {
                 if (value == _maxDoors) return;
@@ -102,9 +106,10 @@ namespace Districts.ViewModel.TabsVM
                 OnPropertyChanged();
             }
         }
+
         public string Streets
         {
-            get { return _streets; }
+            get => _streets;
             set
             {
                 if (value == _streets) return;
@@ -112,9 +117,10 @@ namespace Districts.ViewModel.TabsVM
                 OnPropertyChanged();
             }
         }
+
         public string BaseFolderPath
         {
-            get { return _baseFolderPath; }
+            get => _baseFolderPath;
             set
             {
                 if (value == _baseFolderPath) return;
@@ -122,15 +128,6 @@ namespace Districts.ViewModel.TabsVM
                 OnPropertyChanged();
             }
         }
-
-
-        public SettingsViewModel()
-        {
-            ToggleSettingsLoad = new Command(SettingsLoadSave);
-            SaveSettings = new Command(OnSaveSettings);
-            SaveDefault = new Command(OnSaveDefault);
-        }
-
 
 
         private void OnSaveDefault()

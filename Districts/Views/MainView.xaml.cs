@@ -1,16 +1,10 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using Districts.Settings;
-using Districts.ViewModel;
-using Districts.WebRequest;
 
 namespace Districts.Views
 {
     /// <summary>
-    /// Логика взаимодействия для MainView.xaml
+    ///     Логика взаимодействия для MainView.xaml
     /// </summary>
     public partial class MainView : Window
     {
@@ -23,7 +17,6 @@ namespace Districts.Views
         }
 
         //#region Button handlers
-
 
 
         //#endregion
@@ -76,27 +69,6 @@ namespace Districts.Views
         //#endregion
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //private void Button_Click(object sender, RoutedEventArgs e)
         //{
 
@@ -133,7 +105,6 @@ namespace Districts.Views
         //}
 
 
-
         //private async void DownloadHomes(object sender, RoutedEventArgs e)
         //{
         //    ToggleIsEnabled(sender);
@@ -157,7 +128,6 @@ namespace Districts.Views
         //{
         //    MessageBox.Show("Закончено");
         //}
-
 
 
         //private void LoadStreets(object sender, RoutedEventArgs e)
@@ -188,8 +158,5 @@ namespace Districts.Views
         //    ToggleIsEnabled(sender);
         //    ShowDone();
         //}
-
-
-        
     }
 }

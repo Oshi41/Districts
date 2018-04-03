@@ -1,65 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Xps;
-using System.Windows.Xps.Packaging;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.Printing;
 using Districts.Settings;
 using Districts.ViewModel.TabsVM;
 using Newtonsoft.Json;
-using PrintDialog = System.Windows.Controls.PrintDialog;
 
 namespace Districts.CardGenerator
 {
     /// <summary>
-    /// Генератор карточек
+    ///     Генератор карточек
     /// </summary>
-    class CardGenerator
+    internal class CardGenerator
     {
         /// <summary>
-        /// настройки приложения
+        ///     настройки приложения
         /// </summary>
-        readonly ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
+        private readonly ApplicationSettings settings = ApplicationSettings.ReadOrCreate();
 
         #region Public
 
         /// <summary>
-        /// сгенерировать карточки согласно домам, правилам доступа и кодам.
+        ///     сгенерировать карточки согласно домам, правилам доступа и кодам.
         /// </summary>
         public void Generate()
         {
-            List<Building> allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
-            List<ForbiddenElement> allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
-            List<HomeInfo> allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
+            var allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
+            var allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
+            var allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
 
-            List<Door> allDoors = GetAllDoors(allHomes, allRules, allCodes);
-            List<Card> cards = GenerateCards(allHomes, allRules, allCodes, allDoors);
+            var allDoors = GetAllDoors(allHomes, allRules, allCodes);
+            var cards = GenerateCards(allHomes, allRules, allCodes, allDoors);
             Write(cards);
         }
 
         public void GenerateNew(bool useBestDistribution = false)
         {
-            List<Building> allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
-            List<ForbiddenElement> allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
-            List<HomeInfo> allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
+            var allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
+            var allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
+            var allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
 
             var map = new HomeMap(allHomes, allCodes, allRules);
             var cards = GenerateCardsNew(map, useBestDistribution);
             Write(cards);
             //var doors = GetAllDoorsNew(map);
-
         }
 
         /// <summary>
-        /// Печатаем участки
+        ///     Печатаем участки
         /// </summary>
         public void PrintVisual()
         {
@@ -68,12 +61,13 @@ namespace Districts.CardGenerator
 
             PrintVisual(cards);
         }
+
         #endregion
 
         #region Private
 
         /// <summary>
-        /// Получает все доступные квартиры квартиры
+        ///     Получает все доступные квартиры квартиры
         /// </summary>
         /// <param name="allHomes">Список домов</param>
         /// <param name="allRules">Список правил посещения</param>
@@ -83,7 +77,7 @@ namespace Districts.CardGenerator
             List<ForbiddenElement> allRules,
             List<HomeInfo> allcodes)
         {
-            List<Door> result = new List<Door>();
+            var result = new List<Door>();
 
             foreach (var home in allHomes)
             {
@@ -98,7 +92,7 @@ namespace Districts.CardGenerator
         }
 
         /// <summary>
-        /// Все незапрещенные квартиры в доме
+        ///     Все незапрещенные квартиры в доме
         /// </summary>
         /// <param name="home">Дом</param>
         /// <param name="rule">Правила доступо</param>
@@ -122,16 +116,13 @@ namespace Districts.CardGenerator
                 temp.Number = i;
                 temp.Entrance = GetEntrance(i, home.Floors, home.Entrances);
                 var contains = homeInfo.AllCodes.ContainsKey(temp.Entrance);
-                if (contains)
-                {
-                    temp.Codes.AddRange(homeInfo.AllCodes[temp.Entrance]);
-                }
+                if (contains) temp.Codes.AddRange(homeInfo.AllCodes[temp.Entrance]);
                 yield return temp;
             }
         }
 
         /// <summary>
-        /// Высчитывает подъезд, в котором находится 
+        ///     Высчитывает подъезд, в котором находится
         /// </summary>
         /// <param name="floor">Номер квартиры</param>
         /// <param name="total">Всего квартир</param>
@@ -140,25 +131,22 @@ namespace Districts.CardGenerator
         private int GetEntrance(int floor, int total, int totalEntrances)
         {
             // квартиры в подъезде
-            var onEntrance = Math.Ceiling((double)total / totalEntrances);
+            var onEntrance = Math.Ceiling((double) total / totalEntrances);
 
             // прохожу по всем подъездам
-            for (int i = 0; i < totalEntrances; i++)
+            for (var i = 0; i < totalEntrances; i++)
             {
                 // номер подъезда
-                int tempEntrance = i + 1;
+                var tempEntrance = i + 1;
                 // если находится в пределах, то нашли наш
-                if (floor >= onEntrance * i && floor <= onEntrance * tempEntrance)
-                {
-                    return tempEntrance;
-                }
+                if (floor >= onEntrance * i && floor <= onEntrance * tempEntrance) return tempEntrance;
             }
 
             return 1;
         }
 
         /// <summary>
-        /// Сгенерили карточки
+        ///     Сгенерили карточки
         /// </summary>
         /// <param name="allHomes">Все дома</param>
         /// <param name="allRules">Все правила</param>
@@ -170,17 +158,14 @@ namespace Districts.CardGenerator
             List<Door> doors)
         {
             // итеративная переменная для циклической пробежки по всем карточкам
-            int cardindex = 0;
+            var cardindex = 0;
             // макс. кол-во кв. в карточках
-            int max = settings.MaxDoors;
-            var amount = (int)Math.Ceiling((doors.Count / (double)max));
+            var max = settings.MaxDoors;
+            var amount = (int) Math.Ceiling(doors.Count / (double) max);
 
             // создаю опр. кол-во карточке
             var cards = new List<Card>(amount);
-            for (int i = 0; i < amount; i++)
-            {
-                cards.Add(new Card { Number = i + 1 });
-            }
+            for (var i = 0; i < amount; i++) cards.Add(new Card {Number = i + 1});
 
             // группирую квартиры по улицам
             var streets = doors.GroupBy(x => x.Street)
@@ -205,7 +190,6 @@ namespace Districts.CardGenerator
             var homes = homesRaw.OrderBy(x => Guid.NewGuid()).ToList();
 
             foreach (var home in homes)
-            {
                 // пока есть свободные дверки
                 while (home.Any())
                 {
@@ -224,7 +208,6 @@ namespace Districts.CardGenerator
                     if (cardindex >= cards.Count)
                         cardindex = 0;
                 }
-            }
 
             return cards;
         }
@@ -234,7 +217,7 @@ namespace Districts.CardGenerator
             if (index >= cards.Count)
                 index = 0;
 
-            Card card = cards[index];
+            var card = cards[index];
 
             if (card.Doors.Count >= settings.MaxDoors)
             {
@@ -243,7 +226,6 @@ namespace Districts.CardGenerator
                 return find > 0
                     ? cards[find]
                     : cards.FirstOrDefault(x => x.Doors.Count < settings.MaxDoors);
-
             }
 
             return card;
@@ -251,16 +233,17 @@ namespace Districts.CardGenerator
 
         private void Write(List<Card> cards)
         {
-            for (int i = 0; i < cards.Count; i++)
+            for (var i = 0; i < cards.Count; i++)
             {
                 var toWrite = JsonConvert.SerializeObject(cards[i], Formatting.Indented);
                 var filepath = Path.Combine(settings.CardsPath, "Карточка № " + cards[i].Number);
                 File.WriteAllText(filepath, toWrite);
             }
         }
+
         private void PrintVisual(List<Card> cards)
         {
-            PrintDialog printDialog = new PrintDialog();
+            var printDialog = new PrintDialog();
             var paginator = new CustomDocumentPaginator(cards, printDialog);
             // TODO
             ShowPreview(paginator);
@@ -270,9 +253,7 @@ namespace Districts.CardGenerator
 
         private void ShowPreview(DocumentPaginator paginator)
         {
-            
         }
-
 
         #endregion
 
@@ -285,10 +266,7 @@ namespace Districts.CardGenerator
             if (!map.Any())
                 return result;
 
-            foreach (var full in map)
-            {
-                result.AddRange(GetHomeDoorsNew(full, map));
-            }
+            foreach (var full in map) result.AddRange(GetHomeDoorsNew(full, map));
 
             return result;
         }
@@ -320,10 +298,7 @@ namespace Districts.CardGenerator
                 };
 
                 var contains = homeInfo.AllCodes.ContainsKey(temp.Entrance);
-                if (contains)
-                {
-                    temp.Codes.AddRange(homeInfo.AllCodes[temp.Entrance]);
-                }
+                if (contains) temp.Codes.AddRange(homeInfo.AllCodes[temp.Entrance]);
 
                 yield return temp;
             }
@@ -333,29 +308,20 @@ namespace Districts.CardGenerator
         {
             // смапили дома и доступные квартиры
             var mappedDoors = new DoorsMap();
-            foreach (var full in map)
-            {
-                mappedDoors.Add(full, GetHomeDoorsNew(full, map).ToList());
-            }
+            foreach (var full in map) mappedDoors.Add(full, GetHomeDoorsNew(full, map).ToList());
 
             // ограничиваем кол-во карточек
             CardWorker cards;
             if (bestDestribution)
-            {
-                // все квартиры из разных домов
                 cards = new CardWorker(mappedDoors.BiggestDoorsContainer);
-            }
             else
-            {
-                // выделится роно столько, сколько необходимо
                 cards = new CardWorker(GetMaxCardsCount(mappedDoors.DoorsCount, settings.MaxDoors));
-            }
 
             cards.SetCardCapacity(settings.MaxDoors);
-            
+
             // перемешал
             mappedDoors.Shuffle();
-            
+
             while (!mappedDoors.IsEmpty)
             {
                 var pair = mappedDoors.FirstOrDefault();
@@ -377,7 +343,7 @@ namespace Districts.CardGenerator
 
         private int GetMaxCardsCount(int doors, int capacity)
         {
-            var result = (double)doors / capacity;
+            var result = (double) doors / capacity;
             return (int) Math.Ceiling(result);
         }
 
@@ -421,7 +387,6 @@ namespace Districts.CardGenerator
         //}
 
 
-
         //private void StartPrint(Visual visual, string printerName, string fileName)
         //{
         //    PrintDialog dlg = new PrintDialog();
@@ -431,7 +396,6 @@ namespace Districts.CardGenerator
         //    dlg.PrintVisual(visual, "dfg");
 
         //    StandardPrintController controller = new StandardPrintController();
-
 
 
         //}
@@ -484,7 +448,6 @@ namespace Districts.CardGenerator
         //    }
 
 
-
         //    try
         //    {
         //        var jpgEncoder = new JpegBitmapEncoder();
@@ -514,10 +477,15 @@ namespace Districts.CardGenerator
         //}
     }
 
-    class DoorsMap : Dictionary<FullHomeInfo, List<Door>>
+    internal class DoorsMap : Dictionary<FullHomeInfo, List<Door>>
     {
         public int DoorsCount => this.Aggregate(0, (i, pair) => i + pair.Value.Count);
         public int BiggestDoorsContainer => this.Max(x => x.Value.Count);
+
+        public bool IsEmpty
+        {
+            get { return !this.Any(x => x.Value.Any()); }
+        }
 
         public void Shuffle()
         {
@@ -530,25 +498,20 @@ namespace Districts.CardGenerator
 
             Clear();
 
-            foreach (var pair in temp)
-            {
-                Add(pair.Key, pair.Value);
-            }
-        }
-
-        public bool IsEmpty
-        {
-            get
-            {
-                return !this.Any(x => x.Value.Any());
-            }
+            foreach (var pair in temp) Add(pair.Key, pair.Value);
         }
     }
 
-    class CardWorker : List<Card>
+    internal class CardWorker : List<Card>
     {
-        private int _innerIndex = 0;
         private int _capacity;
+        private int _innerIndex;
+
+        public CardWorker(int count = int.MaxValue)
+            : base(count)
+        {
+            for (var i = 0; i < count; i++) Add(new Card {Number = i + 1});
+        }
 
         private void AddCounter()
         {
@@ -559,26 +522,17 @@ namespace Districts.CardGenerator
                 _innerIndex++;
 
             // нашли ближайшую доступную карточку
-            _innerIndex = this.FindIndex(_innerIndex, x => x.Doors.Count < _capacity);
+            _innerIndex = FindIndex(_innerIndex, x => x.Doors.Count < _capacity);
 
             // если не нашли выше, ищем по всему массиву
             if (_innerIndex < 0)
-                _innerIndex = this.FindIndex(x => x.Doors.Count < _capacity);
+                _innerIndex = FindIndex(x => x.Doors.Count < _capacity);
         }
 
         public CardWorker SetCardCapacity(int capacity)
         {
             _capacity = capacity;
             return this;
-        }
-
-        public CardWorker(int count = Int32.MaxValue)
-            : base(count)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                Add(new Card{Number = i + 1});
-            }
         }
 
         public void Add(Door item)

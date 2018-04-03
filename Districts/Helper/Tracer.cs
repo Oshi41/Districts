@@ -6,12 +6,12 @@ using Districts.Settings;
 namespace Districts.Helper
 {
     /// <summary>
-    /// Логирование
+    ///     Логирование
     /// </summary>
     public class Tracer
     {
-        private readonly string _filename;
         protected static Tracer Instance = new Tracer();
+        private readonly string _filename;
 
         private Tracer()
         {
@@ -21,7 +21,7 @@ namespace Districts.Helper
         }
 
         /// <summary>
-        /// Возвращает время в данный момент
+        ///     Возвращает время в данный момент
         /// </summary>
         /// <returns></returns>
         private static string GetTime()
@@ -32,7 +32,7 @@ namespace Districts.Helper
         }
 
         /// <summary>
-        /// Записывает сообщение
+        ///     Записывает сообщение
         /// </summary>
         /// <param name="message"></param>
         public static void Write(string message)
@@ -41,19 +41,19 @@ namespace Districts.Helper
         }
 
         /// <summary>
-        /// Пишет ошибку
+        ///     Пишет ошибку
         /// </summary>
         /// <param name="e">Исключение</param>
         /// <param name="message">Сообщение пользователя</param>
         /// <param name="file"></param>
         /// <param name="lineNumer"></param>
-        public static void WriteError(Exception e, string message = null, 
+        public static void WriteError(Exception e, string message = null,
             [CallerMemberName] string file = null,
             [CallerLineNumber] int lineNumer = -1)
         {
             var result = $"{GetTime()} File - \'{file}\',line\'{lineNumer}\' ОШИБКА\n" +
-                         (string.IsNullOrEmpty(message) 
-                             ? string.Empty 
+                         (string.IsNullOrEmpty(message)
+                             ? string.Empty
                              : message + "\n") +
                          $"{e.Message}\n\n";
             Write(result);

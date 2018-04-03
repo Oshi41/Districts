@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="Districts.Views.PrintableCard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Districts.Views"
              xmlns:printable="clr-namespace:Districts.Views.Printable"
              xmlns:printVm="clr-namespace:Districts.ViewModel.PrintVM"
@@ -12,86 +12,90 @@
              Background="White"
              d:DataContext="{d:DesignInstance {x:Type printVm:PrintableViewMode}}">
 
-    <Grid Margin="10" >
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.Resources>
             <Style TargetType="printable:OneCardSide">
-                <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
             </Style>
             <Style TargetType="Viewbox">
-                <Setter Property="VerticalAlignment" Value="Top"/>
-                <Setter Property="Margin" Value="10 0 0 0"/>
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Margin" Value="10 0 0 0" />
                 <!--<Setter Property="Stretch" Value="UniformToFill"/>
                 <Setter Property="StretchDirection" Value="Both"/>-->
             </Style>
 
-            <converter:MathConverter x:Key="MathConverter" Divide="5"/>
+            <converter:MathConverter x:Key="MathConverter" Divide="5" />
         </Grid.Resources>
 
-        <Viewbox >
+        <Viewbox>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                    <RowDefinition />
+                    <RowDefinition
+                        Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}" />
                 </Grid.RowDefinitions>
-                <printable:OneCardSide DataContext="{Binding FirstFront}"/>
+                <printable:OneCardSide DataContext="{Binding FirstFront}" />
             </Grid>
         </Viewbox>
-        <Viewbox Grid.Column="2" >
+        <Viewbox Grid.Column="2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                    <RowDefinition />
+                    <RowDefinition
+                        Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}" />
                 </Grid.RowDefinitions>
-                <printable:OneCardSide DataContext="{Binding FirstBack}"/>
+                <printable:OneCardSide DataContext="{Binding FirstBack}" />
             </Grid>
         </Viewbox>
         <Viewbox Grid.Row="2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                    <RowDefinition />
+                    <RowDefinition
+                        Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}" />
                 </Grid.RowDefinitions>
-                <printable:OneCardSide DataContext="{Binding SecondFront}"/>
+                <printable:OneCardSide DataContext="{Binding SecondFront}" />
             </Grid>
         </Viewbox>
         <Viewbox Grid.Row="2" Grid.Column="2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}"/>
+                    <RowDefinition />
+                    <RowDefinition
+                        Height="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualHeight, Converter={StaticResource MathConverter}}" />
                 </Grid.RowDefinitions>
-                <printable:OneCardSide DataContext="{Binding SecondBack}"/>
+                <printable:OneCardSide DataContext="{Binding SecondBack}" />
             </Grid>
         </Viewbox>
 
         <!-- horizontal -->
-        <Rectangle StrokeDashArray="4 2" 
-                   Stroke="Gray" 
+        <Rectangle StrokeDashArray="4 2"
+                   Stroke="Gray"
                    StrokeThickness="1"
                    Grid.Row="1"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
-                   Margin="0 2"/>
+                   Margin="0 2" />
 
         <!-- vertical -->
-        <Rectangle StrokeDashArray="2 4" 
-                   Stroke="Gray" 
+        <Rectangle StrokeDashArray="2 4"
+                   Stroke="Gray"
                    StrokeThickness="1"
                    Grid.Column="1"
                    Grid.Row="0"
                    Grid.RowSpan="3"
-                   Margin="2 0"/>
+                   Margin="2 0" />
 
 
     </Grid>

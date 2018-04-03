@@ -15,9 +15,8 @@ namespace Districts.MVVM
         }
 
         public Command(Action action, Func<bool> condition = null)
-        : this(o => action?.Invoke(), o => condition?.Invoke() ?? true)
+            : this(o => action?.Invoke(), o => condition?.Invoke() ?? true)
         {
-            
         }
 
         public bool CanExecute(object parameter)

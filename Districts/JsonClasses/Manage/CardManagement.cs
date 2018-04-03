@@ -6,61 +6,19 @@ using Districts.Helper;
 namespace Districts.JsonClasses.Manage
 {
     /// <summary>
-    /// Записи использования карточки
+    ///     Записи использования карточки
     /// </summary>
     public class CardManagement : ICloneable<CardManagement>
     {
         /// <summary>
-        /// Номер карточки
+        ///     Номер карточки
         /// </summary>
         public int Number { get; set; }
 
         /// <summary>
-        /// События
+        ///     События
         /// </summary>
         public List<ManageRecord> Actions { get; set; } = new List<ManageRecord>();
-
-        /// <summary>
-        /// Есть ли на руках у кого нибудь
-        /// </summary>
-        /// <returns></returns>
-        public bool HasOwner()
-        {
-            return Actions.Any() && Actions.LastOrDefault()?.ActionType == ActionTypes.Taken;
-        }
-
-        public DateTime? GetLastDroppedTime()
-        {
-            var find = Actions.FindLast(x => x.ActionType == ActionTypes.Dropped);
-            return find?.Date;
-        }
-
-        public DateTime? GetLastTakenTime(string name = "")
-        {
-            Predicate<ManageRecord> nameCondition = record =>
-                record.Subject.Equals(name, StringComparison.InvariantCultureIgnoreCase);
-
-            Predicate<ManageRecord> mainCondition = record =>
-                record.ActionType == ActionTypes.Taken;
-
-            // если пришло пустое имя, ищем без этого условия
-            var find = Actions.FindLast(x => mainCondition(x) &&
-                                             (string.IsNullOrWhiteSpace(name)
-                                              || nameCondition(x)));
-
-            return find?.Date;
-        }
-
-        /// <summary>
-        /// Возвращает имя владельца, null, если никто не держит карточку на руках
-        /// </summary>
-        /// <returns></returns>
-        public string GetOwner()
-        {
-            return HasOwner()
-                ? Actions.LastOrDefault().Subject
-                : null;
-        }
 
         ///// <summary>
         ///// Владелец в данный момент
@@ -136,6 +94,48 @@ namespace Districts.JsonClasses.Manage
             };
 
             return copy;
+        }
+
+        /// <summary>
+        ///     Есть ли на руках у кого нибудь
+        /// </summary>
+        /// <returns></returns>
+        public bool HasOwner()
+        {
+            return Actions.Any() && Actions.LastOrDefault()?.ActionType == ActionTypes.Taken;
+        }
+
+        public DateTime? GetLastDroppedTime()
+        {
+            var find = Actions.FindLast(x => x.ActionType == ActionTypes.Dropped);
+            return find?.Date;
+        }
+
+        public DateTime? GetLastTakenTime(string name = "")
+        {
+            Predicate<ManageRecord> nameCondition = record =>
+                record.Subject.Equals(name, StringComparison.InvariantCultureIgnoreCase);
+
+            Predicate<ManageRecord> mainCondition = record =>
+                record.ActionType == ActionTypes.Taken;
+
+            // если пришло пустое имя, ищем без этого условия
+            var find = Actions.FindLast(x => mainCondition(x) &&
+                                             (string.IsNullOrWhiteSpace(name)
+                                              || nameCondition(x)));
+
+            return find?.Date;
+        }
+
+        /// <summary>
+        ///     Возвращает имя владельца, null, если никто не держит карточку на руках
+        /// </summary>
+        /// <returns></returns>
+        public string GetOwner()
+        {
+            return HasOwner()
+                ? Actions.LastOrDefault().Subject
+                : null;
         }
     }
 }

@@ -7,7 +7,7 @@ using Districts.Helper;
 namespace Districts.Views.Tabs
 {
     /// <summary>
-    /// Interaction logic for ManageTab.xaml
+    ///     Interaction logic for ManageTab.xaml
     /// </summary>
     public partial class ManageTab : UserControl
     {
@@ -33,21 +33,14 @@ namespace Districts.Views.Tabs
             if (pressed)
             {
                 var selected = tab.SelectedItem as TabControl;
-                foreach (var item in tab.Items.OfType<TabItem>())
-                {
-                    item.IsEnabled = false;
-                }
+                foreach (var item in tab.Items.OfType<TabItem>()) item.IsEnabled = false;
 
                 if (selected != null)
                     selected.IsEnabled = true;
-
             }
             else
             {
-                foreach (var item in tab.Items.OfType<TabItem>())
-                {
-                    item.IsEnabled = true;
-                }
+                foreach (var item in tab.Items.OfType<TabItem>()) item.IsEnabled = true;
             }
         }
 

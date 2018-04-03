@@ -6,31 +6,30 @@ namespace Districts.JsonClasses.Manage
     public enum ActionTypes
     {
         /// <summary>
-        /// Участок взят
+        ///     Участок взят
         /// </summary>
-        [Description("взят")]
-        Taken,
+        [Description("взят")] Taken,
+
         /// <summary>
-        /// Участок возвращён
+        ///     Участок возвращён
         /// </summary>
-        [Description("сдан")]
-        Dropped,
+        [Description("сдан")] Dropped
     }
 
     public class ManageRecord
     {
         /// <summary>
-        /// Время записи
+        ///     Время записи
         /// </summary>
         public DateTime Date { get; set; }
 
         /// <summary>
-        /// Автор записи
+        ///     Автор записи
         /// </summary>
         public string Subject { get; set; }
 
         /// <summary>
-        /// Тип события
+        ///     Тип события
         /// </summary>
         public ActionTypes ActionType { get; set; }
     }

@@ -3,7 +3,7 @@ using Districts.JsonClasses.Base;
 
 namespace Districts.Comparers
 {
-    class BaseFindableObjectComparer : IEqualityComparer<BaseFindableObject>
+    internal class BaseFindableObjectComparer : IEqualityComparer<BaseFindableObject>
     {
         public bool Equals(BaseFindableObject x, BaseFindableObject y)
         {
