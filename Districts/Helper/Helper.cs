@@ -22,8 +22,6 @@ namespace Districts.Helper
     /// </summary>
     public static class Helper
     {
-        #region Loading work
-
         /// <summary>
         ///     Загружаю дома по названиям файла. Сортированы!
         /// </summary>
