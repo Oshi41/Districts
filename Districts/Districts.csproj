@@ -138,6 +138,7 @@
       <DependentUpon>SearchLineBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converter\BoolToVisConverter.cs" />
+    <Compile Include="Views\Converter\InverseBoolToVisConverter.cs" />
     <Compile Include="Views\Converter\InvertBoolConverter.cs" />
     <Compile Include="Views\Converter\MathConverter.cs" />
     <Compile Include="Views\Converter\MultiBoolValueConverter.cs" />

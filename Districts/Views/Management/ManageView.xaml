@@ -8,6 +8,7 @@
         xmlns:manage1="clr-namespace:Districts.JsonClasses.Manage"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:controls="clr-namespace:Districts.Views.Controls"
+        xmlns:converter="clr-namespace:Districts.Views.Converter"
         mc:Ignorable="d"
         Title="{Binding Number, StringFormat={}Карточка №{0}}"
         Height="300" Width="375"
@@ -23,6 +24,8 @@
 
         <controls:EnumToDescrConverter x:Key="DescrConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+        <converter:InverseBoolToVisConverter x:Key="InverseBoolToVisConverter"/>
     </Window.Resources>
 
     <DockPanel Dock="Top"
@@ -102,7 +105,8 @@
                     FontFamily="Courier"
                     Command="{Binding RemoveAction}"
                     CommandParameter="{Binding ElementName=Grid, Path=SelectedItem}"
-                    IsEnabled="{Binding ElementName=Box, Path=IsChecked}">
+                    IsEnabled="{Binding ElementName=Box, Path=IsChecked}"
+                    Visibility="{Binding ElementName=Box, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Viewbox Stretch="Uniform">

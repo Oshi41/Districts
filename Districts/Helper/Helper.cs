@@ -119,6 +119,23 @@ namespace Districts.Helper
             return enumerator == null || !enumerator.Any();
         }
 
+        /// <summary>
+        /// Случайным образом перемешиваю элементы
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="elements"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> elements)
+        {
+            //
+            // нашел на StackOverFlow отличное решение случайного перемешивания списка
+            // https://stackoverflow.com/questions/273313/randomize-a-listt
+            //
+
+            var temp = elements.OrderBy(x => Guid.NewGuid());
+            return temp;
+        }
+
         #endregion
     }
 }

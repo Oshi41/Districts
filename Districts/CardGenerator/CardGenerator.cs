@@ -319,8 +319,8 @@ namespace Districts.CardGenerator
 
             cards.SetCardCapacity(settings.MaxDoors);
 
-            // перемешал
-            mappedDoors.Shuffle();
+            // перемешал дома в случайном порядке
+            mappedDoors.ShuffleHomes();
 
             while (!mappedDoors.IsEmpty)
             {
@@ -337,6 +337,9 @@ namespace Districts.CardGenerator
 
                 mappedDoors.Remove(full);
             }
+
+            // перемешал записи в каждой карточке
+            cards.ShuffleCardRecords();
 
             return cards;
         }
@@ -487,17 +490,10 @@ namespace Districts.CardGenerator
             get { return !this.Any(x => x.Value.Any()); }
         }
 
-        public void Shuffle()
+        public void ShuffleHomes()
         {
-            //
-            // нашел на StackOverFlow отличное решение случайного перемешивания списка
-            // https://stackoverflow.com/questions/273313/randomize-a-listt
-            //
-            var temp = this.OrderBy(x => Guid.NewGuid())
-                .ToDictionary(x => x.Key, x => x.Value);
-
+            var temp = this.Shuffle().ToDictionary(x => x.Key, x => x.Value);
             Clear();
-
             foreach (var pair in temp) Add(pair.Key, pair.Value);
         }
     }
@@ -542,6 +538,14 @@ namespace Districts.CardGenerator
 
             this[_innerIndex].Doors.Add(item);
             AddCounter();
+        }
+
+        public void ShuffleCardRecords()
+        {
+            foreach (var card in this)
+            {
+                card.Doors = card.Doors.Shuffle().ToList();
+            }
         }
     }
 }

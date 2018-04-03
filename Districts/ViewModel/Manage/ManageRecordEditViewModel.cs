@@ -28,7 +28,7 @@ namespace Districts.ViewModel.Manage
 
         private bool OnCanRemoveAction(object obj)
         {
-            return obj is ActionViewModel;
+            return SelectedAction != null;
         }
 
         public CardManagement ToCard()
@@ -138,7 +138,7 @@ namespace Districts.ViewModel.Manage
 
         public ICommand DropCardCommand { get; set; }
         public Command AddAction { get; set; }
-        public ICommand RemoveAction { get; set; }
+        public Command RemoveAction { get; set; }
 
         public ObservableCollection<ActionViewModel> Actions
         {
@@ -158,7 +158,9 @@ namespace Districts.ViewModel.Manage
             {
                 if (Equals(value, _selectedAction)) return;
                 _selectedAction = value;
+
                 OnPropertyChanged(nameof(SelectedAction));
+                RemoveAction.OnCanExecuteChanged();
             }
         }
 

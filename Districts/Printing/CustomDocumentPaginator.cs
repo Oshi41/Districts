@@ -30,14 +30,14 @@ namespace Districts.Printing
         public CustomDocumentPaginator(List<Card> cards, PrintDialog dlg)
         {
             _cards = cards;
-            PageCount = (int) Math.Ceiling((decimal) (_cards.Count / 2));
+            PageCount = (int)Math.Ceiling((decimal)(_cards.Count / 2));
             _printCapabilities = dlg.PrintQueue.GetPrintCapabilities(dlg.PrintTicket);
 
             SetSize(_printCapabilities);
         }
 
 
-        public override bool IsPageCountValid => PageCount <= Math.Ceiling((decimal) (_cards.Count / 2));
+        public override bool IsPageCountValid => PageCount <= Math.Ceiling((decimal)(_cards.Count / 2));
         public override int PageCount { get; }
 
         public override Size PageSize
@@ -51,30 +51,21 @@ namespace Districts.Printing
         private void SetSize(PrintCapabilities capabilities)
         {
             var settings = new PrinterSettings();
-            var a4 = settings.PaperSizes.OfType<PaperSize>().FirstOrDefault(x => x.Kind == PaperKind.A4);
-            _pageSize = new Size(a4.Width, a4.Height);
 
+            // устанавливаю размер по принтеру
+            if (capabilities?.OrientedPageMediaWidth != null
+                && capabilities.OrientedPageMediaHeight.HasValue)
+            {
+                _pageSize = new Size((double)capabilities.OrientedPageMediaWidth,
+                                (double)capabilities.OrientedPageMediaHeight);
+            }
+            // либо по а4
+            else
+            {
+                var a4 = settings.PaperSizes.OfType<PaperSize>().FirstOrDefault(x => x.Kind == PaperKind.A4);
+                _pageSize = new Size(a4.Width, a4.Height);
 
-            //var printerSize = new Size(0, 0);
-            ////// устанавливаю размер по принтеру
-            ////if (capabilities?.OrientedPageMediaWidth != null 
-            ////    && capabilities.OrientedPageMediaHeight.HasValue)
-            ////{
-            ////    printerSize = new Size((double)capabilities.OrientedPageMediaWidth,
-            ////                    (double)capabilities.OrientedPageMediaHeight);
-            ////}
-
-            //
-            ////if (a4 != null)
-            ////{
-            ////    if (printerSize.Height >= a4.Height
-            ////        || printerSize.Width >= a4.Width)
-            ////    {
-            //printerSize 
-            ////    }
-            ////}
-
-            //_pageSize = printerSize;
+            }
         }
 
 
@@ -86,7 +77,7 @@ namespace Districts.Printing
                 : _cards[pageNumber * 2 + 1];
 
             var vm = new PrintableViewMode(first, second);
-            var control = new PrintableCard {DataContext = vm};
+            var control = new PrintableCard { DataContext = vm };
 
             // Force render
             control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
