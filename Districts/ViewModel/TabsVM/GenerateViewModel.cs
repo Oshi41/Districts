@@ -11,14 +11,17 @@ namespace Districts.ViewModel.TabsVM
         private bool _bestDistribution;
         private bool _isGenerating;
         private bool _isPrinting;
+        private bool _isSorted;
 
         public GenerateViewModel()
         {
             GenerateCommand = new Command(OnGenerateCommand, () => !_isGenerating);
             PrintCommand = new Command(OnPrintCommand, () => !_isPrinting);
-        }
+            RepairCardsCommand = new Command(OnRepairCommand, (obj) => !_isGenerating);
+        }        
 
         public ICommand GenerateCommand { get; set; }
+        public ICommand RepairCardsCommand { get; set; }
         public ICommand PrintCommand { get; set; }
 
         public bool BestDistribution
@@ -28,6 +31,17 @@ namespace Districts.ViewModel.TabsVM
             {
                 if (value == _bestDistribution) return;
                 _bestDistribution = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        public bool IsSorted
+        {
+            get { return _isSorted; }
+            set
+            {
+                if (value == _isSorted) return;
+                _isSorted = value;
                 OnPropertyChanged();
             }
         }
@@ -60,7 +74,27 @@ namespace Districts.ViewModel.TabsVM
             try
             {
                 var generator = new CardGenerator.CardGenerator();
-                await Task.Run(() => generator.GenerateNew(BestDistribution));
+                await Task.Run(() => generator.GenerateNew(BestDistribution, IsSorted));
+            }
+            catch (Exception e)
+            {
+                Tracer.WriteError(e);
+            }
+            finally
+            {
+                _isGenerating = false;
+                MessageHelper.ShowDoneBubble();
+            }
+        }
+
+        private async void OnRepairCommand(object obj)
+        {
+            _isGenerating = true;
+
+            try
+            {
+                var generator = new CardGenerator.CardGenerator();
+                await Task.Run(() => generator.Repair(IsSorted));
             }
             catch (Exception e)
             {

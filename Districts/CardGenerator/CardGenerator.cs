@@ -10,6 +10,7 @@ using Districts.Printing;
 using Districts.Settings;
 using Districts.ViewModel.TabsVM;
 using Newtonsoft.Json;
+using Districts.Comparers;
 
 namespace Districts.CardGenerator
 {
@@ -39,16 +40,94 @@ namespace Districts.CardGenerator
             Write(cards);
         }
 
-        public void GenerateNew(bool useBestDistribution = false)
+        public void GenerateNew(bool useBestDistribution = false, bool isSorted = false)
         {
             var allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
             var allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
             var allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
 
             var map = new HomeMap(allHomes, allCodes, allRules);
-            var cards = GenerateCardsNew(map, useBestDistribution);
+            var cards = GenerateCardsNew(map, useBestDistribution, isSorted);
             Write(cards);
             //var doors = GetAllDoorsNew(map);
+        }
+
+        public void Repair(bool isSorted)
+        {
+            //
+            // Загрузили из файлов всю инфу
+            // 
+            var allHomes = LoadingWork.LoadSortedHomes().Values.SelectMany(x => x).ToList();
+            var allRules = LoadingWork.LoadRules().Values.ToList().SelectMany(x => x).ToList();
+            var allCodes = LoadingWork.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
+            var allCards = LoadingWork.LoadCards();
+            // смапировали
+            var map = new HomeMap(allHomes, allCodes, allRules);
+            // сгенерили все двери
+            var allDoors = GetAllDoorsNew(map);
+
+            //
+            // Пока что не планируется поддержка заполнения новых квартир,
+            // сопряжено с трудностями сортировки.
+            // Пока что просто логгируем то, что есть ещё квартиры для заполнения
+            //
+
+            // список квартир, которых нет в домах, информация о которых
+            // была скачана
+            var notExisting = new List<Door>();
+
+            foreach (var pair in allCards)
+            {
+                Card card = pair.Value;
+
+                for (int i = 0; i < card.Doors.Count; i++)
+                {
+                    var find = allDoors.FirstOrDefault(x => x.IsTheSameObject(card.Doors[i]));
+                    if (find == null)
+                    {
+                        notExisting.Add(find);
+                        continue;
+                    }
+
+                    // заменяем на новую
+                    if (find != card.Doors[i])
+                        card.Doors[i] = find;
+                }
+
+                if (isSorted)
+                {
+                    card.Doors = card
+                        .Doors
+                        .OrderBy(x => x.Street)
+                        .ThenBy(x => x.HouseNumber, new HouseNumberComparerFromString())
+                        .ToList();
+                }
+                else
+                {
+                    card.Doors = card.Doors.Shuffle().ToList();
+                }
+            }
+
+            if (notExisting.Any())
+            {
+                var all = notExisting.Aggregate("", (main, door) => main += door.ToString() + "\n");
+                Tracer.Write("Следующих квартир не существует в выбранных домах: \n\n" + all);
+            }
+
+            var cardDoors = allCards.SelectMany(x => x.Value.Doors).ToList();
+            var needToAdd = allDoors.Except(cardDoors, new BaseFindableObjectComparer()).ToList();
+            if (needToAdd.Any())
+            {
+                var all = needToAdd.Aggregate("", (main, door) => main += door.ToString() + "\n");
+                Tracer.Write("Данных квартир нет в участках: \n\n" + all);
+            }
+
+            foreach (var pair in allCards)
+            {
+                // записали карточку
+                var toWrite = JsonConvert.SerializeObject(pair.Value, Formatting.Indented);
+                File.WriteAllText(pair.Key, toWrite);
+            }
         }
 
         /// <summary>
@@ -131,7 +210,7 @@ namespace Districts.CardGenerator
         private int GetEntrance(int floor, int total, int totalEntrances)
         {
             // квартиры в подъезде
-            var onEntrance = Math.Ceiling((double) total / totalEntrances);
+            var onEntrance = Math.Ceiling((double)total / totalEntrances);
 
             // прохожу по всем подъездам
             for (var i = 0; i < totalEntrances; i++)
@@ -161,11 +240,11 @@ namespace Districts.CardGenerator
             var cardindex = 0;
             // макс. кол-во кв. в карточках
             var max = settings.MaxDoors;
-            var amount = (int) Math.Ceiling(doors.Count / (double) max);
+            var amount = (int)Math.Ceiling(doors.Count / (double)max);
 
             // создаю опр. кол-во карточке
             var cards = new List<Card>(amount);
-            for (var i = 0; i < amount; i++) cards.Add(new Card {Number = i + 1});
+            for (var i = 0; i < amount; i++) cards.Add(new Card { Number = i + 1 });
 
             // группирую квартиры по улицам
             var streets = doors.GroupBy(x => x.Street)
@@ -304,7 +383,7 @@ namespace Districts.CardGenerator
             }
         }
 
-        private CardWorker GenerateCardsNew(HomeMap map, bool bestDestribution)
+        private CardWorker GenerateCardsNew(HomeMap map, bool bestDestribution, bool isSorted)
         {
             // смапили дома и доступные квартиры
             var mappedDoors = new DoorsMap();
@@ -319,8 +398,12 @@ namespace Districts.CardGenerator
 
             cards.SetCardCapacity(settings.MaxDoors);
 
-            // перемешал дома в случайном порядке
-            mappedDoors.ShuffleHomes();
+            // сортирую дома
+            if (isSorted)
+                mappedDoors.SortByStreet();
+            // перемешиваю
+            else
+                mappedDoors.ShuffleHomes();
 
             while (!mappedDoors.IsEmpty)
             {
@@ -346,8 +429,8 @@ namespace Districts.CardGenerator
 
         private int GetMaxCardsCount(int doors, int capacity)
         {
-            var result = (double) doors / capacity;
-            return (int) Math.Ceiling(result);
+            var result = (double)doors / capacity;
+            return (int)Math.Ceiling(result);
         }
 
         #endregion
@@ -493,8 +576,21 @@ namespace Districts.CardGenerator
         public void ShuffleHomes()
         {
             var temp = this.Shuffle().ToDictionary(x => x.Key, x => x.Value);
+
             Clear();
-            foreach (var pair in temp) Add(pair.Key, pair.Value);
+            foreach (var pair in temp)
+                Add(pair.Key, pair.Value);
+        }
+
+        public void SortByStreet()
+        {
+            var temp = this.OrderBy(x => x.Key.HomeInfo.Street)
+                .ThenBy(x => x.Key.HomeInfo.HouseNumber)
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            Clear();
+            foreach (var pair in temp)
+                Add(pair.Key, pair.Value);
         }
     }
 
@@ -506,7 +602,7 @@ namespace Districts.CardGenerator
         public CardWorker(int count = int.MaxValue)
             : base(count)
         {
-            for (var i = 0; i < count; i++) Add(new Card {Number = i + 1});
+            for (var i = 0; i < count; i++) Add(new Card { Number = i + 1 });
         }
 
         private void AddCounter()
@@ -534,7 +630,15 @@ namespace Districts.CardGenerator
         public void Add(Door item)
         {
             if (_innerIndex < 0)
-                return;
+            {
+                // пытаемся добавить ещё одну карточку
+                if (this.Count >= _capacity)
+                    return;
+
+                this.Add(new Card { Number = Count + 1 });
+                _innerIndex = Count - 1;
+            }
+
 
             this[_innerIndex].Doors.Add(item);
             AddCounter();

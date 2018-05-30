@@ -36,7 +36,7 @@ namespace Districts.Helper
                 try
                 {
                     var temp = JsonConvert.DeserializeObject<T>(fileContent);
-                    result.Add(Path.GetFileName(fileName), temp);
+                    result.Add(Path.GetFullPath(fileName), temp);
                 }
                 catch (Exception e)
                 {

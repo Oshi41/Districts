@@ -7,6 +7,7 @@ namespace Districts.MVVM
     {
         private readonly Action<object> _action;
         private readonly Predicate<object> _condition;
+        EventHandler _canExecuteChanged;
 
         public Command(Action<object> action, Predicate<object> condition = null)
         {
@@ -30,11 +31,23 @@ namespace Districts.MVVM
         }
 
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                _canExecuteChanged += value;
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                _canExecuteChanged -= value;
+                CommandManager.RequerySuggested -= value;
+            }
+        }
 
         public void OnCanExecuteChanged()
         {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            _canExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

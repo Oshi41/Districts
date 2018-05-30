@@ -120,6 +120,9 @@ namespace Districts.ViewModel.TabsVM
 
         private void OnDelete(object obj)
         {
+            if (SelectedBuilding == null)
+                return;
+
             var isDeleted = _map.Remove(SelectedBuilding);
             //_map.Remove(SelectedBuilding);
 

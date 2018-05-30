@@ -39,7 +39,9 @@ namespace Districts.JsonClasses
             if (!base.Equals(obj))
                 return false;
 
-            if (obj is Door x) return x.Number == Number;
+            if (obj is Door x)
+                return x.Number == Number
+                    && x.Entrance == Entrance;
 
             return false;
         }

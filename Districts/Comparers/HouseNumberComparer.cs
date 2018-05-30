@@ -9,6 +9,8 @@ namespace Districts.Comparers
     /// </summary>
     public class HouseNumberComparer : IComparer<Building>
     {
+        private readonly HouseNumberComparerFromString _comparer = new HouseNumberComparerFromString();
+
         /// <summary>
         ///     Сравнивает два дома
         /// </summary>
@@ -17,12 +19,20 @@ namespace Districts.Comparers
         /// <returns></returns>
         public int Compare(Building x, Building y)
         {
+            return _comparer.Compare(x?.HouseNumber, y?.HouseNumber);
+        }
+    }
+
+    public class HouseNumberComparerFromString : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
             if (ReferenceEquals(x, y)) return 0;
             if (ReferenceEquals(x, null)) return -1;
             if (ReferenceEquals(y, null)) return 1;
 
-            var first = new HouseNumber(x.HouseNumber);
-            var second = new HouseNumber(y.HouseNumber);
+            var first = new HouseNumber(x);
+            var second = new HouseNumber(y);
 
             var numberDiff = first.Number.CompareTo(second.Number);
             if (numberDiff != 0) return numberDiff;

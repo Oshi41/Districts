@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using Districts.Helper;
+using System;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Districts
 {
@@ -7,5 +10,14 @@ namespace Districts
     /// </summary>
     public class App : Application
     {
+        public App()
+        {
+            DispatcherUnhandledException += OnError;
+        }
+
+        private void OnError(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            Tracer.WriteError(e.Exception);
+        }
     }
 }
