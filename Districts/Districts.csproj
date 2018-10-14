@@ -91,6 +91,7 @@
     <Compile Include=".Tests\Tests.cs" />
     <Compile Include="Backup\BackupManager.cs" />
     <Compile Include="Behaviors\BlockTabsBehavior.cs" />
+    <Compile Include="Behaviors\TabSwitchBehavior.cs" />
     <Compile Include="CardGenerator\CardGenerator.cs" />
     <Compile Include="Checker\DoorChecker.cs" />
     <Compile Include="Comparers\BaseFindableObjectComparer.cs" />
@@ -170,6 +171,9 @@
     </Compile>
     <Compile Include="Views\Tabs\GenerateTab.xaml.cs">
       <DependentUpon>GenerateTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\HelpTab.xaml.cs">
+      <DependentUpon>HelpTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ManageTab.xaml.cs">
       <DependentUpon>ManageTab.xaml</DependentUpon>
@@ -257,6 +261,9 @@
     </Page>
     <Page Include="Views\Tabs\GenerateTab.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\HelpTab.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\ManageTab.xaml">

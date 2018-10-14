@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="Districts.Views.Tabs.HelpTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Districts.Views.Tabs"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:behaviors="clr-namespace:Districts.Behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="250">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Expander Header="Генерация карточек">
+            <TextBlock TextWrapping="Wrap">
+                <Run Text="Для начала зайдите на"/>
+                <Hyperlink>
+                    <i:Interaction.Behaviors>
+                        <behaviors:TabSwitchBehavior TabIndex="0"/> 
+                    </i:Interaction.Behaviors>
+                    <Run Text="первую вкладку"/>
+                </Hyperlink>
+                <Run Text="и введите максимальное кол-во квартир на карточке (на обеих разворотах), а так же список улиц, дома которых будут использоваться."/>
+                
+                <LineBreak/>
+                <Run Text="Затем на"/>
+                <Hyperlink>
+                    <i:Interaction.Behaviors>
+                        <behaviors:TabSwitchBehavior TabIndex="1"/> 
+                    </i:Interaction.Behaviors>
+                    <Run Text="второй вкладке"/>
+                </Hyperlink>
+                <Run Text="скачайте всю информацию."/>
+                
+                <LineBreak/>
+                <Run Text="Затем, на"/>
+                <Hyperlink>
+                    <i:Interaction.Behaviors>
+                        <behaviors:TabSwitchBehavior TabIndex="2"/> 
+                    </i:Interaction.Behaviors>
+                    <Run Text="третей вкладке"/>
+                </Hyperlink>
+                <Run Text="нажмите на кнопку, загруженные улицы появятся списком. 
+Ненужные дома можно удалить по контекстному меню. При двойном клике в появившемся окошке можно заполнить
+информацию о доме"/>
+                
+                <LineBreak/>
+                <Run Text="После редактирования данных завершите редактирование по кнопке вверху. Переходите к"/>
+                <Hyperlink>
+                    <i:Interaction.Behaviors>
+                        <behaviors:TabSwitchBehavior TabIndex="3"/> 
+                    </i:Interaction.Behaviors>
+                    <Run Text="четветой вкладке"/>
+                </Hyperlink>
+                <Run Text="и сгенерируйте участки по кнопке. После этого можно иъ распечатать по кнопке."/>
+            </TextBlock>
+        </Expander>
+        
+
+        
+            
+    </Grid>
+</UserControl>

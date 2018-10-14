@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace Districts.Helper
 {
@@ -8,7 +9,13 @@ namespace Districts.Helper
         public static T GetFirstParentByType<T>(DependencyObject child)
             where T : DependencyObject
         {
-            var parent = VisualTreeHelper.GetParent(child);
+            if (child == null)
+                return null;
+
+            var parent = child is Visual || child is Visual3D
+                ? VisualTreeHelper.GetParent(child)
+                : LogicalTreeHelper.GetParent(child);
+
             while (parent != null)
             {
                 if (parent is T result)

@@ -81,6 +81,13 @@
             </TabItem.Style>
             <tabs:OpenFolderTab />
         </TabItem>
+        <TabItem Header="Помощь">
+            <!--<TabItem.DataContext>
+
+            </TabItem.DataContext>-->
+
+            <tabs:HelpTab/>
+        </TabItem>
     </TabControl>
 
     <!--<TabControl  TabStripPlacement="Left">
