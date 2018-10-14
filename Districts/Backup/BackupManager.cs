@@ -22,7 +22,7 @@ namespace Districts.Backup
 
                 zip.AddDirectory(settings.BuildingPath, Path.GetDirectoryName(settings.BuildingPath));
                 zip.AddDirectory(settings.CardsPath, Path.GetDirectoryName(settings.CardsPath));
-                zip.AddDirectory(settings.CodesPath, Path.GetDirectoryName(settings.CodesPath));
+                zip.AddDirectory(settings.HomeInfoPath, Path.GetDirectoryName(settings.HomeInfoPath));
                 zip.AddDirectory(settings.RestrictionsPath, Path.GetDirectoryName(settings.RestrictionsPath));
                 zip.AddFile(settings.StreetsPath, Path.GetFileName(settings.StreetsPath));
 
