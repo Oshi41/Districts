@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Districts.Helper;
 using Districts.JsonClasses.Base;
 
 namespace Districts.JsonClasses
@@ -31,7 +32,6 @@ namespace Districts.JsonClasses
         /// </summary>
         public List<string> Codes { get; set; } = new List<string>();
 
-
         #region Overrided
 
         public override bool Equals(object obj)
@@ -40,10 +40,27 @@ namespace Districts.JsonClasses
                 return false;
 
             if (obj is Door x)
-                return x.Number == Number
-                    && x.Entrance == Entrance;
+                return Equals(x);
 
             return false;
+        }
+
+        protected bool Equals(Door other)
+        {
+            return base.Equals(other)
+                   && Number == other.Number
+                   && Entrance == other.Entrance
+                   && Codes.IsTermwiseEquals(other.Codes);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = Number;
+                hashCode = (hashCode * 397) ^ Entrance;
+                return hashCode;
+            }
         }
 
         public static bool operator ==(Door x, Door y)

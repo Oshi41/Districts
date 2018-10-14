@@ -136,6 +136,30 @@ namespace Districts.Helper
             return temp;
         }
 
+        public static T GetRandom<T>(this IEnumerable<T> elements, Random rand)
+        {
+            if (elements.IsNullOrEmpty())
+                return default(T);
+
+            var index = rand.Next(0, elements.Count() - 1);
+            return elements.ElementAt(index);
+        }
+
+        public static bool IsTermwiseEquals<T>(this IEnumerable<T> source, IEnumerable<T> list, IEqualityComparer<T> comparer = null)
+        {
+            if (source.IsNullOrEmpty() && list.IsNullOrEmpty())
+                return true;
+
+            if (source.IsNullOrEmpty() || list.IsNullOrEmpty())
+                return false;
+
+            if (comparer == null)
+                comparer = EqualityComparer<T>.Default;
+
+            return source.Count() == list.Count()
+                   && !source.Except(list, comparer).Any();
+        }
+
         #endregion
     }
 }

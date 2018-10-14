@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Districts.Views
+namespace Districts.Views.Printable
 {
     /// <summary>
     ///     Логика взаимодействия для PrintableCard.xaml

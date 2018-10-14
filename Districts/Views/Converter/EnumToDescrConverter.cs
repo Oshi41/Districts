@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Districts.Views.Controls
+namespace Districts.Views.Converter
 {
     internal class EnumToDescrConverter : IValueConverter
     {

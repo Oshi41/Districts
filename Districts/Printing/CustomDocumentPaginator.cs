@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Districts.JsonClasses;
 using Districts.ViewModel.PrintVM;
 using Districts.Views;
+using PrintableCard = Districts.Views.Printable.PrintableCard;
 
 namespace Districts.Printing
 {

@@ -9,12 +9,13 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:controls="clr-namespace:Districts.Views.Controls"
+        xmlns:converter="clr-namespace:Districts.Views.Converter"
         mc:Ignorable="d" Height="400" Width="300"
         d:DataContext="{d:DesignInstance {x:Type viewModel:EditHomeInfoViewModel}}">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <controls:EnumToDescrConverter x:Key="DescrConverter" />
+        <converter:EnumToDescrConverter x:Key="DescrConverter" />
 
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type viewModel:CountingTypes}">
@@ -22,6 +23,8 @@
                 <x:Type TypeName="viewModel:CountingTypes" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        
     </Window.Resources>
 
     <Window.Title>
@@ -54,6 +57,14 @@
         </Grid.RowDefinitions>
 
         <UniformGrid Columns="1">
+            <UniformGrid.ToolTip>
+                <TextBlock>
+                    <Run Text="Нужно внести список номеров через запятую, либо промежуток с тире"/>
+                    <LineBreak/>
+                    <Run Text="15,46,55-60"/>
+                </TextBlock>
+            </UniformGrid.ToolTip>
+
             <TextBlock Text="Агрессии" />
             <TextBox Grid.Row="1"
                      Text="{Binding Aggresive}"
@@ -156,7 +167,8 @@
         <TextBlock Grid.Row="6"
                    Text="Коды" />
         <TabControl Grid.Row="7"
-                    ItemsSource="{Binding Codes}">
+                    ItemsSource="{Binding Codes}"
+                    ToolTip="Каждый код с новой строки">
             <TabControl.ItemContainerStyle>
                 <Style TargetType="TabItem">
                     <Setter Property="Header" Value="{Binding Number, StringFormat={}{0} под.}" />

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Districts.Annotations;
+using Districts.Properties;
 
 namespace Districts.MVVM
 {

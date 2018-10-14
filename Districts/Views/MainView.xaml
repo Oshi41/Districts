@@ -43,6 +43,13 @@
 
             <tabs:GenerateTab />
         </TabItem>
+        <TabItem Header="Сортировка готовых карточек">
+            <TabItem.DataContext>
+                <tabsVm:RepairTabViewModel />
+            </TabItem.DataContext>
+
+            <tabs:RepairVierw />
+        </TabItem>
         <TabItem Header="Менеджмент">
             <TabItem.DataContext>
                 <tabsVm:ManageViewModel />

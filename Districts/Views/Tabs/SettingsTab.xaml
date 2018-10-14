@@ -7,7 +7,7 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:controls1="clr-namespace:Districts.Views.Controls"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:bahaviors="clr-namespace:Districts.Bahaviors"
+             xmlns:behaviors="clr-namespace:Districts.Behaviors"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:SettingsViewModel}}">
@@ -18,7 +18,7 @@
                           Command="{Binding Path=ToggleSettingsLoad}"
                           CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}">
                 <i:Interaction.Behaviors>
-                    <bahaviors:BlockTabsBehavior/>
+                    <behaviors:BlockTabsBehavior/>
                 </i:Interaction.Behaviors>
 
                 <ToggleButton.Style>

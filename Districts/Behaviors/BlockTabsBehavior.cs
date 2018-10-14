@@ -5,12 +5,12 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Interactivity;
 using Districts.Helper;
 
-namespace Districts.Bahaviors
+namespace Districts.Behaviors
 {
     /// <summary>
     /// Блокирует остальные табы
     /// </summary>
-    class BlockTabsBehavior : Behavior<ButtonBase>
+    class BlockTabsBehavior : Behavior<ToggleButton>
     {
         private bool _isBlocked;
 
@@ -20,14 +20,16 @@ namespace Districts.Bahaviors
         {
             base.OnAttached();
 
-            AssociatedObject.Click += BlockOrReleaseTab;
+            AssociatedObject.Checked += BlockOrReleaseTab;
+            AssociatedObject.Unchecked += BlockOrReleaseTab;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
 
-            AssociatedObject.Click -= BlockOrReleaseTab;
+            AssociatedObject.Checked -= BlockOrReleaseTab;
+            AssociatedObject.Unchecked -= BlockOrReleaseTab;
         }
 
         #endregion

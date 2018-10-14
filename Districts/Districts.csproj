@@ -90,7 +90,7 @@
     </ApplicationDefinition>
     <Compile Include=".Tests\Tests.cs" />
     <Compile Include="Backup\BackupManager.cs" />
-    <Compile Include="Bahaviors\BlockTabsBehavior.cs" />
+    <Compile Include="Behaviors\BlockTabsBehavior.cs" />
     <Compile Include="CardGenerator\CardGenerator.cs" />
     <Compile Include="Checker\DoorChecker.cs" />
     <Compile Include="Comparers\BaseFindableObjectComparer.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="ViewModel\TabsVM\GenerateViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\ManageViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\OpenFolderViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\RepairTabViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\SettingsViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\TreeViewModel.cs" />
     <Compile Include="Views\Controls\DataGridWithCommand.cs" />
@@ -175,6 +176,9 @@
     </Compile>
     <Compile Include="Views\Tabs\OpenFolderTab.xaml.cs">
       <DependentUpon>OpenFolderTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\RepairView.xaml.cs">
+      <DependentUpon>RepairView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\SettingsTab.xaml.cs">
       <DependentUpon>SettingsTab.xaml</DependentUpon>
@@ -261,6 +265,9 @@
     </Page>
     <Page Include="Views\Tabs\OpenFolderTab.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\RepairView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SettingsTab.xaml">

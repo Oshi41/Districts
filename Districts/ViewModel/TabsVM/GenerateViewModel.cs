@@ -17,11 +17,9 @@ namespace Districts.ViewModel.TabsVM
         {
             GenerateCommand = new Command(OnGenerateCommand, () => !_isGenerating);
             PrintCommand = new Command(OnPrintCommand, () => !_isPrinting);
-            RepairCardsCommand = new Command(OnRepairCommand, (obj) => !_isGenerating);
         }        
 
         public ICommand GenerateCommand { get; set; }
-        public ICommand RepairCardsCommand { get; set; }
         public ICommand PrintCommand { get; set; }
 
         public bool BestDistribution
@@ -74,27 +72,7 @@ namespace Districts.ViewModel.TabsVM
             try
             {
                 var generator = new CardGenerator.CardGenerator();
-                await Task.Run(() => generator.GenerateNew(BestDistribution, IsSorted));
-            }
-            catch (Exception e)
-            {
-                Tracer.WriteError(e);
-            }
-            finally
-            {
-                _isGenerating = false;
-                MessageHelper.ShowDoneBubble();
-            }
-        }
-
-        private async void OnRepairCommand(object obj)
-        {
-            _isGenerating = true;
-
-            try
-            {
-                var generator = new CardGenerator.CardGenerator();
-                await Task.Run(() => generator.Repair(IsSorted));
+                await Task.Run(() => generator.Generate(BestDistribution, IsSorted));
             }
             catch (Exception e)
             {

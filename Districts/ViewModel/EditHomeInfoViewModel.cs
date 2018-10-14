@@ -329,10 +329,11 @@ namespace Districts.ViewModel
 
     public enum CountingTypes
     {
-        [Description("Обычная нумерация")] Regular,
-
+        [Description("Обычная нумерация")]
+        Regular,
         [Description("Продолжать по корпусам")]
         AutomaticIncrement,
-        [Description("Настроить")] Custom
+        [Description("Начать с...")]
+        Custom
     }
 }

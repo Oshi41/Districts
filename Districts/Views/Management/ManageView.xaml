@@ -22,7 +22,7 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
-        <controls:EnumToDescrConverter x:Key="DescrConverter" />
+        <converter:EnumToDescrConverter x:Key="DescrConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
         <converter:InverseBoolToVisConverter x:Key="InverseBoolToVisConverter"/>

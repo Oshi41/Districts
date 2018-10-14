@@ -44,6 +44,29 @@ namespace Districts.Comparers
         }
     }
 
+    public class HouseNumberComparerFromDoor : IComparer<Door>
+    {
+        private readonly IComparer<string> _comparer;
+
+        public HouseNumberComparerFromDoor(IComparer<string> comparer)
+        {
+            _comparer = comparer;
+        }
+
+        public int Compare(Door x, Door y)
+        {
+            if (ReferenceEquals(x, y)) return 0;
+            if (ReferenceEquals(x, null)) return -1;
+            if (ReferenceEquals(y, null)) return 1;
+
+            var streetCompare = string.Compare(x.Street, y.Street, StringComparison.Ordinal);
+            if (streetCompare != 0)
+                return streetCompare;
+
+            return _comparer.Compare(x.HouseNumber, y.HouseNumber);
+        }
+    }
+
     /// <summary>
     ///     Класс представляющий номер дома
     /// </summary>
