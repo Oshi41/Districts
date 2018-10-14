@@ -6,6 +6,8 @@
              xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:controls1="clr-namespace:Districts.Views.Controls"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:bahaviors="clr-namespace:Districts.Bahaviors"
              mc:Ignorable="d"
              d:DesignHeight="900" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:SettingsViewModel}}">
@@ -15,6 +17,10 @@
             <ToggleButton x:Name="SettingsButton"
                           Command="{Binding Path=ToggleSettingsLoad}"
                           CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}">
+                <i:Interaction.Behaviors>
+                    <bahaviors:BlockTabsBehavior/>
+                </i:Interaction.Behaviors>
+
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton">
                         <Setter Property="Content" Value="Редактировать настройки" />

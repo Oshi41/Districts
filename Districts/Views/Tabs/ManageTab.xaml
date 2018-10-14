@@ -8,6 +8,8 @@
              xmlns:controls="clr-namespace:Districts.Views.Controls"
              xmlns:converter="clr-namespace:Districts.Views.Converter"
              xmlns:manage="clr-namespace:Districts.ViewModel.Manage"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:bahaviors="clr-namespace:Districts.Bahaviors"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance {x:Type tabsVm:ManageViewModel}}">
@@ -53,10 +55,14 @@
                       Command="{Binding LoadCommand}"
                       CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
                       ClickMode="Release"
-                      Checked="BlockTab"
-                      Unchecked="BlockTab"
                       DockPanel.Dock="Top"
                       Margin="10 10 10 0">
+            <!--Checked="BlockTab"
+            Unchecked="BlockTab"-->
+            <i:Interaction.Behaviors>
+                <bahaviors:BlockTabsBehavior/>
+            </i:Interaction.Behaviors>
+
             <ToggleButton.Style>
                 <Style TargetType="ToggleButton">
                     <Setter Property="Content" Value="Загрузить информацию" />

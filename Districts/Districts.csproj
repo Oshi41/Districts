@@ -90,6 +90,7 @@
     </ApplicationDefinition>
     <Compile Include=".Tests\Tests.cs" />
     <Compile Include="Backup\BackupManager.cs" />
+    <Compile Include="Bahaviors\BlockTabsBehavior.cs" />
     <Compile Include="CardGenerator\CardGenerator.cs" />
     <Compile Include="Checker\DoorChecker.cs" />
     <Compile Include="Comparers\BaseFindableObjectComparer.cs" />
@@ -178,9 +179,6 @@
     <Compile Include="Views\Tabs\SettingsTab.xaml.cs">
       <DependentUpon>SettingsTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TreeTableView.xaml.cs">
-      <DependentUpon>TreeTableView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WebRequest\HomeDownloader.cs" />
     <Compile Include="WebRequest\MainDownloader.cs" />
     <Compile Include="WebRequest\StreetDownloader.cs" />
@@ -266,10 +264,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SettingsTab.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TreeTableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
