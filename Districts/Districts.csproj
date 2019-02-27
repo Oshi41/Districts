@@ -105,13 +105,21 @@
     <Compile Include="New\Gui\Controls\EditStreets.xaml.cs">
       <DependentUpon>EditStreets.xaml</DependentUpon>
     </Compile>
+    <Compile Include="New\Gui\Controls\HomesView.xaml.cs">
+      <DependentUpon>HomesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="New\Gui\Controls\StreetView.xaml.cs">
+      <DependentUpon>StreetView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="New\Gui\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="New\Gui\Controls\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="New\ViewModel\HomesViewModel.cs" />
     <Compile Include="New\ViewModel\MainViewModel.cs" />
+    <Compile Include="New\ViewModel\StreetsViewModel.cs" />
     <Compile Include="Singleton\Interfaces\AppSettings.cs" />
     <Compile Include="Singleton\Implementation\IAppSettings.cs" />
     <Compile Include="Singleton\Implementation\WebWork.cs" />
@@ -228,6 +236,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="New\Gui\Controls\EditStreets.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="New\Gui\Controls\HomesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="New\Gui\Controls\StreetView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

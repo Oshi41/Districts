@@ -28,7 +28,8 @@
                     Width="80"
                     Height="40"
                     Margin="10,0"
-                    Command="{Binding Path=DeletePath}"/>
+                    Command="{Binding Path=DeletePath}">
+            </Button>
 
             <ComboBox Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
                       IsEditable="True"
@@ -42,5 +43,10 @@
                  ItemsSource="{Binding Path=Streets}">
 
         </ListBox>
+
+        <Grid.InputBindings>
+            <KeyBinding Key="Delete"
+                        Command="{Binding Path=DeletePath}"/>
+        </Grid.InputBindings>
     </Grid>
 </UserControl>

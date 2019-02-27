@@ -19,8 +19,9 @@ namespace Districts.New.ViewModel
         private ICommand _addPath;
         private ICommand _deletePath;
         private string _currentPath;
-        private ObservableCollection<string> _hints;
+        private ObservableCollection<string> _hints = new ObservableCollection<string>();
         private bool _hintsOpen;
+        private int _index;
 
         public EditStreetViewModel(IWebWorker webWorker,
             IList<string> streets = null)
@@ -90,12 +91,12 @@ namespace Districts.New.ViewModel
         {
             if (string.IsNullOrWhiteSpace(InputText))
             {
-                Hints.Clear();
+                // Hints.Clear();
                 return;
             }
 
             // такая улица уже есть
-            if (Hints?.Contains(InputText) == true)
+            if (Hints.Contains(InputText) == true)
             {
                 HintsOpen = false;
                 return;
@@ -111,13 +112,16 @@ namespace Districts.New.ViewModel
 
         private bool OnCanAddStreet()
         {
-            return !string.IsNullOrWhiteSpace(InputText) && !Streets.Contains(InputText);
+            return !string.IsNullOrWhiteSpace(InputText)
+                   && !Streets.Contains(InputText)
+                   && Hints.Contains(InputText);
         }
 
         private void OnAddStreet()
         {
             Streets.Add(InputText);
-            InputText = string.Empty;
+            Hints.Remove(InputText);
+            InputText = Hints.FirstOrDefault() ?? string.Empty;
         }
     }
 }

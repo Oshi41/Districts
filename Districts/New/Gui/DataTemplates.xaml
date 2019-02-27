@@ -7,5 +7,9 @@
     <DataTemplate DataType="{x:Type viewModel:EditStreetViewModel}">
         <controls:EditStreets/>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
+        <local:MainView/>
+    </DataTemplate>
     
 </ResourceDictionary>
