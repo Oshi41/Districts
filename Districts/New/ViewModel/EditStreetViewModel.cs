@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 using Districts.New.Interfaces;
-using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 using Mvvm.Commands;
 
@@ -21,11 +20,14 @@ namespace Districts.New.ViewModel
         private ICommand _deletePath;
         private string _currentPath;
         private ObservableCollection<string> _hints;
+        private bool _hintsOpen;
 
-        public EditStreetViewModel(IWebWorker webWorker)
+        public EditStreetViewModel(IWebWorker webWorker,
+            IList<string> streets = null)
         {
             _webWorker = webWorker;
-            Streets = new ObservableCollection<string>();
+
+            Streets = new ObservableCollection<string>(streets ?? new string[] { });
             AddPath = new DelegateCommand(OnAddStreet, OnCanAddStreet);
             DeletePath = new DelegateCommand(OnDeletePath, OnCanDeletePath);
         }
@@ -70,6 +72,12 @@ namespace Districts.New.ViewModel
             set => SetProperty(ref _currentPath, value);
         }
 
+        public bool HintsOpen
+        {
+            get => _hintsOpen;
+            set => SetProperty(ref _hintsOpen, value);
+        }
+
         public ObservableCollection<string> Streets { get; }
 
         public ObservableCollection<string> Hints
@@ -77,7 +85,6 @@ namespace Districts.New.ViewModel
             get => _hints;
             set => SetProperty(ref _hints, value);
         }
-
 
         private async void UpdateHints()
         {
@@ -87,8 +94,19 @@ namespace Districts.New.ViewModel
                 return;
             }
 
-            var result = await _webWorker.Hints(InputText);
-            Hints = new ObservableCollection<string>(result);
+            // такая улица уже есть
+            if (Hints?.Contains(InputText) == true)
+            {
+                HintsOpen = false;
+                return;
+            }
+
+            // поиск раз в 400 млс
+            await Task.Delay(TimeSpan.FromMilliseconds(400));
+
+            var result = await _webWorker.StreetHints(InputText);
+            Hints = new ObservableCollection<string>(result.Except(Streets));
+            HintsOpen = Hints.Any();
         }
 
         private bool OnCanAddStreet()

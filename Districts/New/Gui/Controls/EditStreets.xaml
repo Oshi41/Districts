@@ -8,6 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type={x:Type viewModel:EditStreetViewModel}}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -30,6 +31,9 @@
                     Command="{Binding Path=DeletePath}"/>
 
             <ComboBox Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
+                      IsEditable="True"
+                      VerticalContentAlignment="Center"
+                      IsDropDownOpen="{Binding Path=HintsOpen, Mode=TwoWay}"
                       ItemsSource="{Binding Path=Hints}"/>
         </DockPanel>
 

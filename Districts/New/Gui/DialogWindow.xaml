@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="DialogWindow" Height="400" Width="350">
 
-    <Grid Margin="10">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ContentControl Content="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Content}"
-                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}"/>
+        <ContentControl Margin="10"
+                        Content="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}"/>
 
         <Grid Grid.Row="1"
               Background="LightGray">
@@ -28,14 +28,14 @@
                     Width="90"
                     Height="40"
                     Content="Ok"
-                    Margin="10,0"
+                    Margin="10"
                     Click="ConfirmAndClose"/>
 
             <Button Grid.Column="2"
                     Width="90"
                     Height="40"
                     Content="Отмена"
-                    Margin="10,0"
+                    Margin="10"
                     Click="JustClose"/>
         </Grid>
     </Grid>

@@ -10,6 +10,9 @@
     <!--MainWindow.xaml-->
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="New/Gui/DataTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
             <Canvas x:Key="UpButtonContent"
                     x:Shared="False"
@@ -39,7 +42,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-
 
             <Style TargetType="mah:NumericUpDown">
                 <Setter Property="Height" Value="22" />

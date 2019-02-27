@@ -4,70 +4,70 @@ using Newtonsoft.Json;
 
 namespace Districts.Settings
 {
-    internal class ApplicationSettings
-    {
-        #region ctor
-
-        private ApplicationSettings()
+        internal class ApplicationSettings
         {
-        }
+            #region ctor
 
-        #endregion
+            private ApplicationSettings()
+            {
+            }
 
-        /// <summary>
-        ///     Будет меняться только базовая папка, остальные создаются внутри этой
-        /// </summary>
-        public string BaseFolder { get; set; } = GetLocalFolder();
+            #endregion
 
-        /// <summary>
-        ///     Макс кол-во квартир
-        /// </summary>
-        public int MaxDoors { get; set; } = 25;
+            /// <summary>
+            ///     Будет меняться только базовая папка, остальные создаются внутри этой
+            /// </summary>
+            public string BaseFolder { get; set; } = GetLocalFolder();
 
-        /// <summary>
-        ///     Путь к домам
-        /// </summary>
-        public string BuildingPath => BaseFolder + "\\Buildings";
+            /// <summary>
+            ///     Макс кол-во квартир
+            /// </summary>
+            public int MaxDoors { get; set; } = 25;
 
-        /// <summary>
-        ///     Путь к карточкам участков
-        /// </summary>
-        public string CardsPath => BaseFolder + "\\Cards";
+            /// <summary>
+            ///     Путь к домам
+            /// </summary>
+            public string BuildingPath => BaseFolder + "\\Buildings";
 
-        /// <summary>
-        ///     Путь к улицам
-        /// </summary>
-        public string StreetsPath => BaseFolder + "\\Streets.txt";
+            /// <summary>
+            ///     Путь к карточкам участков
+            /// </summary>
+            public string CardsPath => BaseFolder + "\\Cards";
 
-        /// <summary>
-        ///     Путь к кодам
-        /// </summary>
-        public string HomeInfoPath => BaseFolder + "\\HomeInfo";
+            /// <summary>
+            ///     Путь к улицам
+            /// </summary>
+            public string StreetsPath => BaseFolder + "\\Streets.txt";
 
-        /// <summary>
-        ///     Путь к правилам доступа
-        /// </summary>
-        public string RestrictionsPath => BaseFolder + "\\Restrictions";
+            /// <summary>
+            ///     Путь к кодам
+            /// </summary>
+            public string HomeInfoPath => BaseFolder + "\\HomeInfo";
 
-        /// <summary>
-        ///     Путь для логирования
-        /// </summary>
-        public string LogPath => BaseFolder + "\\Logs";
+            /// <summary>
+            ///     Путь к правилам доступа
+            /// </summary>
+            public string RestrictionsPath => BaseFolder + "\\Restrictions";
 
-        /// <summary>
-        ///     Путь для записей о карточке
-        /// </summary>
-        public string ManageRecordsPath => BaseFolder + "\\ManageRecords";
+            /// <summary>
+            ///     Путь для логирования
+            /// </summary>
+            public string LogPath => BaseFolder + "\\Logs";
 
-        /// <summary>
-        ///     Папка с бэкапами
-        /// </summary>
-        public string BackupFolder => BaseFolder + "\\Backups";
+            /// <summary>
+            ///     Путь для записей о карточке
+            /// </summary>
+            public string ManageRecordsPath => BaseFolder + "\\ManageRecords";
 
-        /// <summary>
-        ///     Путь к конфигу всегда один и тот же!!!!
-        /// </summary>
-        public static string ConfigPath => GetLocalFolder() + "\\config";
+            /// <summary>
+            ///     Папка с бэкапами
+            /// </summary>
+            public string BackupFolder => BaseFolder + "\\Backups";
+
+            /// <summary>
+            ///     Путь к конфигу всегда один и тот же!!!!
+            /// </summary>
+            public static string ConfigPath => GetLocalFolder() + "\\config";
 
         #region Helping
 

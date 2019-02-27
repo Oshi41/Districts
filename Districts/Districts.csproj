@@ -108,6 +108,12 @@
     <Compile Include="New\Gui\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="New\Gui\Controls\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="New\ViewModel\MainViewModel.cs" />
+    <Compile Include="Singleton\Interfaces\AppSettings.cs" />
+    <Compile Include="Singleton\Implementation\IAppSettings.cs" />
     <Compile Include="Singleton\Implementation\WebWork.cs" />
     <Compile Include="Singleton\Interfaces\IWebWorker.cs" />
     <Compile Include="New\ViewModel\EditStreetViewModel.cs" />
@@ -225,7 +231,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="New\Gui\DataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="New\Gui\DialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="New\Gui\Controls\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

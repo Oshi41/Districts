@@ -9,6 +9,6 @@ namespace Districts.New.Interfaces
         /// Возвращает список подсказок
         /// </summary>
         /// <returns></returns>
-        Task<IList<string>> Hints(string street);
+        Task<IList<string>> StreetHints(string street);
     }
 }

@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Districts.New.Gui"
+                    xmlns:viewModel="clr-namespace:Districts.New.ViewModel"
+                    xmlns:controls="clr-namespace:Districts.New.Gui.Controls">
+
+    <DataTemplate DataType="{x:Type viewModel:EditStreetViewModel}">
+        <controls:EditStreets/>
+    </DataTemplate>
+    
+</ResourceDictionary>

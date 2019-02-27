@@ -19,6 +19,7 @@ namespace Districts.Singleton
             Register<IMessageHelper>(new MessageHelper());
             Register<IDialogProvider>(new DialogProvider());
             Register<IWebWorker>(new WebWork());
+            Register<IAppSettings>(new AppSettings());
         }
 
 
