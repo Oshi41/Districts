@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Districts.Helper;
+using Districts.New.Interfaces;
+using Districts.Singleton.Implementation;
 
 namespace Districts.Singleton
 {
@@ -15,6 +17,8 @@ namespace Districts.Singleton
         private IoC()
         {
             Register<IMessageHelper>(new MessageHelper());
+            Register<IDialogProvider>(new DialogProvider());
+            Register<IWebWorker>(new WebWork());
         }
 
 

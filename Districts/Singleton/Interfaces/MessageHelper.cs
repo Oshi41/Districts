@@ -4,13 +4,6 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Districts.Helper
 {
-    public interface IMessageHelper
-    {
-        void ShowDone();
-        void ShowAwait();
-        void ShowDoneBubble(string header = "Завершение работы", string text = "Готово", int seconds = 2);
-    }
-
     public class MessageHelper : IMessageHelper
     {
         private static IMessageHelper _instanse;

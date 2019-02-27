@@ -1,0 +1,42 @@
+﻿<Window x:Class="Districts.New.Gui.DialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Districts.New.Gui"
+        mc:Ignorable="d"
+        Title="DialogWindow" Height="400" Width="350">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ContentControl Content="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Content}"
+                        DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}"/>
+
+        <Grid Grid.Row="1"
+              Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1"
+                    Width="90"
+                    Height="40"
+                    Content="Ok"
+                    Margin="10,0"
+                    Click="ConfirmAndClose"/>
+
+            <Button Grid.Column="2"
+                    Width="90"
+                    Height="40"
+                    Content="Отмена"
+                    Margin="10,0"
+                    Click="JustClose"/>
+        </Grid>
+    </Grid>
+</Window>
