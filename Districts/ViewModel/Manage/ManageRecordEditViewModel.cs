@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using Districts.JsonClasses.Manage;
-using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 using Mvvm.Commands;
 

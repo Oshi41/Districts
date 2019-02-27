@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.Helper;
-using Microsoft.Expression.Interactivity.Core;
+using Districts.Singleton;
 using Mvvm;
 using Mvvm.Commands;
 
@@ -14,6 +14,8 @@ namespace Districts.ViewModel.TabsVM
 
         private readonly Lazy<CardGenerator.CardGenerator> _generator =
     new Lazy<CardGenerator.CardGenerator>(() => new CardGenerator.CardGenerator());
+
+        private readonly IMessageHelper _messageHelper = IoC.Instance.Get<IMessageHelper>();
 
         private bool _isGenerating;
 
@@ -45,7 +47,7 @@ namespace Districts.ViewModel.TabsVM
             finally
             {
                 _isGenerating = false;
-                MessageHelper.ShowDoneBubble();
+                _messageHelper.ShowDoneBubble();
             }
         }
     }

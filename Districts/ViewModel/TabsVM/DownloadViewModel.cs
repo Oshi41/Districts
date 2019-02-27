@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Input;
 using Districts.Helper;
 using Districts.Settings;
+using Districts.Singleton;
 using Districts.WebRequest;
 using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
@@ -15,6 +16,7 @@ namespace Districts.ViewModel.TabsVM
         private bool _isLoading;
         private bool _isPropChanged1;
         private string _streets;
+        private IMessageHelper _messageHelper = IoC.Instance.Get<IMessageHelper>();
 
         public DownloadViewModel()
         {
@@ -95,7 +97,7 @@ namespace Districts.ViewModel.TabsVM
             {
                 _isLoading = true;
                 var downloader = new MainDownloader();
-                MessageHelper.ShowAwait();
+                _messageHelper.ShowAwait();
                 await downloader.DownloadInfo();
             }
             catch (Exception e)
@@ -105,7 +107,7 @@ namespace Districts.ViewModel.TabsVM
             finally
             {
                 _isLoading = false;
-                MessageHelper.ShowDone();
+                _messageHelper.ShowDone();
             }
         }
     }

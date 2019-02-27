@@ -102,10 +102,9 @@
     <Compile Include="Comparers\HouseNumberComparer.cs" />
     <Compile Include="Helper\Helper.cs" />
     <Compile Include="Helper\LoadingWork.cs" />
-    <Compile Include="Helper\Logger.cs" />
-    <Compile Include="Helper\MessageHelper.cs" />
-    <Compile Include="Helper\ObservableDictionary.cs" />
-    <Compile Include="Helper\Tracer.cs" />
+    <Compile Include="Singleton\IoC.cs" />
+    <Compile Include="Singleton\MessageHelper.cs" />
+    <Compile Include="Tracer\Tracer.cs" />
     <Compile Include="Helper\WpfHelper.cs" />
     <Compile Include="JsonClasses\ForbiddenElement.cs" />
     <Compile Include="JsonClasses\Manage\CardManagement.cs" />
@@ -323,6 +322,7 @@
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.0.0\build\netstandard1.4\Fody.targets" Condition="Exists('..\packages\Fody.2.0.0\build\netstandard1.4\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

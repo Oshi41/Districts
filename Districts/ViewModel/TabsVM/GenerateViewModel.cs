@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.Helper;
-using Microsoft.Expression.Interactivity.Core;
+using Districts.Singleton;
 using Mvvm;
 using Mvvm.Commands;
 
@@ -14,6 +14,7 @@ namespace Districts.ViewModel.TabsVM
         private bool _isGenerating;
         private bool _isPrinting;
         private bool _isSorted;
+        private readonly IMessageHelper _messageHelper = IoC.Instance.Get<IMessageHelper>();
 
         public GenerateViewModel()
         {
@@ -53,7 +54,7 @@ namespace Districts.ViewModel.TabsVM
             try
             {
                 var generator = new CardGenerator.CardGenerator();
-                MessageHelper.ShowAwait();
+                _messageHelper.ShowAwait();
                 generator.PrintVisual();
             }
             catch (Exception e)
@@ -63,7 +64,7 @@ namespace Districts.ViewModel.TabsVM
             finally
             {
                 _isPrinting = false;
-                MessageHelper.ShowDone();
+                _messageHelper.ShowDone();
             }
         }
 
@@ -83,7 +84,7 @@ namespace Districts.ViewModel.TabsVM
             finally
             {
                 _isGenerating = false;
-                MessageHelper.ShowDoneBubble();
+                _messageHelper.ShowDoneBubble();
             }
         }
     }

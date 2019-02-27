@@ -3,8 +3,8 @@ using System.IO;
 using System.Text;
 using Districts.Helper;
 using Districts.Settings;
+using Districts.Singleton;
 using Ionic.Zip;
-using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 using Mvvm.Commands;
 
@@ -18,6 +18,7 @@ namespace Districts.ViewModel.TabsVM
         private bool _saveLogs;
         private bool _saveManagement;
         private bool _saveRestrictions;
+        private readonly IMessageHelper _messageHelper = IoC.Instance.Get<IMessageHelper>();
 
 
         public BackupViewModel()
@@ -98,7 +99,7 @@ namespace Districts.ViewModel.TabsVM
 
             if (SaveLogs) CompressAndSaveFolder(settings.LogPath, currentFolder + "\\Logs.zip");
 
-            MessageHelper.ShowDoneBubble();
+            _messageHelper.ShowDoneBubble();
         }
 
         private void CompressAndSaveFolder(string toCopy, string archiveName)

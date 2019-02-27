@@ -4,19 +4,30 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Districts.Helper
 {
-    public static class MessageHelper
+    public interface IMessageHelper
     {
-        public static void ShowDone()
+        void ShowDone();
+        void ShowAwait();
+        void ShowDoneBubble(string header = "Завершение работы", string text = "Готово", int seconds = 2);
+    }
+
+    public class MessageHelper : IMessageHelper
+    {
+        private static IMessageHelper _instanse;
+        public static IMessageHelper Instance => _instanse ?? (_instanse = new MessageHelper());
+
+
+        public void ShowDone()
         {
             MessageBox.Show("Готово");
         }
 
-        public static void ShowAwait()
+        public void ShowAwait()
         {
             ShowDoneBubble("Ожидайте", "По окончанию действия программа уведомит вас об окончании");
         }
 
-        public static void ShowDoneBubble(string header = "Завершение работы",
+        public void ShowDoneBubble(string header = "Завершение работы",
             string text = "Готово",
             int seconds = 2)
         {
