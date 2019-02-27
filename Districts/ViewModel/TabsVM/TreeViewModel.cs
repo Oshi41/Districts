@@ -7,22 +7,24 @@ using Districts.Comparers;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
-using Districts.MVVM;
 using Districts.Settings;
 using Districts.Views;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
+using Mvvm.Commands;
 using Newtonsoft.Json;
 
 namespace Districts.ViewModel.TabsVM
 {
-    internal class TreeViewModel : ObservableObject
+    internal class TreeViewModel : BindableBase
     {
         public TreeViewModel()
         {
-            LoadCommand = new Command(OnLoad);
-            SaveCommand = new Command(SaveNew, () => CanSave);
-            DeleteCommand = new Command(OnDelete);
-            EditCommand = new Command(OnEdit);
-            SetSelectedItemCommand = new Command(SetSelectedItem);
+            LoadCommand = new ActionCommand(OnLoad);
+            SaveActionCommand = new DelegateCommand(SaveNew, () => CanSave);
+            DeleteCommand = new ActionCommand(OnDelete);
+            EditCommand = new ActionCommand(OnEdit);
+            SetSelectedItemCommand = new ActionCommand(SetSelectedItem);
         }
 
         #region Fields
@@ -47,7 +49,7 @@ namespace Districts.ViewModel.TabsVM
         public ObservableCollection<StreetViewModel> Streets { get; set; } =
             new ObservableCollection<StreetViewModel>();
 
-        public Command SaveCommand { get; set; }
+        public DelegateCommandBase SaveActionCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand LoadCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -95,7 +97,7 @@ namespace Districts.ViewModel.TabsVM
                 _canSave = value;
 
                 OnPropertyChanged(nameof(CanSave));
-                SaveCommand.OnCanExecuteChanged();
+                SaveActionCommand.RaiseCanExecuteChanged();
             }
         }
 

@@ -19,7 +19,7 @@
         <Button Padding="4 2"
                 Margin="5"
                 Content="Сохранить копию"
-                Command="{Binding BackupCommand}" />
+                Command="{Binding BackupActionCommand}" />
 
         <StackPanel Grid.Row="1"
                     Margin="10">

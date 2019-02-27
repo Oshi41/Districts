@@ -1,10 +1,10 @@
 ﻿using System;
 using Districts.JsonClasses.Manage;
-using Districts.MVVM;
+using Mvvm;
 
 namespace Districts.ViewModel.Manage
 {
-    internal class ActionViewModel : ObservableObject
+    internal class ActionViewModel : BindableBase
     {
         private ActionTypes _actionType;
         private DateTime _date;

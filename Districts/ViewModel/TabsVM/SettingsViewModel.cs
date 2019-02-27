@@ -2,12 +2,13 @@
 using System.IO;
 using System.Windows.Input;
 using Districts.Helper;
-using Districts.MVVM;
 using Districts.Settings;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
 
 namespace Districts.ViewModel.TabsVM
 {
-    internal class SettingsViewModel : ObservableObject
+    internal class SettingsViewModel : BindableBase
     {
         private string _baseFolderPath;
         // оставил, моэет пригодится
@@ -24,9 +25,9 @@ namespace Districts.ViewModel.TabsVM
 
         public SettingsViewModel()
         {
-            ToggleSettingsLoad = new Command(SettingsLoadSave);
-            SaveSettings = new Command(OnSaveSettings);
-            SaveDefault = new Command(OnSaveDefault);
+            ToggleSettingsLoad = new ActionCommand(SettingsLoadSave);
+            SaveSettings = new ActionCommand(OnSaveSettings);
+            SaveDefault = new ActionCommand(OnSaveDefault);
         }
 
         public ICommand ToggleSettingsLoad { get; set; }

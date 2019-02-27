@@ -2,11 +2,13 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.Helper;
-using Districts.MVVM;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
+using Mvvm.Commands;
 
 namespace Districts.ViewModel.TabsVM
 {
-    class RepairTabViewModel : ObservableObject
+    class RepairTabViewModel : BindableBase
     {
         #region Fields
 
@@ -22,8 +24,8 @@ namespace Districts.ViewModel.TabsVM
 
         public RepairTabViewModel()
         {
-            SortCommand = new Command(() => OnRepair(true), () => !_isGenerating);
-            ShuffleCommand = new Command(() => OnRepair(false), () => !_isGenerating);
+            SortCommand = new DelegateCommand(() => OnRepair(true), () => !_isGenerating);
+            ShuffleCommand = new DelegateCommand(() => OnRepair(false), () => !_isGenerating);
         }
 
         private async void OnRepair(bool isSorting)

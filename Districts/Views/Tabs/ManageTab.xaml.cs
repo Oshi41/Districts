@@ -19,7 +19,7 @@ namespace Districts.Views.Tabs
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             ToggleButton.IsChecked = false;
-            //ToggleButton.Command?.Execute(ToggleButton.IsChecked);
+            //ToggleButton.ActionCommand?.Execute(ToggleButton.IsChecked);
         }
 
         private void BlocReleaseTab(object sender)

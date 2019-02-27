@@ -36,7 +36,7 @@
             <Button Content="Сохранить"
                     Padding="2 4"
                     Margin="5"
-                    Command="{Binding SaveCommand}"
+                    Command="{Binding SaveActionCommand}"
                     Click="ClosePopup"
                     IsDefault="True" />
         </StackPanel>

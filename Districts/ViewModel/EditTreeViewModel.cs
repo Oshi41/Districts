@@ -1,6 +1,6 @@
 ﻿namespace Districts.ViewModel
 {
-    //public class EditTreeViewModel : ObservableObject
+    //public class EditTreeViewModel : BindableBase
     //{
     //    public EditTreeViewModel()
     //    {
@@ -120,13 +120,13 @@
     //            OnPropertyChanged();
     //        }
     //    }
-    //    public Command DeleteHome { get; set; }
+    //    public ActionCommand DeleteHome { get; set; }
     //    public ICommand EditCommand { get; set; }
     //    public ICommand UpdateSelectedItem { get; set; }
 
     //    public Building CurrentHome { get; set; }
 
-    //    public ICommand SaveCommand { get; set; }
+    //    public ICommand SaveActionCommand { get; set; }
 
 
     //    private ObservableCollection<StreetViewModel> _streets = new ObservableCollection<StreetViewModel>();
@@ -136,10 +136,10 @@
 
     //    private void InitView()
     //    {
-    //        UpdateSelectedItem = new Command(UpdateCurrentItem);
-    //        DeleteHome = new Command(OnDeleteCommand, OnCanDeleteCommand);
-    //        SaveCommand = new Command(OnSave);
-    //        EditCommand = new Command(LunchEdit);
+    //        UpdateSelectedItem = new ActionCommand(UpdateCurrentItem);
+    //        DeleteHome = new ActionCommand(OnDeleteCommand, OnCanDeleteCommand);
+    //        SaveActionCommand = new ActionCommand(OnSave);
+    //        EditCommand = new ActionCommand(LunchEdit);
     //    }
 
     //    private void LunchEdit(object o)
@@ -156,7 +156,7 @@
     //        window.ShowDialog();
     //    }
 
-    //    #region Command handlers
+    //    #region ActionCommand handlers
 
 
     //    private void OnDeleteCommand(object obj)

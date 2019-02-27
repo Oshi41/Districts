@@ -16,7 +16,7 @@ namespace Districts.Views.Tabs
         private void CloseSettingsEdit(object sender, RoutedEventArgs e)
         {
             SettingsButton.IsChecked = false;
-            //SettingsButton.Command?.Execute(SettingsButton.IsChecked);
+            //SettingsButton.ActionCommand?.Execute(SettingsButton.IsChecked);
         }
     }
 }

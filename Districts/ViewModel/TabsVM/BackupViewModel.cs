@@ -2,13 +2,15 @@
 using System.IO;
 using System.Text;
 using Districts.Helper;
-using Districts.MVVM;
 using Districts.Settings;
 using Ionic.Zip;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
+using Mvvm.Commands;
 
 namespace Districts.ViewModel.TabsVM
 {
-    public class BackupViewModel : ObservableObject
+    public class BackupViewModel : BindableBase
     {
         private bool _saveCards;
         private bool _saveCodes;
@@ -20,76 +22,46 @@ namespace Districts.ViewModel.TabsVM
 
         public BackupViewModel()
         {
-            BackupCommand = new Command(OnBackUp, OnCanBackup);
+            BackupActionCommand = new DelegateCommand<object>(OnBackUp, OnCanBackup);
         }
 
 
-        public Command BackupCommand { get; set; }
+        public DelegateCommandBase BackupActionCommand { get; set; }
 
         public bool SaveHomes
         {
             get => _saveHomes;
-            set
-            {
-                if (value == _saveHomes) return;
-                _saveHomes = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _saveHomes, value);
         }
 
         public bool SaveCards
         {
             get => _saveCards;
-            set
-            {
-                if (value == _saveCards) return;
-                _saveCards = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _saveCards, value);
         }
 
         public bool SaveCodes
         {
             get => _saveCodes;
-            set
-            {
-                if (value == _saveCodes) return;
-                _saveCodes = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _saveCodes, value);
         }
 
         public bool SaveRestrictions
         {
             get => _saveRestrictions;
-            set
-            {
-                if (value == _saveRestrictions) return;
-                _saveRestrictions = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _saveRestrictions, value);
         }
 
         public bool SaveManagement
         {
             get => _saveManagement;
-            set
-            {
-                if (value == _saveManagement) return;
-                _saveManagement = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _saveManagement, value);
         }
 
         public bool SaveLogs
         {
             get => _saveLogs;
-            set
-            {
-                if (value == _saveLogs) return;
-                _saveLogs = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _saveLogs, value);
         }
 
 
@@ -150,12 +122,13 @@ namespace Districts.ViewModel.TabsVM
             }
         }
 
-
-        protected override void OnPropertyChanged(string propertyName = null)
+        protected override bool SetProperty<T>(ref T storage, T value, string propertyName = null)
         {
-            base.OnPropertyChanged(propertyName);
+            var result = base.SetProperty(ref storage, value, propertyName);
 
-            BackupCommand?.OnCanExecuteChanged();
+            BackupActionCommand?.RaiseCanExecuteChanged();
+
+            return result;
         }
     }
 }

@@ -46,7 +46,7 @@
                     Padding="4 2"
                     Margin="5"
                     Click="CloseEditing"
-                    Command="{Binding SaveCommand}" />
+                    Command="{Binding SaveActionCommand}" />
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto"

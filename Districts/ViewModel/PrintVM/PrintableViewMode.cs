@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using Districts.JsonClasses;
-using Districts.MVVM;
+using Mvvm;
 
 namespace Districts.ViewModel.PrintVM
 {
-    public class PrintableViewMode : ObservableObject
+    public class PrintableViewMode : BindableBase
     {
         private OneCardSizeViewModel _firstBack;
         private OneCardSizeViewModel _firstFront;

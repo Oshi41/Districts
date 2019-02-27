@@ -2,11 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Districts.JsonClasses;
-using Districts.MVVM;
+using Mvvm;
 
 namespace Districts.ViewModel.PrintVM
 {
-    public class OneCardSizeViewModel : ObservableObject
+    public class OneCardSizeViewModel : BindableBase
     {
         public OneCardSizeViewModel(int number, List<Door> doors)
         {

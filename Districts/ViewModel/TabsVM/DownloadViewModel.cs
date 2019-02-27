@@ -2,13 +2,15 @@
 using System.IO;
 using System.Windows.Input;
 using Districts.Helper;
-using Districts.MVVM;
 using Districts.Settings;
 using Districts.WebRequest;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
+using Mvvm.Commands;
 
 namespace Districts.ViewModel.TabsVM
 {
-    internal class DownloadViewModel : ObservableObject
+    internal class DownloadViewModel : BindableBase
     {
         private bool _isLoading;
         private bool _isPropChanged1;
@@ -16,9 +18,9 @@ namespace Districts.ViewModel.TabsVM
 
         public DownloadViewModel()
         {
-            DownloadCommand = new Command(OnDownload, o => !_isLoading);
-            LoadStreetCommand = new Command(OnLoadStreet);
-            SaveCommand = new Command(OnSave, () => IsPropChanged);
+            DownloadCommand = new DelegateCommand<object>(OnDownload, o => !_isLoading);
+            LoadStreetCommand = new ActionCommand(OnLoadStreet);
+            SaveActionCommand = new DelegateCommand(OnSave, () => IsPropChanged);
         }
 
 
@@ -30,7 +32,7 @@ namespace Districts.ViewModel.TabsVM
                 if (_isPropChanged1 != value)
                 {
                     _isPropChanged1 = value;
-                    SaveCommand.OnCanExecuteChanged();
+                    SaveActionCommand.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -38,7 +40,7 @@ namespace Districts.ViewModel.TabsVM
 
         public ICommand DownloadCommand { get; set; }
         public ICommand LoadStreetCommand { get; set; }
-        public Command SaveCommand { get; set; }
+        public DelegateCommandBase SaveActionCommand { get; set; }
 
         public string Streets
         {

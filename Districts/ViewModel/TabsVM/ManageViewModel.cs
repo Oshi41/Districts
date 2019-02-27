@@ -8,22 +8,23 @@ using System.Windows.Input;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Manage;
-using Districts.MVVM;
 using Districts.Settings;
 using Districts.ViewModel.Manage;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
 using Newtonsoft.Json;
 
 namespace Districts.ViewModel.TabsVM
 {
-    internal class ManageViewModel : ObservableObject
+    internal class ManageViewModel : BindableBase
     {
         public ManageViewModel()
         {
-            LoadCommand = new Command(OnLoadCommand);
-            SearchCommand = new Command(OnSearch);
-            CancelSearchCommand = new Command(OnClearSearch);
-            SaveCommand = new Command(OnSave);
-            EditRecord = new Command(OnEdit);
+            LoadCommand = new ActionCommand(OnLoadCommand);
+            SearchCommand = new ActionCommand(OnSearch);
+            CancelSearchCommand = new ActionCommand(OnClearSearch);
+            SaveCommand = new ActionCommand(OnSave);
+            EditRecord = new ActionCommand(OnEdit);
         }
 
         /// <summary>
@@ -188,7 +189,7 @@ namespace Districts.ViewModel.TabsVM
 
         #endregion
 
-        #region Command Handlers
+        #region ActionCommand Handlers
 
         private void OnClearSearch()
         {

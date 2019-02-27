@@ -7,11 +7,12 @@ using System.Windows.Input;
 using Districts.Comparers;
 using Districts.Helper;
 using Districts.JsonClasses;
-using Districts.MVVM;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
 
 namespace Districts.ViewModel
 {
-    public class EditHomeInfoViewModel : ObservableObject
+    public class EditHomeInfoViewModel : BindableBase
     {
         public EditHomeInfoViewModel(Building home, ForbiddenElement rule, HomeInfo homeInfo)
         {
@@ -27,7 +28,7 @@ namespace Districts.ViewModel
             Comments = ForbiddenElement.Comments;
             Begin = homeInfo.Begin;
 
-            SaveCommand = new Command(OnSave);
+            SaveCommand = new ActionCommand(OnSave);
 
             var number = new HouseNumber(home.HouseNumber);
             if (number.Housing > 1)
@@ -42,7 +43,7 @@ namespace Districts.ViewModel
 
         #region Nested
 
-        public class CodesViewModel : ObservableObject
+        public class CodesViewModel : BindableBase
         {
             private string _codes;
             private int _number;

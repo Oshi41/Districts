@@ -5,11 +5,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using Districts.JsonClasses.Manage;
-using Districts.MVVM;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
+using Mvvm.Commands;
 
 namespace Districts.ViewModel.Manage
 {
-    internal class ManageRecordEditViewModel : ObservableObject
+    internal class ManageRecordEditViewModel : BindableBase
     {
         public ManageRecordEditViewModel(CardManagement card, List<string> names)
         {
@@ -20,10 +22,10 @@ namespace Districts.ViewModel.Manage
             Number = card.Number;
             Actions = new ObservableCollection<ActionViewModel>(card.Actions.Select(x => new ActionViewModel(x)));
             IsTaken = card.HasOwner();
-            DropCardCommand = new Command(OnDropCommand);
-            AddAction = new Command(OnAddAction, OnCanAddCommand);
-            DropCardCommand = new Command(OnDropCommand);
-            RemoveAction = new Command(OnRemoveAction, OnCanRemoveAction);
+            DropCardCommand = new DelegateCommand<object>(OnDropCommand);
+            AddAction = new DelegateCommand<object>(OnAddAction, OnCanAddCommand);
+            DropCardCommand = new DelegateCommand<object>(OnDropCommand);
+            RemoveAction = new DelegateCommand<object>(OnRemoveAction, OnCanRemoveAction);
         }
 
         private bool OnCanRemoveAction(object obj)
@@ -90,14 +92,6 @@ namespace Districts.ViewModel.Manage
             IsTaken = false;
         }
 
-
-        protected override void OnPropertyChanged(string propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-
-            InvalidateCommands();
-        }
-
         #region Fields
 
         private ObservableCollection<ActionViewModel> _actions;
@@ -117,99 +111,68 @@ namespace Districts.ViewModel.Manage
         public bool IsTaken
         {
             get => _isTaken;
-            set
-            {
-                if (value == _isTaken) return;
-                _isTaken = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _isTaken , value);
         }
 
         public int Number
         {
             get => _number;
-            set
-            {
-                if (value == _number) return;
-                _number = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _number, value);
         }
 
-        public ICommand DropCardCommand { get; set; }
-        public Command AddAction { get; set; }
-        public Command RemoveAction { get; set; }
+        public DelegateCommandBase DropCardCommand { get; set; }
+        public DelegateCommandBase AddAction { get; set; }
+        public DelegateCommandBase RemoveAction { get; set; }
 
         public ObservableCollection<ActionViewModel> Actions
         {
             get => _actions;
-            set
-            {
-                if (Equals(value, _actions)) return;
-                _actions = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _actions, value);
         }
 
         public ActionViewModel SelectedAction
         {
             get => _selectedAction;
-            set
-            {
-                if (Equals(value, _selectedAction)) return;
-                _selectedAction = value;
-
-                OnPropertyChanged(nameof(SelectedAction));
-                RemoveAction.OnCanExecuteChanged();
-            }
+            set => SetProperty(ref _selectedAction, value);
         }
 
 
         public DateTime? Date
         {
             get => _date;
-            set
-            {
-                if (value.Equals(_date)) return;
-                _date = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _date, value);
         }
 
         public ActionTypes? ActionType
         {
             get => _actionType;
-            set
-            {
-                if (value == _actionType) return;
-                _actionType = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _actionType, value);
         }
 
         public string Subject
         {
             get => _subject;
-            set
-            {
-                if (value == _subject) return;
-                _subject = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _subject, value);
         }
 
         public ObservableCollection<string> Names
         {
             get => _names;
-            set
-            {
-                if (Equals(value, _names)) return;
-                _names = value;
-                OnPropertyChanged(nameof(Names));
-            }
+            set => SetProperty(ref _names, value);
         }
 
         #endregion
+
+        protected override bool SetProperty<T>(ref T storage, T value, string propertyName = null)
+        {
+            var result = base.SetProperty(ref storage, value, propertyName);
+
+            DropCardCommand.RaiseCanExecuteChanged();
+            AddAction.RaiseCanExecuteChanged();
+            RemoveAction.RaiseCanExecuteChanged();
+
+            return result;
+        }
     }
 
 

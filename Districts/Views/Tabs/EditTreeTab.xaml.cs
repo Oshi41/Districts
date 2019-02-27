@@ -46,7 +46,7 @@ namespace Districts.Views.Tabs
         private void CloseEditing(object sender, RoutedEventArgs e)
         {
             ToggleButton.IsChecked = false;
-            //ToggleButton.Command?.Execute(ToggleButton.IsChecked);
+            //ToggleButton.ActionCommand?.Execute(ToggleButton.IsChecked);
         }
     }
 }

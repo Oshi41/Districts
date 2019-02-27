@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Districts.JsonClasses.Manage;
-using Districts.MVVM;
 using Districts.Views.Management;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
 
 namespace Districts.ViewModel.Manage
 {
-    public class ManageRecordViewModel : ObservableObject
+    public class ManageRecordViewModel : BindableBase
     {
         public ManageRecordViewModel(CardManagement card)
         {
@@ -19,7 +20,7 @@ namespace Districts.ViewModel.Manage
             Number = _card.Number;
             UpdateByLastRecord(_card.Actions.LastOrDefault());
 
-            EditCommand = new Command(OnEdit);
+            EditCommand = new ActionCommand(OnEdit);
         }
 
         #region Fields
@@ -164,7 +165,7 @@ namespace Districts.ViewModel.Manage
         #endregion
     }
 
-    //public class ManageRecordViewModel : ObservableObject
+    //public class ManageRecordViewModel : BindableBase
     //{
     //    private readonly CardManagement _card;
     //    private int _number;
@@ -216,7 +217,7 @@ namespace Districts.ViewModel.Manage
 
 
     //    public ICommand EditCommand { get; set; }
-    //    public ICommand SaveCommand { get; set; }
+    //    public ICommand SaveActionCommand { get; set; }
 
 
     //    public ManageRecordViewModel(CardManagement card)
@@ -229,8 +230,8 @@ namespace Districts.ViewModel.Manage
     //        _actions = card.Actions;
     //        UpdateByLastAction(_actions.LastOrDefault());
 
-    //        EditCommand = new Command(OnEdit);
-    //        SaveCommand = new Command(OnSave);
+    //        EditCommand = new ActionCommand(OnEdit);
+    //        SaveActionCommand = new ActionCommand(OnSave);
     //    }
 
     //    private void OnSave()
@@ -262,7 +263,7 @@ namespace Districts.ViewModel.Manage
     //    }
 
     //}
-    //class ManagementRecord : ObservableObject
+    //class ManagementRecord : BindableBase
     //{
     //private int _number;
     //private DateTime? _first;

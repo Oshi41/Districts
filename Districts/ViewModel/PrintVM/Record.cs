@@ -1,8 +1,8 @@
-﻿using Districts.MVVM;
+﻿using Mvvm;
 
 namespace Districts.ViewModel.PrintVM
 {
-    public class Record : ObservableObject
+    public class Record : BindableBase
     {
         private string _codes;
         private string _floor;

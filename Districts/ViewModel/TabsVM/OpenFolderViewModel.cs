@@ -1,18 +1,19 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
-using Districts.MVVM;
 using Districts.Settings;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
 
 namespace Districts.ViewModel.TabsVM
 {
-    internal class OpenFolderViewModel : ObservableObject
+    internal class OpenFolderViewModel : BindableBase
     {
         private ApplicationSettings _settings = ApplicationSettings.ReadOrCreate();
 
         public OpenFolderViewModel()
         {
-            OpenCommand = new Command(OpenFolder);
+            OpenCommand = new ActionCommand(OpenFolder);
         }
 
         public ICommand OpenCommand { get; set; }

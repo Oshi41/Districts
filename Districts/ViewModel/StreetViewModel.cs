@@ -2,11 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Districts.JsonClasses;
-using Districts.MVVM;
+using Mvvm;
 
 namespace Districts.ViewModel
 {
-    public class StreetViewModel : ObservableObject
+    public class StreetViewModel : BindableBase
     {
         private ObservableCollection<Building> _homes;
 

@@ -2,11 +2,13 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.Helper;
-using Districts.MVVM;
+using Microsoft.Expression.Interactivity.Core;
+using Mvvm;
+using Mvvm.Commands;
 
 namespace Districts.ViewModel.TabsVM
 {
-    internal class GenerateViewModel : ObservableObject
+    internal class GenerateViewModel : BindableBase
     {
         private bool _bestDistribution;
         private bool _isGenerating;
@@ -15,8 +17,8 @@ namespace Districts.ViewModel.TabsVM
 
         public GenerateViewModel()
         {
-            GenerateCommand = new Command(OnGenerateCommand, () => !_isGenerating);
-            PrintCommand = new Command(OnPrintCommand, () => !_isPrinting);
+            GenerateCommand = new DelegateCommand(OnGenerateCommand, () => !_isGenerating);
+            PrintCommand = new DelegateCommand(OnPrintCommand, () => !_isPrinting);
         }        
 
         public ICommand GenerateCommand { get; set; }
