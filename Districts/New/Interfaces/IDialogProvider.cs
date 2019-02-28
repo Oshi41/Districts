@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Districts.Singleton
+namespace Districts.New.Interfaces
 {
     interface IDialogProvider
     {

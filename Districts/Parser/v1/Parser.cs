@@ -8,6 +8,7 @@ using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
 using Districts.JsonClasses.Manage;
 using Districts.Settings;
+using Districts.Settings.v1;
 using Newtonsoft.Json;
 
 namespace Districts.Parser.v1
@@ -26,7 +27,7 @@ namespace Districts.Parser.v1
 
             if (!Directory.Exists(folder))
             {
-                Tracer.WriteError(new FileNotFoundException("Не найдена папка " + folder));
+                Tracer.Tracer.WriteError(new FileNotFoundException("Не найдена папка " + folder));
                 return new Dictionary<string, T>();
             }
 
@@ -41,7 +42,7 @@ namespace Districts.Parser.v1
                 }
                 catch (Exception e)
                 {
-                    Tracer.WriteError(e);
+                    Tracer.Tracer.WriteError(e);
                 }
             }
 

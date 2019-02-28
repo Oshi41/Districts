@@ -1,4 +1,4 @@
-﻿namespace Districts.Helper
+﻿namespace Districts.New.Implementation
 {
     public interface IMessageHelper
     {

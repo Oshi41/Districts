@@ -1,4 +1,4 @@
-﻿namespace Districts.Singleton.Implementation
+﻿namespace Districts.New.Implementation
 {
     interface IAppSettings
     {
@@ -26,6 +26,11 @@
         /// Путь к учетности ведения участков
         /// </summary>
         string ManagementPath { get; }
+
+        /// <summary>
+        /// Путь к скачанным домам
+        /// </summary>
+        string HomesPath { get; }
 
         /// <summary>
         /// Путь к сэкапу

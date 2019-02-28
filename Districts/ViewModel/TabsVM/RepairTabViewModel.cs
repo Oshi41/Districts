@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.Helper;
+using Districts.New.Implementation;
 using Districts.Singleton;
 using Mvvm;
 using Mvvm.Commands;
@@ -42,7 +43,7 @@ namespace Districts.ViewModel.TabsVM
             }
             catch (Exception e)
             {
-                Tracer.WriteError(e);
+                Tracer.Tracer.WriteError(e);
             }
             finally
             {

@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Input;
 using Districts.Helper;
 using Districts.Settings;
+using Districts.Settings.v1;
 using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 
@@ -161,7 +162,7 @@ namespace Districts.ViewModel.TabsVM
             }
             catch (Exception e)
             {
-                Tracer.WriteError(e);
+                Tracer.Tracer.WriteError(e);
             }
 
             SettingsLoadSave(false);

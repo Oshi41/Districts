@@ -6,6 +6,7 @@ using Districts.Comparers;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.Settings;
+using Districts.Settings.v1;
 using Newtonsoft.Json;
 
 namespace Districts.WebRequest
@@ -21,7 +22,7 @@ namespace Districts.WebRequest
 
             if (!CheckIfStreetFileExist(settings))
             {
-                Tracer.Write("Улицы не были заполнены");
+                Tracer.Tracer.Write("Улицы не были заполнены");
                 return;
             }
 
@@ -84,7 +85,7 @@ namespace Districts.WebRequest
 
 
             var json = JsonConvert.SerializeObject(except, Formatting.Indented);
-            Tracer.Write("Следующие дома не попали в общий список:\n" + json);
+            Tracer.Tracer.Write("Следующие дома не попали в общий список:\n" + json);
         }
 
         #region Write

@@ -2,7 +2,9 @@
 using System.IO;
 using System.Windows.Input;
 using Districts.Helper;
+using Districts.New.Implementation;
 using Districts.Settings;
+using Districts.Settings.v1;
 using Districts.Singleton;
 using Districts.WebRequest;
 using Microsoft.Expression.Interactivity.Core;
@@ -67,7 +69,7 @@ namespace Districts.ViewModel.TabsVM
             }
             catch (Exception e)
             {
-                Tracer.WriteError(e);
+                Tracer.Tracer.WriteError(e);
             }
 
             IsPropChanged = false;
@@ -102,7 +104,7 @@ namespace Districts.ViewModel.TabsVM
             }
             catch (Exception e)
             {
-                Tracer.WriteError(e);
+                Tracer.Tracer.WriteError(e);
             }
             finally
             {

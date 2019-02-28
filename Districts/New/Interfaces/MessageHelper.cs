@@ -1,8 +1,9 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using Districts.New.Implementation;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Districts.Helper
+namespace Districts.New.Interfaces
 {
     public class MessageHelper : IMessageHelper
     {

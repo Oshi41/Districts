@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using Districts.Helper;
+using Districts.New.Implementation;
 using Newtonsoft.Json;
 
-namespace Districts.Singleton.Implementation
+namespace Districts.Settings.v2
 {
     class AppSettings : IAppSettings
     {
@@ -32,6 +32,7 @@ namespace Districts.Singleton.Implementation
         public string ConfigFilePath => _configFilePath;
         public string StreetsPath => Path.Combine(BaseFolder, "streets.txt");
         public string ManagementPath => Path.Combine(BackupPath, "Management");
+        public string HomesPath => Path.Combine(BackupPath, "Homes");
         public string BackupPath => Path.Combine(BaseFolder, "Backup");
         public string LogsPath => Path.Combine(BaseFolder, "logs");
 
@@ -92,7 +93,7 @@ namespace Districts.Singleton.Implementation
                 }
                 catch (Exception e)
                 {
-                    Tracer.WriteError(e);
+                    Tracer.Tracer.WriteError(e);
                 }
             }
         }
@@ -116,7 +117,7 @@ namespace Districts.Singleton.Implementation
                 }
                 catch (Exception e)
                 {
-                    Tracer.WriteError(e);
+                    Tracer.Tracer.WriteError(e);
                 }
             }
         }

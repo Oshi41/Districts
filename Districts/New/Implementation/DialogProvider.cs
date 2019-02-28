@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 using Districts.New.Gui;
+using Districts.New.Interfaces;
 
-namespace Districts.Singleton
+namespace Districts.New.Implementation
 {
     class DialogProvider : IDialogProvider
     {

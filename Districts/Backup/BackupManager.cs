@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Districts.Settings;
+using Districts.Settings.v1;
 using Ionic.Zip;
 using Microsoft.Win32;
 

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Districts.Settings;
+using Districts.Settings.v1;
 
 namespace Districts.Views
 {

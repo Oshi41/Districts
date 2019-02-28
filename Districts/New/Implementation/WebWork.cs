@@ -6,13 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Districts.Comparers;
-using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
 using Districts.New.Interfaces;
 using Newtonsoft.Json;
 
-namespace Districts.Singleton.Implementation
+namespace Districts.New.Implementation
 {
     class WebWork : IWebWorker
     {
@@ -83,7 +82,7 @@ namespace Districts.Singleton.Implementation
             }
             catch (Exception e)
             {
-                Tracer.WriteError(e);
+                Tracer.Tracer.WriteError(e);
                 return new List<home_info>();
             }
         }

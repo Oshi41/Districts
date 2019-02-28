@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Districts.Helper;
+using Districts.New.Implementation;
 using Districts.New.Interfaces;
-using Districts.Singleton.Implementation;
+using Districts.Settings.v2;
 
 namespace Districts.Singleton
 {

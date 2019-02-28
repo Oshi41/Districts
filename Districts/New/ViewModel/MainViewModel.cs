@@ -1,6 +1,6 @@
-﻿using Districts.New.Interfaces;
+﻿using Districts.New.Implementation;
+using Districts.New.Interfaces;
 using Districts.Singleton;
-using Districts.Singleton.Implementation;
 using Mvvm;
 
 namespace Districts.New.ViewModel

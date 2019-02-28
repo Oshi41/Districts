@@ -2,7 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace Districts.Settings
+namespace Districts.Settings.v1
 {
         internal class ApplicationSettings
         {

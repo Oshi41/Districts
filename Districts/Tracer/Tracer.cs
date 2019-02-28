@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Districts.Settings;
+using Districts.Settings.v1;
 
-namespace Districts.Helper
+namespace Districts.Tracer
 {
     /// <summary>
     ///     Логирование

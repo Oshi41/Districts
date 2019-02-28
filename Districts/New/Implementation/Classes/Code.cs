@@ -1,7 +1,7 @@
 ﻿using System;
 using Districts.New.Interfaces;
 
-namespace Districts.New.Implementation
+namespace Districts.New.Implementation.Classes
 {
     class Code : iCode
     {

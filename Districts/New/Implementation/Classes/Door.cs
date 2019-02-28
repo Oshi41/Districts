@@ -2,7 +2,7 @@
 using Districts.Helper;
 using Districts.New.Interfaces;
 
-namespace Districts.New.Implementation
+namespace Districts.New.Implementation.Classes
 {
     class Door : iDoor
     {

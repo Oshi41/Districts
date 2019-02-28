@@ -11,6 +11,7 @@ using Districts.Settings;
 using Districts.ViewModel.TabsVM;
 using Newtonsoft.Json;
 using Districts.Comparers;
+using Districts.Settings.v1;
 
 namespace Districts.CardGenerator
 {
@@ -115,7 +116,7 @@ namespace Districts.CardGenerator
             if (notExisting.Any())
             {
                 var all = notExisting.Aggregate("", (main, door) => main += door.ToString() + "\n");
-                Tracer.Write("Следующих квартир не существует в выбранных домах: \n\n" + all);
+                Tracer.Tracer.Write("Следующих квартир не существует в выбранных домах: \n\n" + all);
             }
 
             var cardDoors = allCards.SelectMany(x => x.Value.Doors).ToList();
@@ -123,7 +124,7 @@ namespace Districts.CardGenerator
             if (needToAdd.Any())
             {
                 //var all = needToAdd.Aggregate("", (main, door) => main += door.ToString() + "\n");
-                Tracer.Write("Данных квартир нет в участках: \n\n" + string.Join("\n", needToAdd));
+                Tracer.Tracer.Write("Данных квартир нет в участках: \n\n" + string.Join("\n", needToAdd));
             }
 
             foreach (var pair in allCards)

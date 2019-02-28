@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using Districts.New.Implementation;
 using Districts.New.Interfaces;
 using Districts.Singleton;
-using Districts.Singleton.Implementation;
 using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 

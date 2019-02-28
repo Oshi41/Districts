@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Districts.New.Gui
+namespace Districts.New.Gui.Controls
 {
     /// <summary>
     /// Interaction logic for MainView.xaml

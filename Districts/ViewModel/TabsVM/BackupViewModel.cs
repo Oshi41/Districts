@@ -2,7 +2,9 @@
 using System.IO;
 using System.Text;
 using Districts.Helper;
+using Districts.New.Implementation;
 using Districts.Settings;
+using Districts.Settings.v1;
 using Districts.Singleton;
 using Ionic.Zip;
 using Mvvm;
@@ -106,7 +108,7 @@ namespace Districts.ViewModel.TabsVM
         {
             if (!Directory.Exists(toCopy))
             {
-                Tracer.Write("Нет папки для сохранения");
+                Tracer.Tracer.Write("Нет папки для сохранения");
                 return;
             }
 

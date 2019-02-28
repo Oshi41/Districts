@@ -59,7 +59,7 @@ namespace Districts.Helper
                 }
                 catch (Exception e)
                 {
-                    Tracer.WriteError(e, "Can't delete " + file);
+                    Tracer.Tracer.WriteError(e, "Can't delete " + file);
                 }
         }
 

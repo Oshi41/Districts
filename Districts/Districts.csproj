@@ -117,13 +117,13 @@
     <Compile Include="New\Gui\Controls\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="New\Implementation\Card.cs" />
-    <Compile Include="New\Implementation\Code.cs" />
-    <Compile Include="New\Implementation\Door.cs" />
-    <Compile Include="New\Implementation\Find.cs" />
-    <Compile Include="New\Implementation\Home.cs" />
-    <Compile Include="New\Implementation\Manage.cs" />
-    <Compile Include="New\Implementation\Record.cs" />
+    <Compile Include="New\Implementation\Classes\Card.cs" />
+    <Compile Include="New\Implementation\Classes\Code.cs" />
+    <Compile Include="New\Implementation\Classes\Door.cs" />
+    <Compile Include="New\Implementation\Classes\Find.cs" />
+    <Compile Include="New\Implementation\Classes\Home.cs" />
+    <Compile Include="New\Implementation\Classes\Manage.cs" />
+    <Compile Include="New\Implementation\Classes\Record.cs" />
     <Compile Include="New\Interfaces\iCard.cs" />
     <Compile Include="New\Interfaces\iCode.cs" />
     <Compile Include="New\Interfaces\iDoor.cs" />
@@ -135,16 +135,17 @@
     <Compile Include="New\ViewModel\MainViewModel.cs" />
     <Compile Include="New\ViewModel\StreetsViewModel.cs" />
     <Compile Include="Parser\v1\Parser.cs" />
+    <Compile Include="Parser\v2\Parser.cs" />
     <Compile Include="Settings\v2\AppSettings.cs" />
-    <Compile Include="Singleton\Implementation\IAppSettings.cs" />
-    <Compile Include="Singleton\Implementation\WebWork.cs" />
-    <Compile Include="Singleton\Interfaces\IWebWorker.cs" />
+    <Compile Include="New\Implementation\IAppSettings.cs" />
+    <Compile Include="New\Implementation\WebWork.cs" />
+    <Compile Include="New\Interfaces\IWebWorker.cs" />
     <Compile Include="New\ViewModel\EditStreetViewModel.cs" />
-    <Compile Include="Singleton\Implementation\DialogProvider.cs" />
-    <Compile Include="Singleton\Interfaces\IDialogProvider.cs" />
-    <Compile Include="Singleton\Implementation\IMessageHelper.cs" />
+    <Compile Include="New\Implementation\DialogProvider.cs" />
+    <Compile Include="New\Interfaces\IDialogProvider.cs" />
+    <Compile Include="New\Implementation\IMessageHelper.cs" />
     <Compile Include="Singleton\IoC.cs" />
-    <Compile Include="Singleton\Interfaces\MessageHelper.cs" />
+    <Compile Include="New\Interfaces\MessageHelper.cs" />
     <Compile Include="Tracer\Tracer.cs" />
     <Compile Include="Helper\WpfHelper.cs" />
     <Compile Include="JsonClasses\ForbiddenElement.cs" />

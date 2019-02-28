@@ -9,6 +9,7 @@ using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Manage;
 using Districts.Settings;
+using Districts.Settings.v1;
 using Districts.ViewModel.Manage;
 using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
@@ -212,7 +213,7 @@ namespace Districts.ViewModel.TabsVM
                 }
                 catch (Exception e)
                 {
-                    Tracer.WriteError(e);
+                    Tracer.Tracer.WriteError(e);
                 }
             }
 
