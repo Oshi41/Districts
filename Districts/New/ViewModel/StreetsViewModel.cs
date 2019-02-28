@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Districts.New.Interfaces;
 using Districts.Singleton;
@@ -36,7 +33,7 @@ namespace Districts.New.ViewModel
             _provider = provider;
 
             SetStreetCommand = new ActionCommand(CustomizeStreets);
-            SetStreets(File.ReadAllText(_settings.GetStreetsFile()).Split('\n'));
+            SetStreets(File.ReadAllText(_settings.StreetsPath).Split('\n'));
         }
 
         public ICommand SetStreetCommand { get; }
@@ -59,7 +56,7 @@ namespace Districts.New.ViewModel
 
             if (_provider.ShowDialog(vm, 400))
             {
-                File.WriteAllText(_settings.GetStreetsFile(),
+                File.WriteAllText(_settings.StreetsPath,
                     string.Join("\n", vm.Streets));
 
                 SetStreets(vm.Streets);

@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Windows.Input;
-using Districts.New.Interfaces;
+﻿using Districts.New.Interfaces;
 using Districts.Singleton;
 using Districts.Singleton.Implementation;
-using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 
 namespace Districts.New.ViewModel

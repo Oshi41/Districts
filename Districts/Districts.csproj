@@ -134,7 +134,8 @@
     <Compile Include="New\ViewModel\HomesViewModel.cs" />
     <Compile Include="New\ViewModel\MainViewModel.cs" />
     <Compile Include="New\ViewModel\StreetsViewModel.cs" />
-    <Compile Include="Singleton\Interfaces\AppSettings.cs" />
+    <Compile Include="Parser\v1\Parser.cs" />
+    <Compile Include="Settings\v2\AppSettings.cs" />
     <Compile Include="Singleton\Implementation\IAppSettings.cs" />
     <Compile Include="Singleton\Implementation\WebWork.cs" />
     <Compile Include="Singleton\Interfaces\IWebWorker.cs" />
@@ -151,7 +152,7 @@
     <Compile Include="JsonClasses\Manage\ManageRecord.cs" />
     <Compile Include="Printing\CustomDocumentPaginator.cs" />
     <Compile Include="Printing\FastCardPrinter.cs" />
-    <Compile Include="Settings\ApplicationSettings.cs" />
+    <Compile Include="Settings\v1\ApplicationSettings.cs" />
     <Compile Include="ViewModel\EditHomeInfoViewModel.cs" />
     <Compile Include="ViewModel\EditTreeViewModel.cs" />
     <Compile Include="ViewModel\Manage\ActionViewModel.cs" />
