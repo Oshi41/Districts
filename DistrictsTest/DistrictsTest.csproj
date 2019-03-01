@@ -53,7 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="v2\CardsParserTests.cs" />
     <Compile Include="v2\DoorParserTests.cs" />
+    <Compile Include="v2\RecordParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

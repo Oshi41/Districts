@@ -1,10 +1,11 @@
 ﻿using System;
 using Districts.New.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Districts.New.Implementation.Classes
 {
-    class Record : iRecord
+    public class Record : iRecord
     {
         [JsonConstructor]
         public Record(ActionType action, string subject, DateTime date)
@@ -14,6 +15,7 @@ namespace Districts.New.Implementation.Classes
             Date = date;
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public ActionType Action { get; }
         public string Subject { get; }
         public DateTime Date { get; }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Input;
 using Districts.New.Implementation;
 using Districts.New.Interfaces;
-using Districts.Singleton;
 using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 

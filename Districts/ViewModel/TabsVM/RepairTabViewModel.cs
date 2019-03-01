@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Districts.Helper;
 using Districts.New.Implementation;
 using Districts.Singleton;
 using Mvvm;

@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows.Input;
 using Districts.Helper;
 using Districts.New.Implementation;
-using Districts.Settings;
 using Districts.Settings.v1;
 using Districts.Singleton;
 using Districts.WebRequest;

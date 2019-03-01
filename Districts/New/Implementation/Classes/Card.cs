@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
-    class Card : iCard
+    public class Card : iCard
     {
         [JsonConstructor]
         public Card(int number, IList<iDoor> doors)

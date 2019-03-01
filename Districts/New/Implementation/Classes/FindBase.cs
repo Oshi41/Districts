@@ -60,6 +60,23 @@ namespace Districts.New.Implementation.Classes
             return false;
         }
 
+        public string GetPrettyHouseName()
+        {
+            var result = HomeNumber.ToString();
+
+            if (Housing >= 0)
+            {
+                result += "k " + Housing;
+            }
+
+            if (AfterSlash >= 0)
+            {
+                result += "/ " + AfterSlash;
+            }
+
+            return result;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is iFind find)

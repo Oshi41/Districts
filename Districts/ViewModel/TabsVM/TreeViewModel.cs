@@ -7,7 +7,6 @@ using Districts.Comparers;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
-using Districts.Settings;
 using Districts.Settings.v1;
 using Districts.Views;
 using Microsoft.Expression.Interactivity.Core;

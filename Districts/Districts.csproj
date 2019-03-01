@@ -135,7 +135,9 @@
     <Compile Include="New\ViewModel\MainViewModel.cs" />
     <Compile Include="New\ViewModel\StreetsViewModel.cs" />
     <Compile Include="Parser\v1\Parser.cs" />
+    <Compile Include="Parser\v2\Converters\CardConverter.cs" />
     <Compile Include="Parser\v2\Converters\ListConverter.cs" />
+    <Compile Include="New\Interfaces\IParser.cs" />
     <Compile Include="Parser\v2\Parser.cs" />
     <Compile Include="Settings\v2\AppSettings.cs" />
     <Compile Include="New\Implementation\IAppSettings.cs" />

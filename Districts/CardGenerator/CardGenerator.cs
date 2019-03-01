@@ -7,7 +7,6 @@ using System.Windows.Documents;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.Printing;
-using Districts.Settings;
 using Districts.ViewModel.TabsVM;
 using Newtonsoft.Json;
 using Districts.Comparers;

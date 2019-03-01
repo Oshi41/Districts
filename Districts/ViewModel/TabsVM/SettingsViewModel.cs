@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows.Input;
 using Districts.Helper;
-using Districts.Settings;
 using Districts.Settings.v1;
 using Microsoft.Expression.Interactivity.Core;
 using Mvvm;

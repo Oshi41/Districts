@@ -1,6 +1,7 @@
 ﻿using System;
 using Districts.New.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Districts.New.Implementation.Classes
 {
@@ -14,6 +15,8 @@ namespace Districts.New.Implementation.Classes
         }
 
         public string Text { get; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
         public CodeStatus Status { get; }
 
         protected bool Equals(Code other)

@@ -42,6 +42,8 @@
         /// </summary>
         string LogsPath { get; }
 
+        string CardsPath { get; }
+
         /// <summary>
         /// Читаем настройки
         /// </summary>

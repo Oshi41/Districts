@@ -9,7 +9,7 @@ namespace Districts.New.Interfaces
         Deleted
     }
 
-    interface iRecord
+    public interface iRecord
     {
         ActionType Action { get; }
         string Subject { get; }

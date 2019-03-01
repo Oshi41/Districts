@@ -8,7 +8,6 @@ using System.Windows.Input;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Manage;
-using Districts.Settings;
 using Districts.Settings.v1;
 using Districts.ViewModel.Manage;
 using Microsoft.Expression.Interactivity.Core;

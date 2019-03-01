@@ -6,7 +6,6 @@ using Districts.Comparers;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
 using Districts.JsonClasses.Manage;
-using Districts.Settings;
 using Districts.Settings.v1;
 using Newtonsoft.Json;
 

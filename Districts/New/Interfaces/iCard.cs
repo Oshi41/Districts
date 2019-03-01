@@ -2,7 +2,7 @@
 
 namespace Districts.New.Interfaces
 {
-    interface iCard
+    public interface iCard
     {
         int Number { get; }
         IList<iDoor> Doors { get; }

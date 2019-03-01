@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Districts.Helper;
 using Districts.New.Implementation;
 using Districts.New.Interfaces;
+using Districts.Parser.v2;
 using Districts.Settings.v2;
 
 namespace Districts.Singleton
@@ -21,6 +21,9 @@ namespace Districts.Singleton
             Register<IDialogProvider>(new DialogProvider());
             Register<IWebWorker>(new WebWork());
             Register<IAppSettings>(new AppSettings());
+
+            // Инициализируется после IAppSettings!
+            Register<IParser>(new Parser.v2.Parser(Get<IAppSettings>()));
         }
 
 

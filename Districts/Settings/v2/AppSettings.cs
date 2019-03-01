@@ -30,11 +30,12 @@ namespace Districts.Settings.v2
         }
         public int MaxDoors { get; set; }
         public string ConfigFilePath => _configFilePath;
-        public string StreetsPath => Path.Combine(BaseFolder, "streets.txt");
+        public string StreetsPath => Path.Combine(BaseFolder, "streets.json");
         public string ManagementPath => Path.Combine(BackupPath, "Management");
         public string HomesPath => Path.Combine(BackupPath, "Homes");
         public string BackupPath => Path.Combine(BaseFolder, "Backup");
         public string LogsPath => Path.Combine(BaseFolder, "logs");
+        public string CardsPath => Path.Combine(BaseFolder, "Cards");
 
 
         public AppSettings()

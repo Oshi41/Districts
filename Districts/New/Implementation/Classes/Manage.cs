@@ -15,6 +15,7 @@ namespace Districts.New.Implementation.Classes
             Card = card;
         }
 
+        [JsonConverter(typeof(CardConverter))]
         public iCard Card { get; }
 
         [JsonConverter(typeof(ListConverter<Record, iRecord>))]

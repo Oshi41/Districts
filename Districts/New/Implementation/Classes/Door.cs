@@ -3,6 +3,7 @@ using Districts.Helper;
 using Districts.New.Interfaces;
 using Districts.Parser.v2.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Districts.New.Implementation.Classes
 {
@@ -26,6 +27,8 @@ namespace Districts.New.Implementation.Classes
 
         public int DoorNumber { get; }
         public int Entrance { get; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
         public DoorStatus Status { get; }
 
         [JsonConverter(typeof(ListConverter<Code, iCode>))]
