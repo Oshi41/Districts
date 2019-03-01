@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Districts.New.Interfaces
 {
+    [Flags]
     public enum DoorStatus
     {
-        Good,
-        NotWarning,
-        Aggressive,
-        Restricted
+        Good = 0,
+
+        NoWorry = 1,
+        Aggressive = 2,
+        Restricted = 4,
     }
 
     public interface iDoor : iFind

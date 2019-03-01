@@ -49,10 +49,7 @@ namespace Districts.New.Implementation
                                     new BaseFindableObject(street, x.GetHouseNumber()))));
 
                             taskResult = taskResult.OrderBy(x => x.HouseNumber, comparer).ToList();
-
-                            
                         }
-
 
                         return taskResult;
                     }));

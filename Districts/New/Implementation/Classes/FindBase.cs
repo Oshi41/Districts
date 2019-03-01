@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Districts.New.Interfaces;
 using Newtonsoft.Json;
 
@@ -13,6 +14,41 @@ namespace Districts.New.Implementation.Classes
             HomeNumber = homeNumber;
             Housing = housing;
             AfterSlash = afterSlash;
+        }
+
+        protected FindBase(string street, string number)
+             :this(street, -1,-1,-1)
+        {
+            number = number.Replace(" ", "");
+
+            // parse nuber
+            if (int.TryParse(new string(number.TakeWhile(char.IsDigit).ToArray()), out var parsedNumber))
+            {
+                HomeNumber = parsedNumber;
+            }
+
+            // parse housing
+            var index = number.IndexOf(number.FirstOrDefault(char.IsLetter));
+            if (index >= 0
+                && int.TryParse(new string(number
+                    .Skip(index + 1)
+                    .TakeWhile(char.IsDigit)
+                    .ToArray()), out var parsedHousing))
+            {
+                Housing = parsedHousing;
+            }
+
+            // parse slash
+            index = number.IndexOfAny(new[] {'/', '\\'});
+            if (index >= 0
+                && int.TryParse(new string(
+                    number
+                        .Skip(index + 1)
+                        .TakeWhile(char.IsDigit)
+                        .ToArray()), out var parsedSlash))
+            {
+                AfterSlash = parsedSlash;
+            }
         }
 
         public string Street { get; }

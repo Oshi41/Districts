@@ -2,8 +2,10 @@
 
 namespace Districts.New.Interfaces
 {
-    interface iHome : iFind
+    public interface iHome : iFind
     {
         IList<iDoor> Doors { get; }
+
+        string Comments { get; set; }
     }
 }

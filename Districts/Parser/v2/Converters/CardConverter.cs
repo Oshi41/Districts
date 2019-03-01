@@ -19,8 +19,10 @@ namespace Districts.Parser.v2.Converters
 
         public override void WriteJson(JsonWriter writer, iCard value, JsonSerializer serializer)
         {
+            writer.WriteStartObject();
             writer.WritePropertyName(_propName);
             writer.WriteValue(value.Number);
+            writer.WriteEnd();
         }
 
         public override iCard ReadJson(JsonReader reader, Type objectType, iCard existingValue, bool hasExistingValue,

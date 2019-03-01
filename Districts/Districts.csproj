@@ -134,6 +134,7 @@
     <Compile Include="New\ViewModel\HomesViewModel.cs" />
     <Compile Include="New\ViewModel\MainViewModel.cs" />
     <Compile Include="New\ViewModel\StreetsViewModel.cs" />
+    <Compile Include="Parser\Migrate_v1_v2.cs" />
     <Compile Include="Parser\v1\Parser.cs" />
     <Compile Include="Parser\v2\Converters\CardConverter.cs" />
     <Compile Include="Parser\v2\Converters\ListConverter.cs" />

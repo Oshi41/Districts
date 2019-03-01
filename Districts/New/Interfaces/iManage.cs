@@ -2,7 +2,7 @@
 
 namespace Districts.New.Interfaces
 {
-    interface iManage
+    public interface iManage
     {
         iCard Card { get; }
         IList<iRecord> Records { get; } 

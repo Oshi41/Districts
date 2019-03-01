@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
-    class Manage : iManage
+    public class Manage : iManage
     {
         [JsonConstructor]
         public Manage(IList<iRecord> records, iCard card)

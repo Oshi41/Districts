@@ -1,6 +1,6 @@
 ﻿namespace Districts.New.Implementation
 {
-    interface IAppSettings
+    public interface IAppSettings
     {
         /// <summary>
         /// Бащовая папка

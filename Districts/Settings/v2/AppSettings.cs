@@ -47,9 +47,10 @@ namespace Districts.Settings.v2
         {
             CheckFolders(Path.GetDirectoryName(ConfigFilePath));
 
-            if (File.Exists(ConfigFilePath))
+            if (File.Exists(ConfigFilePath) 
+                && JsonConvert.DeserializeObject<settings>(File.ReadAllText(ConfigFilePath)) is settings set)
             {
-                Update(JsonConvert.DeserializeObject<settings>(File.ReadAllText(ConfigFilePath)));
+                Update(set);
             }
             else
             {
@@ -63,7 +64,7 @@ namespace Districts.Settings.v2
         {
             ChechFiles(ConfigFilePath);
 
-            File.ReadAllText(JsonConvert.SerializeObject(ToSettings()));
+            File.WriteAllText(ConfigFilePath, JsonConvert.SerializeObject(ToSettings()));
         }
 
         private void Update(settings settings)

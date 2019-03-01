@@ -1,5 +1,6 @@
 ﻿using Districts.New.Implementation;
 using Districts.New.Interfaces;
+using Districts.Parser.v2;
 using Districts.Singleton;
 using Mvvm;
 
@@ -12,10 +13,10 @@ namespace Districts.New.ViewModel
         public MainViewModel()
         {
             var worker = IoC.Instance.Get<IWebWorker>();
-            var settings = IoC.Instance.Get<IAppSettings>();
+            var parser = IoC.Instance.Get<IParser>();
             var provider = IoC.Instance.Get<IDialogProvider>();
 
-            StreetsViewModel = new StreetsViewModel(worker, settings, provider);
+            StreetsViewModel = new StreetsViewModel(worker, parser, provider);
         }
     }
 }

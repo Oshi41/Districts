@@ -39,10 +39,11 @@ namespace Districts.Singleton
         {
             var type = typeof(T);
 
-            if (_map.ContainsKey(type)
-                && !Equals(_map[type], instance))
+            if (_map.ContainsKey(type))
             {
-                throw new Exception($"Can't register type {type} twice");
+                Tracer.Tracer.Write($"Replacing instance {_map[type]} by {instance}");
+
+                _map[type] = instance;
             }
 
             _map[type] = instance;

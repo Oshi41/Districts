@@ -20,7 +20,7 @@ namespace DistrictsTest.v2
                     new Code("1234", CodeStatus.Good)
                 }),
 
-                new Door("2", 2, 2, 4, 1, 1, DoorStatus.NotWarning, new List<iCode>
+                new Door("2", 2, 2, 4, 1, 1, DoorStatus.NoWorry, new List<iCode>
                 {
                     new Code("1234k4578", CodeStatus.NotWorking)
                 }),
@@ -46,7 +46,7 @@ namespace DistrictsTest.v2
                             new Code("1", CodeStatus.Good)
                         }),
 
-                        new Door("2", 2, 2, 2, 2, 2, DoorStatus.NotWarning, new List<iCode>
+                        new Door("2", 2, 2, 2, 2, 2, DoorStatus.NoWorry, new List<iCode>
                         {
                             new Code("1", CodeStatus.NotWorking),
                             new Code("2", CodeStatus.Good),

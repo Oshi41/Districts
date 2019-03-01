@@ -6,17 +6,25 @@ using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
-    class Home : FindBase, iHome
+    public class Home : FindBase, iHome
     {
         [JsonConstructor]
         public Home(string street, int homeNumber, int housing, int afterSlash, IList<iDoor> doors) 
-            : base(street, homeNumber, housing, afterSlash)
+            : this(street, $"{homeNumber}k{housing}/{afterSlash}", doors)
+        {
+            Doors = doors;
+        }
+
+        public Home(string street, string number, IList<iDoor> doors)
+            : base(street, number)
         {
             Doors = doors;
         }
 
         [JsonConverter(typeof(ListConverter<Door, iDoor>))]
         public IList<iDoor> Doors { get; }
+
+        public string Comments { get; set; }
 
         public override bool Equals(object obj)
         {

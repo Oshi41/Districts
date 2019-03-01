@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using Districts.New.Implementation;
 using Districts.New.Interfaces;
+using Districts.Parser.v2;
 using Microsoft.Expression.Interactivity.Core;
 using Mvvm;
 
@@ -12,7 +13,7 @@ namespace Districts.New.ViewModel
     class StreetsViewModel : BindableBase
     {
         private readonly IWebWorker _web;
-        private readonly IAppSettings _settings;
+        private readonly IParser _parser;
         private readonly IDialogProvider _provider;
 
         private bool _checkedStreets;
@@ -24,15 +25,15 @@ namespace Districts.New.ViewModel
         private string _streetsShort;
 
         public StreetsViewModel(IWebWorker web,
-            IAppSettings settings,
+            IParser parser,
             IDialogProvider provider)
         {
             _web = web;
-            _settings = settings;
+            _parser = parser;
             _provider = provider;
 
             SetStreetCommand = new ActionCommand(CustomizeStreets);
-            SetStreets(File.ReadAllText(_settings.StreetsPath).Split('\n'));
+            SetStreets(_parser.LoadStreets());
         }
 
         public ICommand SetStreetCommand { get; }
@@ -55,8 +56,7 @@ namespace Districts.New.ViewModel
 
             if (_provider.ShowDialog(vm, 400))
             {
-                File.WriteAllText(_settings.StreetsPath,
-                    string.Join("\n", vm.Streets));
+                _parser.SaveStreets(vm.Streets);
 
                 SetStreets(vm.Streets);
             }

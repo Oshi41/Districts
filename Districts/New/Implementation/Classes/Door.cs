@@ -12,12 +12,8 @@ namespace Districts.New.Implementation.Classes
         [JsonConstructor]
         public Door(string street, int homeNumber, int housing, int afterSlash, int doorNumber, 
             int entrance, DoorStatus status, IList<iCode> codes) 
-            : base(street, homeNumber, housing, afterSlash)
+            : this(street, $"{homeNumber}k{housing}\\{afterSlash}", doorNumber, entrance, status, codes)
         {
-            DoorNumber = doorNumber;
-            Entrance = entrance;
-            Status = status;
-            Codes = codes;
         }
 
         public Door(iFind find, int doorNumber, int entrance, DoorStatus status, IList<iCode> codes)
@@ -25,10 +21,19 @@ namespace Districts.New.Implementation.Classes
         {
         }
 
+        public Door(string street, string number, int doorNumber, 
+            int entrance, DoorStatus status, IList<iCode> codes)
+            : base(street, number)
+        {
+            DoorNumber = doorNumber;
+            Entrance = entrance;
+            Status = status;
+            Codes = codes;
+        }
+
         public int DoorNumber { get; }
         public int Entrance { get; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public DoorStatus Status { get; }
 
         [JsonConverter(typeof(ListConverter<Code, iCode>))]
