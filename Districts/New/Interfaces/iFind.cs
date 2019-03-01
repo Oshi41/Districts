@@ -20,7 +20,7 @@ namespace Districts.New.Interfaces
         //AllWithSlashCheck = All | CompareSlash
     }
 
-    interface iFind
+    public interface iFind
     {
         string Street { get; }
         int HomeNumber { get; }

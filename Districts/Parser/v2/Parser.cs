@@ -16,10 +16,5 @@ namespace Districts.Parser.v2
         {
             _settings = settings;
         }
-
-        public IList<iHome> LoadHomes()
-        {
-            var folder = _settings.HomesPath
-        }
     }
 }

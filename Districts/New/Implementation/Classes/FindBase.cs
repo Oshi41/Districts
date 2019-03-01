@@ -1,11 +1,13 @@
 ﻿using System;
 using Districts.New.Interfaces;
+using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
-    class Find : iFind
+    public abstract class FindBase : iFind
     {
-        public Find(string street, int homeNumber, int housing, int afterSlash)
+        [JsonConstructor]
+        protected FindBase(string street, int homeNumber, int housing, int afterSlash)
         {
             Street = street;
             HomeNumber = homeNumber;
@@ -17,6 +19,7 @@ namespace Districts.New.Implementation.Classes
         public int HomeNumber { get; }
         public int Housing { get; }
         public int AfterSlash { get; }
+
         public bool SameObject(iFind obj, ReturnConditions conditions = ReturnConditions.WithSlash)
         {
             if (ReferenceEquals(this, obj))
@@ -25,7 +28,7 @@ namespace Districts.New.Implementation.Classes
             if (obj == null)
                 return false;
 
-            if (string.Equals(Street, obj.Street, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(Street, obj.Street, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }

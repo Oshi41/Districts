@@ -7,7 +7,7 @@
         Restricted,
     }
 
-    interface iCode
+    public interface iCode
     {
         string Text { get; }
         CodeStatus Status { get; }

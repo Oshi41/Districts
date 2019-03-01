@@ -10,7 +10,7 @@ namespace Districts.New.Interfaces
         Restricted
     }
 
-    interface iDoor : iFind
+    public interface iDoor : iFind
     {
         int DoorNumber { get; }
         int Entrance { get; }

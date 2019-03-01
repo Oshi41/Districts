@@ -1,10 +1,12 @@
 ﻿using System;
 using Districts.New.Interfaces;
+using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
     class Record : iRecord
     {
+        [JsonConstructor]
         public Record(ActionType action, string subject, DateTime date)
         {
             Action = action;

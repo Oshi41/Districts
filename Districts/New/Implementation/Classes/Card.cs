@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using Districts.Helper;
 using Districts.New.Interfaces;
+using Districts.Parser.v2.Converters;
+using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
     class Card : iCard
     {
+        [JsonConstructor]
         public Card(int number, IList<iDoor> doors)
         {
             Number = number;
@@ -13,6 +16,8 @@ namespace Districts.New.Implementation.Classes
         }
 
         public int Number { get; }
+
+        [JsonConverter(typeof(ListConverter<Door, iDoor>))]
         public IList<iDoor> Doors { get; }
 
         protected bool Equals(Card other)

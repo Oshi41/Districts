@@ -1,10 +1,12 @@
 ﻿using System;
 using Districts.New.Interfaces;
+using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
-    class Code : iCode
+    public class Code : iCode
     {
+        [JsonConstructor]
         public Code(string text, CodeStatus status)
         {
             Text = text;

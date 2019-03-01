@@ -1,85 +1,54 @@
 ﻿using System.Collections.Generic;
 using Districts.Helper;
 using Districts.New.Interfaces;
+using Districts.Parser.v2.Converters;
+using Newtonsoft.Json;
 
 namespace Districts.New.Implementation.Classes
 {
-    class Door : iDoor
+    public class Door : FindBase, iDoor
     {
-        private iFind _inner;
-        public string Street => _inner.Street;
-
-        public int HomeNumber => _inner.HomeNumber;
-
-        public int Housing => _inner.Housing;
-
-        public int AfterSlash => _inner.AfterSlash;
-
-        public bool SameObject(iFind obj, ReturnConditions conditions = ReturnConditions.WithSlash)
+        [JsonConstructor]
+        public Door(string street, int homeNumber, int housing, int afterSlash, int doorNumber, 
+            int entrance, DoorStatus status, IList<iCode> codes) 
+            : base(street, homeNumber, housing, afterSlash)
         {
-            return _inner.SameObject(obj, conditions);
-        }
-
-        public Door(iFind find, int doorNumber, int entrance, DoorStatus status, IList<iCode> codes)
-        {
-            _inner = find;
             DoorNumber = doorNumber;
             Entrance = entrance;
             Status = status;
             Codes = codes;
         }
 
+        public Door(iFind find, int doorNumber, int entrance, DoorStatus status, IList<iCode> codes)
+            : this(find.Street, find.HomeNumber, find.Housing, find.AfterSlash, doorNumber, entrance, status, codes)
+        {
+        }
+
         public int DoorNumber { get; }
         public int Entrance { get; }
         public DoorStatus Status { get; }
-        public IList<iCode> Codes { get; }
 
-        protected bool Equals(Door other)
-        {
-            return Equals(_inner, other._inner) 
-                   && DoorNumber == other.DoorNumber 
-                   && Entrance == other.Entrance &&
-                   Status == other.Status 
-                   && Codes.IsTermwiseEquals(other.Codes);
-        }
+        [JsonConverter(typeof(ListConverter<Code, iCode>))]
+        public IList<iCode> Codes { get; }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Door) obj);
+            return obj is Door door &&
+                   base.Equals(obj) 
+                   && DoorNumber == door.DoorNumber 
+                   && Entrance == door.Entrance 
+                   && Status == door.Status 
+                   && Codes.IsTermwiseEquals(door.Codes);
         }
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = (_inner != null ? _inner.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ DoorNumber;
-                hashCode = (hashCode * 397) ^ Entrance;
-                hashCode = (hashCode * 397) ^ (int) Status;
-                return hashCode;
-            }
+            var hashCode = -1864148151;
+            hashCode = hashCode * -1521134295 + base.GetHashCode();
+            hashCode = hashCode * -1521134295 + DoorNumber.GetHashCode();
+            hashCode = hashCode * -1521134295 + Entrance.GetHashCode();
+            hashCode = hashCode * -1521134295 + Status.GetHashCode();
+            return hashCode;
         }
     }
-
-//    private iFind _inner;
-//    public string Street => _inner.Street;
-
-//    public int HomeNumber => _inner.HomeNumber;
-
-//    public int Housing => _inner.Housing;
-
-//    public int AfterSlash => _inner.AfterSlash;
-
-//    public bool SameObject(iFind obj, ReturnConditions conditions = ReturnConditions.WithSlash)
-//    {
-//    return _inner.SameObject(obj, conditions);
-//}
-
-//public Door(iFind find)
-//{
-//_inner = find;
-//}
 }
