@@ -1,21 +1,24 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Districts.Settings.v1;
+using Districts.New.Implementation;
+using Districts.Singleton;
 
 namespace Districts.Tracer
 {
     /// <summary>
     ///     Логирование
     /// </summary>
-    public class Tracer
+    public class Tracer : ITrace
     {
-        protected static Tracer Instance = new Tracer();
-        private readonly string _filename;
+        public static ITrace Instance => _instance ?? (_instance = new Tracer(IoC.Instance.Get<IAppSettings>().LogsPath));
+        private static ITrace _instance;
 
-        private Tracer()
+
+        private readonly string _filename;
+        private Tracer(string folder)
         {
-            _filename = Path.Combine(ApplicationSettings.ReadOrCreate().LogPath, Guid.NewGuid().ToString());
+            _filename = Path.Combine(folder, DateTime.Now.ToShortDateString() + ".log");
             var stream = File.CreateText(_filename);
             stream.Close();
         }
@@ -24,7 +27,7 @@ namespace Districts.Tracer
         ///     Возвращает время в данный момент
         /// </summary>
         /// <returns></returns>
-        private static string GetTime()
+        private string GetTime()
         {
             var time = DateTime.Now;
             var timeToWrite = $"{time.Hour}:{time.Minute}:{time.Second}  ->  ";
@@ -35,9 +38,11 @@ namespace Districts.Tracer
         ///     Записывает сообщение
         /// </summary>
         /// <param name="message"></param>
-        public static void Write(string message)
+        public void Write(string message)
         {
-            File.AppendAllText(Instance._filename, $"{GetTime()}{message}\n\n");
+            File.AppendAllText(_filename, $@"{GetTime()}{message}
+
+");
         }
 
         /// <summary>
@@ -46,12 +51,12 @@ namespace Districts.Tracer
         /// <param name="e">Исключение</param>
         /// <param name="message">Сообщение пользователя</param>
         /// <param name="file"></param>
-        /// <param name="lineNumer"></param>
-        public static void WriteError(Exception e, string message = null,
+        /// <param name="lineNumber"></param>
+        public void Write(Exception e, string message = null,
             [CallerMemberName] string file = null,
-            [CallerLineNumber] int lineNumer = -1)
+            [CallerLineNumber] int lineNumber = -1)
         {
-            var result = $"{GetTime()} File - \'{file}\',line\'{lineNumer}\' ОШИБКА\n" +
+            var result = $"{GetTime()} File - \'{file}\',line\'{lineNumber}\' ОШИБКА\n" +
                          (string.IsNullOrEmpty(message)
                              ? string.Empty
                              : message + "\n") +

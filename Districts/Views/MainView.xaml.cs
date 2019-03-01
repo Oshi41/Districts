@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Districts.New.ViewModel;
 using Districts.Settings.v1;
 
 namespace Districts.Views
@@ -12,6 +13,14 @@ namespace Districts.Views
 
         public MainView()
         {
+            var window = new Window
+            {
+                Content = new MainViewModel()
+            };
+
+            window.ShowDialog();
+            App.Current.Shutdown();
+
             InitializeComponent();
             settings = ApplicationSettings.ReadOrCreate();
         }

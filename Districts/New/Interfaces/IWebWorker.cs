@@ -4,7 +4,7 @@ using Districts.JsonClasses;
 
 namespace Districts.New.Interfaces
 {
-    interface IWebWorker
+    public interface IWebWorker
     {
         /// <summary>
         /// Возвращает список подсказок
@@ -17,6 +17,6 @@ namespace Districts.New.Interfaces
         /// </summary>
         /// <param name="streets">Улицы</param>
         /// <returns></returns>
-        Task<IList<HomeInfo>> DownloadHomes(IList<string> streets);
+        Task<IList<iHome>> DownloadHomes(IList<string> streets);
     }
 }

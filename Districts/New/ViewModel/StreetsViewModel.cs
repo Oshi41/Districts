@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Districts.New.Implementation;
+using Districts.New.Implementation.Args;
 using Districts.New.Interfaces;
 using Districts.Parser.v2;
 using Microsoft.Expression.Interactivity.Core;
@@ -15,6 +16,7 @@ namespace Districts.New.ViewModel
         private readonly IWebWorker _web;
         private readonly IParser _parser;
         private readonly IDialogProvider _provider;
+        private readonly IMessage _message;
 
         private bool _checkedStreets;
         /// <summary>
@@ -26,11 +28,13 @@ namespace Districts.New.ViewModel
 
         public StreetsViewModel(IWebWorker web,
             IParser parser,
-            IDialogProvider provider)
+            IDialogProvider provider,
+            IMessage message)
         {
             _web = web;
             _parser = parser;
             _provider = provider;
+            _message = message;
 
             SetStreetCommand = new ActionCommand(CustomizeStreets);
             SetStreets(_parser.LoadStreets());
@@ -67,6 +71,8 @@ namespace Districts.New.ViewModel
             _streets = newStreets.ToList();
             CheckedStreets = _streets.Any();
             StreetsShort = string.Join("; ", _streets);
+
+            _message.OnSendMessage(new MessageArgs(newStreets.ToList()));
         }
     }
 }

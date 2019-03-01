@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Districts.JsonClasses;
+using Districts.New.Interfaces;
 
 namespace Districts.Comparers
 {

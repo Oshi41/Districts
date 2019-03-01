@@ -15,12 +15,7 @@
 
         <controls:StreetView DataContext="{Binding Path=StreetsViewModel}"/>
 
-        
-        <Button HorizontalAlignment="Left"
-                Margin="10"
-                Content="Скачать дома"
-                Height="40"
-                Width="160"/>
-            
+        <controls:HomesView DataContext="{Binding Path=HomesViewModel}"/>
+
     </StackPanel>
 </UserControl>

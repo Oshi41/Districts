@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using Districts.New.Implementation;
+using Districts.New.Implementation.Args;
 using Districts.New.Interfaces;
+using Districts.Parser.v2;
 using Mvvm;
 using Mvvm.Commands;
 
@@ -9,26 +13,55 @@ namespace Districts.New.ViewModel
 {
     class HomesViewModel : BindableBase
     {
-        private readonly IList<string> _streets;
-        private readonly IWebWorker _worker;
+        private IList<string> _streets;
 
-        public HomesViewModel(IList<string> streets, IWebWorker worker)
+        private readonly IWebWorker _worker;
+        private readonly IParser _parser;
+        private readonly IMessageHelper _messageHelper;
+        private readonly IMessage _messageService;
+
+        private bool _isWorking;
+
+        public HomesViewModel(IList<string> streets,
+            IWebWorker worker,
+            IParser parser, 
+            IMessageHelper messageHelper,
+            IMessage messageService)
         {
             _streets = streets;
             _worker = worker;
-            Download = new DelegateCommand(OnDownload, CanDownload);
+            _parser = parser;
+            _messageHelper = messageHelper;
+            _messageService = messageService;
+            _messageService.Subscribe<MessageArgs>(OnStreetsChanged);
+
+            Download = DelegateCommand.FromAsyncHandler(OnDownload, CanDownload);
+        }
+
+        private void OnStreetsChanged(object sender, MessageArgs e)
+        {
+            _streets = e.Streets.ToList();
+            Download.RaiseCanExecuteChanged();
         }
 
         private bool CanDownload()
         {
-            return _streets.Any();
+            return _streets.Any() && !_isWorking;
         }
 
-        private void OnDownload()
+        private async Task OnDownload()
         {
-            
+            _isWorking = true;
+
+            var homes = await _worker.DownloadHomes(_streets);
+
+            _parser.SaveHomes(homes);
+            _parser.UpdateRelationships();
+
+            _isWorking = true;
+            _messageHelper.ShowDone();
         }
 
-        public ICommand Download { get; }
+        public DelegateCommandBase Download { get; }
     }
 }

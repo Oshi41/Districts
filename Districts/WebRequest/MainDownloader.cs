@@ -20,7 +20,7 @@ namespace Districts.WebRequest
 
             if (!CheckIfStreetFileExist(settings))
             {
-                Tracer.Tracer.Write("Улицы не были заполнены");
+                Tracer.Tracer.Instance.Write("Улицы не были заполнены");
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace Districts.WebRequest
 
 
             var json = JsonConvert.SerializeObject(except, Formatting.Indented);
-            Tracer.Tracer.Write("Следующие дома не попали в общий список:\n" + json);
+            Tracer.Tracer.Instance.Write("Следующие дома не попали в общий список:\n" + json);
         }
 
         #region Write

@@ -115,7 +115,7 @@ namespace Districts.CardGenerator
             if (notExisting.Any())
             {
                 var all = notExisting.Aggregate("", (main, door) => main += door.ToString() + "\n");
-                Tracer.Tracer.Write("Следующих квартир не существует в выбранных домах: \n\n" + all);
+                Tracer.Tracer.Instance.Write("Следующих квартир не существует в выбранных домах: \n\n" + all);
             }
 
             var cardDoors = allCards.SelectMany(x => x.Value.Doors).ToList();
@@ -123,7 +123,7 @@ namespace Districts.CardGenerator
             if (needToAdd.Any())
             {
                 //var all = needToAdd.Aggregate("", (main, door) => main += door.ToString() + "\n");
-                Tracer.Tracer.Write("Данных квартир нет в участках: \n\n" + string.Join("\n", needToAdd));
+                Tracer.Tracer.Instance.Write("Данных квартир нет в участках: \n\n" + string.Join("\n", needToAdd));
             }
 
             foreach (var pair in allCards)

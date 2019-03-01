@@ -19,8 +19,9 @@ namespace Districts.Singleton
         {
             Register<IMessageHelper>(new MessageHelper());
             Register<IDialogProvider>(new DialogProvider());
-            Register<IWebWorker>(new WebWork());
+            Register<IWebWorker>(new WebWork(new HomeParser()));
             Register<IAppSettings>(new AppSettings());
+            Register<IMessage>(new MessageTranslator());
 
             // Инициализируется после IAppSettings!
             Register<IParser>(new Parser.v2.Parser(Get<IAppSettings>()));
@@ -41,7 +42,7 @@ namespace Districts.Singleton
 
             if (_map.ContainsKey(type))
             {
-                Tracer.Tracer.Write($"Replacing instance {_map[type]} by {instance}");
+                Tracer.Tracer.Instance.Write($"Replacing instance {_map[type]} by {instance}");
 
                 _map[type] = instance;
             }

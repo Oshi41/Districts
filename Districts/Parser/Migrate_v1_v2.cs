@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Districts.Comparers;
 using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.New.Implementation;
 using Districts.New.Implementation.Classes;
 using Districts.New.Interfaces;
-using Districts.Singleton;
 using Districts.ViewModel.TabsVM;
 using Door = Districts.JsonClasses.Door;
 
@@ -25,12 +22,10 @@ namespace Districts.Parser
             _newParser = new v2.Parser(settings);
         }
 
-        public void Migrate()
-        {
-            MigrateCards();
-        }
-
-        private void MigrateCards()
+        /// <summary>
+        /// Переносит карточки на новый формат
+        /// </summary>
+        public void MigrateCards()
         {
             var cards = _oldParser.LoadCards().Select(x => x.Value).ToList();
             var allForbidden = _oldParser.LoadRules().SelectMany(x => x.Value).ToList();
@@ -55,6 +50,41 @@ namespace Districts.Parser
             _newParser.SaveCards(newCards);
         }
 
+        /// <summary>
+        /// Переносит старую инфу. Не создает дома!!!
+        /// </summary>
+        public void MigrateHomes()
+        {
+            var allHomes = _oldParser.LoadSortedHomes().Values.SelectMany(x => x).ToList();
+            var allRules = _oldParser.LoadRules().Values.ToList().SelectMany(x => x).ToList();
+            var allCodes = _oldParser.LoadCodes().Values.ToList().SelectMany(x => x).ToList();
+            
+            // смапировали
+            var map = new HomeMap(allHomes, allCodes, allRules);
+
+            var result = new List<iHomeInfo>();
+
+            foreach (var oldHome in map)
+            {
+                result.Add(new CommonHomeInfo(
+                    oldHome.Building.Street,
+                    oldHome.Building.HouseNumber,
+                    oldHome
+                        .HomeInfo
+                        .AllCodes
+                        .ToDictionary(x => x.Key, x => ToCodes(x.Value)),
+                    oldHome.Building.HasConcierge,
+                    oldHome.HomeInfo.Begin));
+            }
+
+            _newParser.SaveHomesInfo(result);
+        }
+        
+        private IList<iCode> ToCodes(IEnumerable<string> texts)
+        {
+            return texts.Select(x => (iCode) new Code(x, CodeStatus.Good)).ToList();
+        }
+
         private iDoor ToDoor(Door door, ForbiddenElement element)
         {
             var status = DoorStatus.Good;
@@ -73,10 +103,7 @@ namespace Districts.Parser
                 door.Number,
                 door.Entrance,
                 status,
-                door
-                    .Codes
-                    .Select(x => (iCode) new Code(x, CodeStatus.Good))
-                    .ToList());
+                ToCodes(door.Codes));
         }
     }
 

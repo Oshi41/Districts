@@ -24,18 +24,30 @@ namespace Districts.Settings.v2
                 if (_baseFolder != value)
                 {
                     _baseFolder = value;
-                    CheckFolders(BaseFolder, ManagementPath, LocalFolder, BackupPath);
+
+                    CheckFolders(LocalFolder,
+                        BaseFolder,
+                        ManagementPath, 
+                        HomesPath,
+                        BackupPath,
+                        LogsPath,
+                        CardsPath,
+                        CommonHomeInfoPath);
+
+                    ChechFiles(StreetsPath,
+                        ConfigFilePath);
                 }
             }
         }
         public int MaxDoors { get; set; }
         public string ConfigFilePath => _configFilePath;
         public string StreetsPath => Path.Combine(BaseFolder, "streets.json");
-        public string ManagementPath => Path.Combine(BackupPath, "Management");
-        public string HomesPath => Path.Combine(BackupPath, "Homes");
+        public string ManagementPath => Path.Combine(BaseFolder, "Management");
+        public string HomesPath => Path.Combine(BaseFolder, "Homes");
         public string BackupPath => Path.Combine(BaseFolder, "Backup");
         public string LogsPath => Path.Combine(BaseFolder, "logs");
         public string CardsPath => Path.Combine(BaseFolder, "Cards");
+        public string CommonHomeInfoPath => Path.Combine(BaseFolder, "CommonInfo");
 
 
         public AppSettings()
@@ -95,7 +107,7 @@ namespace Districts.Settings.v2
                 }
                 catch (Exception e)
                 {
-                    Tracer.Tracer.WriteError(e);
+                    Tracer.Tracer.Instance.Write(e);
                 }
             }
         }
@@ -119,7 +131,7 @@ namespace Districts.Settings.v2
                 }
                 catch (Exception e)
                 {
-                    Tracer.Tracer.WriteError(e);
+                    Tracer.Tracer.Instance.Write(e);
                 }
             }
         }

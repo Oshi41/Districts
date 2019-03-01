@@ -10,11 +10,16 @@ namespace Districts.Parser.v2
         IList<string> LoadStreets();
         void SaveStreets(IList<string> streets);
 
+        void UpdateRelationships();
+
+        IList<iHome> LoadHomes();
+        void SaveHomes(IList<iHome> homes);
+
         //IList<iCard> LoadCards();
-        //IList<iHome> LoadHomes();
+        //
         //IList<iManage> LoadManagement();
         //void SaveCards(IList<Card> cards);
-        //void SaveHomes(IList<Home> homes);
+        //
         //void SaveManagements(IList<Manage> history);
 
     }

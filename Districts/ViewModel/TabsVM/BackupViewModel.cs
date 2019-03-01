@@ -106,7 +106,7 @@ namespace Districts.ViewModel.TabsVM
         {
             if (!Directory.Exists(toCopy))
             {
-                Tracer.Tracer.Write("Нет папки для сохранения");
+                Tracer.Tracer.Instance.Write("Нет папки для сохранения");
                 return;
             }
 

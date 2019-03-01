@@ -19,26 +19,42 @@ namespace Districts.Parser.v2
             _settings = settings;
         }
 
-        #region Save
-
-        /// <summary>
-        /// Сохраняю список домов
-        /// Хранится по улицам! 
-        /// </summary>
-        /// <param name="homes"></param>
-        public void SaveHomes(IList<Home> homes)
+        public void UpdateRelationships()
         {
-            Directory.Delete(_settings.HomesPath, true);
+            var infos = LoadHomeInfos();
+            var homes = LoadHomes();
 
-            Directory.CreateDirectory(_settings.HomesPath);
-
-            var byStreets = homes.GroupBy(x => x.Street);
-
-            foreach (var street in byStreets)
+            foreach (var info in infos)
             {
-                Save(street.GetEnumerator().ToList(), street.Key, h => $"{h.GetPrettyHouseName()}.json");
+                var home = homes.FirstOrDefault(x => x.SameObject(info));
+                if (home == null)
+                    continue;
+
+                homes.Remove(home);
+
+                var doors = home
+                    .Doors
+                    .Select(x =>
+                    {
+                        var number = -1 + x.DoorNumber + info.FirstDoor;
+                        info.Codes.TryGetValue(number, out var codes);
+                        return (iDoor)new Door(x, number, x.Entrance, x.Status, codes);
+                    });
+
+                home = new Home(home.Street, 
+                    home.HomeNumber, 
+                    home.Housing,
+                    home.AfterSlash,
+                    doors.ToList());
+
+                homes.Add(home);
             }
+
+
+            SaveHomes(homes);
         }
+
+        #region Save
 
         /// <summary>
         /// Сохраняю улицы. Хранятся как json array 
@@ -58,6 +74,13 @@ namespace Districts.Parser.v2
             Save(history, _settings.ManagementPath, m => $"{m.Card.Number}.json");
         }
 
+        public void SaveHomesInfo(IList<iHomeInfo> infos)
+        {
+            SaveFolders(infos.GroupBy(x => x.Street), _settings.CommonHomeInfoPath, i => $"{i}.json");
+
+            UpdateRelationships();
+        }
+
         public void SaveCards(IList<Card> cards)
         {
             Save(cards, _settings.CardsPath, c => $"{c.Number}.json");
@@ -73,12 +96,14 @@ namespace Districts.Parser.v2
         /// <returns></returns>
         public IList<iHome> LoadHomes()
         {
-            // Вытаскиваю из всех директорий
-            return Directory
-                .GetDirectories(_settings.HomesPath)
-                .SelectMany(x => Load<Home>(x)
-                    .Cast<iHome>())
+            return LoadFolders<Home>(_settings.HomesPath)
+                .Cast<iHome>()
                 .ToList();
+        }
+
+        public void SaveHomes(IList<iHome> homes)
+        {
+            SaveFolders(homes.GroupBy(x => x.Street), _settings.HomesPath, h => $"{h}.json");
         }
 
         /// <summary>
@@ -87,7 +112,8 @@ namespace Districts.Parser.v2
         /// <returns></returns>
         public IList<string> LoadStreets()
         {
-            return JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(_settings.StreetsPath));
+            return JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(_settings.StreetsPath)) 
+                   ?? new List<string>();
         }
 
         /// <summary>
@@ -127,9 +153,39 @@ namespace Districts.Parser.v2
                 .ToList();
         }
 
+        public IList<iHomeInfo> LoadHomeInfos()
+        {
+            return LoadFolders<Home>(_settings.CommonHomeInfoPath)
+                .Cast<iHomeInfo>()
+                .ToList();
+        }
+
         #endregion
 
         #region private
+
+        private IEnumerable<T> LoadFolders<T>(string folder)
+        {
+            var folders = Directory.GetDirectories(folder);
+
+            return folders
+                .SelectMany(Load<T>)
+                .ToList();
+        }
+
+        private void SaveFolders<T>(IEnumerable<IGrouping<string, T>> items, string folder, Func<T, string> fileName)
+        {
+            if (Directory.Exists(folder))
+                Directory.Delete(folder, true);
+
+            Directory.CreateDirectory(folder);
+
+            foreach (var item in items)
+            {
+                Save(item.GetEnumerator().ToList<T>(), Path.Combine(folder, item.Key), fileName);
+            }
+        }
+
 
         private IEnumerable<T> Load<T>(string folder)
         {
@@ -142,8 +198,10 @@ namespace Districts.Parser.v2
 
         private void Save<T>(IList<T> items, string folder, Func<T, string> fileName)
         {
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
+            if (Directory.Exists(folder))
+                Directory.Delete(folder, true);
+
+            Directory.CreateDirectory(folder);
 
             foreach (var item in items)
             {

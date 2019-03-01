@@ -59,7 +59,7 @@ namespace Districts.Helper
                 }
                 catch (Exception e)
                 {
-                    Tracer.Tracer.WriteError(e, "Can't delete " + file);
+                    Tracer.Tracer.Instance.Write(e, "Can't delete " + file);
                 }
         }
 
@@ -160,6 +160,18 @@ namespace Districts.Helper
                    && !source.Except(list, comparer).Any();
         }
 
+        public static IList<T> SelectRecursive<T>(this IEnumerable<T> source, 
+            Func<T, IEnumerable<T>> selectFunction)
+        {
+            var result = source.ToList();
+
+            if (result.Any())
+            {
+                result.AddRange(result.SelectMany(selectFunction));
+            }
+
+            return result;
+        }
         #endregion
     }
 }

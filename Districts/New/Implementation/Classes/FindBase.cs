@@ -96,7 +96,7 @@ namespace Districts.New.Implementation.Classes
             return false;
         }
 
-        public string GetPrettyHouseName()
+        public override string ToString()
         {
             var result = HomeNumber.ToString();
 

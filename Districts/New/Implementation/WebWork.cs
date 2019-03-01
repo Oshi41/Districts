@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,7 @@ using System.Web;
 using Districts.Comparers;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
+using Districts.New.Implementation.Classes;
 using Districts.New.Interfaces;
 using Newtonsoft.Json;
 
@@ -15,54 +17,103 @@ namespace Districts.New.Implementation
 {
     class WebWork : IWebWorker
     {
+        /// <summary>
+        /// Макс сколько приходит по API
+        /// </summary>
+        private const int _maxAPI = 50;
+
+        /// <summary>
+        /// Самый большой номер дома
+        /// </summary>
+        private const int _maxHouseNumber = 1000;
+
+        private readonly IHomeParser _homeParser;
         private readonly string _autoCompliteFormatString = "http://www.dom.mos.ru/Lookups/GetSearchAutoComplete?term={0}&section=Buildings";
+
+        public WebWork(IHomeParser homeParser)
+        {
+            _homeParser = homeParser;
+        }
 
         public async Task<IList<string>> StreetHints(string street)
         {
             return (await DownloadHomesInner(street))
                 .Take(50)
-                .Select(x => x.GetStreetName())
+                .Select(x => x.Street())
                 .Where(x => x.IndexOf(street, StringComparison.InvariantCultureIgnoreCase) >= 0)
                 .Distinct()
                 .ToList();
         }
 
-        public async Task<IList<HomeInfo>> DownloadHomes(IList<string> streets)
+        public async Task<IList<iHome>> DownloadHomes(IList<string> streets)
         {
-            var result = new List<Task<List<HomeInfo>>>();
+            var tasks = new List<Task<List<iHome>>>();
 
             foreach (var street in streets)
             {
-                result.Add(
-                    Task.Run(async ()  =>
+                tasks.Add(Task.Run(async () =>
+                {
+                    // собрали вссе дома по улиуам
+                    var streetHomes = await AggregateWholeStreet(street);
+
+                    Tracer.Tracer.Instance.Write($"Collected {streetHomes.Count} homes on {street}");
+
+                    // скачали инфу о всех домах
+                    var parsed = streetHomes
+                        .Select(async x => await _homeParser.DownloadAndParse(x));
+
+                    // подожжём пока все скачается
+                    await Task.WhenAll(parsed);
+
+                    // вырезали те, у которых нет жилых квартир
+                    var homes = parsed.Select(x => x.Result);
+                    var except = homes.Where(x => !x.Doors.Any());
+
+                    if (except.Any())
                     {
-                        var taskResult = new List<HomeInfo>();
-                        var innerQuery = street;
-                        var comparer = new HouseNumberComparerFromString();
-                        var homes = await DownloadHomesInner(innerQuery);
+                        Tracer.Tracer.Instance.Write("No living flats here: "
+                                            + string.Join(", ", except));
 
-                        while (homes.Any())
-                        {
-                            taskResult.AddRange(homes
-                                .Take(50)
-                                .Select(x => new HomeInfo(
-                                    new BaseFindableObject(street, x.GetHouseNumber()))));
+                        homes = homes.Except(except);
+                    }
 
-                            taskResult = taskResult.OrderBy(x => x.HouseNumber, comparer).ToList();
-                        }
-
-                        return taskResult;
-                    }));
+                    return homes.ToList();
+                }));
             }
 
-            await Task.WhenAll(result);
+            await Task.WhenAll(tasks);
 
-            return result.SelectMany(x => x.Result).ToList();
+            return tasks.SelectMany(x => x.Result).ToList();
         }
 
         #region private
 
-        private async Task<IList<home_info>> DownloadHomesInner(string quarry)
+        private async Task<IList<home_info>> AggregateWholeStreet(string street)
+        {
+            var streetHomes = await DownloadHomesInner(street);
+
+            if (streetHomes.Count > _maxAPI)
+            {
+                streetHomes.RemoveAt(_maxAPI);
+
+                for (int i = 1; i < _maxHouseNumber / _maxAPI; i++)
+                {
+                    var quarry = street + " " + i;
+                    var toAdd = (await DownloadHomesInner(quarry))
+                        .Take(_maxAPI);
+
+                    // Номера домов закончились
+                    if (!toAdd.Any())
+                        break;
+
+                    streetHomes.AddRange(toAdd.Except(streetHomes));
+                }
+            }
+
+            return streetHomes;
+        }
+
+        private async Task<List<home_info>> DownloadHomesInner(string quarry)
         {
             try
             {
@@ -79,7 +130,7 @@ namespace Districts.New.Implementation
             }
             catch (Exception e)
             {
-                Tracer.Tracer.WriteError(e);
+                Tracer.Tracer.Instance.Write(e);
                 return new List<home_info>();
             }
         }
@@ -88,20 +139,25 @@ namespace Districts.New.Implementation
 
         #region Nested
 
-        private class home_info
+        private class home_info : IRawHome
         {
             public string url { get; set; }
             public string value { get; set; }
             public string label { get; set; }
             public string section { get; set; }
 
-            public string GetStreetName()
+            public string UriPart()
+            {
+                return url;
+            }
+
+            public string Street()
             {
                 var index = label.IndexOf(",");
                 return label.Substring(0, index);
             }
 
-            public string GetHouseNumber()
+            public string HouseNumber()
             {
                 var text = label.Replace(",", "");
                 var spitted = text.Split(' ');
@@ -133,6 +189,16 @@ namespace Districts.New.Implementation
                         return null;
 
                 return text;
+            }
+
+            public override int GetHashCode()
+            {
+                return 0;
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is home_info info && string.Equals(label, info.label);
             }
         }
 

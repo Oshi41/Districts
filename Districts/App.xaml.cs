@@ -15,7 +15,7 @@ namespace Districts
 
         private void OnError(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            Tracer.Tracer.WriteError(e.Exception);
+            Tracer.Tracer.Instance.Write(e.Exception);
         }
     }
 }

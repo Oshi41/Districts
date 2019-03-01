@@ -26,7 +26,7 @@ namespace Districts.Parser.v1
 
             if (!Directory.Exists(folder))
             {
-                Tracer.Tracer.WriteError(new FileNotFoundException("Не найдена папка " + folder));
+                Tracer.Tracer.Instance.Write(new FileNotFoundException("Не найдена папка " + folder));
                 return new Dictionary<string, T>();
             }
 
@@ -41,7 +41,7 @@ namespace Districts.Parser.v1
                 }
                 catch (Exception e)
                 {
-                    Tracer.Tracer.WriteError(e);
+                    Tracer.Tracer.Instance.Write(e);
                 }
             }
 

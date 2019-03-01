@@ -37,12 +37,22 @@ namespace DistrictsTest.v2
             throw new NotImplementedException();
         }
 
+        public void UpdateRelationships()
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<iCard> LoadCards()
         {
             throw new NotImplementedException();
         }
 
         public IList<iHome> LoadHomes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveHomes(IList<iHome> homes)
         {
             throw new NotImplementedException();
         }

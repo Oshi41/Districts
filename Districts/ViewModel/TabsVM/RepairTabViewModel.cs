@@ -42,7 +42,7 @@ namespace Districts.ViewModel.TabsVM
             }
             catch (Exception e)
             {
-                Tracer.Tracer.WriteError(e);
+                Tracer.Tracer.Instance.Write(e);
             }
             finally
             {

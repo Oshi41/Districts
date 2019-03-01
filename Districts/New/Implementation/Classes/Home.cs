@@ -26,6 +26,25 @@ namespace Districts.New.Implementation.Classes
 
         public string Comments { get; set; }
 
+        public Home WithComments(int elevators, bool hasConcierge = false)
+        {
+            var com = string.Empty;
+
+            if (hasConcierge)
+            {
+                com = "Есть консьерж";
+            }
+
+            if (elevators < 1)
+            {
+                com = string.Join(", ", "Нет лифтов");
+            }
+
+            Comments = com;
+
+            return this;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is Home home &&
