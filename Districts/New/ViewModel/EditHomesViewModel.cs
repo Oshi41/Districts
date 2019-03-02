@@ -49,14 +49,22 @@ namespace Districts.New.ViewModel
         {
             if (_selectedItem is HomeVm vm)
             {
-                var copy = new HomeVm(vm);
+                var copy = new HomeVm(vm.ToHome());
 
                 if (_provider.ShowDialog(copy, 350))
                 {
+                    var street = StreetHomes
+                        .FirstOrDefault(x => x.Homes.Any(
+                            c => c.SameObject(vm)));
 
+                    if (street != null)
+                    {
+                        street.Homes.Remove(vm);
+                        street.Homes.Add(new HomeVm(copy.ToHome()));
+                    }
                 }
             }
-           
+
         }
 
         private bool OnCanDelete()
@@ -111,9 +119,9 @@ namespace Districts.New.ViewModel
 
     class StreetVm : BindableBase
     {
-        private ObservableCollection<iHome> _homes;
+        private ObservableCollection<HomeVm> _homes;
 
-        public ObservableCollection<iHome> Homes
+        public ObservableCollection<HomeVm> Homes
         {
             get => _homes;
             set => SetProperty(ref _homes, value);
@@ -123,50 +131,65 @@ namespace Districts.New.ViewModel
 
         public StreetVm(IEnumerable<iHome> homes)
         {
-            Homes = new ObservableCollection<iHome>(homes.Select(x => new HomeVm(x)));
-            StreetName = Homes.FirstOrDefault()?.Street;
+            Homes = new ObservableCollection<HomeVm>(homes.Select(x => new HomeVm(x)));
+            StreetName = homes.FirstOrDefault()?.Street;
         }
     }
 
-    class HomeVm : BindableBase, iHome
+    class HomeVm : BindableBase
     {
-        private iHome _home;
-        private string _comments;
+        private iHome _vm;
+
+        private readonly IDoorStatusParser _parser;
+        private string _aggresiveRange;
+        private string _noWorryRange;
+        private string _restrictedRange;
         private bool _hasConcierge;
         private int _firstDoor;
-        private int _floors;
-        private int _entrances;
-        private IList<iDoor> _doors;
+        private ObservableCollection<DoorVm> _doors;
 
-        public HomeVm(iHome home)
+        public HomeVm(iHome vm)
         {
-            _home = home;
+            _vm = vm;
+            _parser = new DoorStatusParser();
 
-            _doors = home.Doors.Select(x => (iDoor)new DoorVm(x)).ToList();
-            Comments = home.Comments;
-            HasConcierge = home.HasConcierge;
-            FirstDoor = home.FirstDoor;
-            Floors = home.Floors;
-            Entrances = home.Entrances;
+            HasConcierge = _vm.HasConcierge;
+            FirstDoor = _vm.FirstDoor;
+            Doors = new ObservableCollection<DoorVm>(vm.Doors.Select(x => new DoorVm(x)));
         }
 
-        public string Street => _home.Street;
-
-        public int HomeNumber => _home.HomeNumber;
-
-        public int Housing => _home.Housing;
-
-        public int AfterSlash => _home.AfterSlash;
-
-        public bool SameObject(iFind obj, ReturnConditions conditions = ReturnConditions.WithSlash)
+        public iHome ToHome()
         {
-            return _home.SameObject(obj, conditions);
+            _parser.Populate(AggresiveRange, Doors, DoorStatus.Aggressive);
+            _parser.Populate(RestrictedRange, Doors, DoorStatus.Restricted);
+            _parser.Populate(NoWorryRange, Doors, DoorStatus.NoWorry);
+
+            _vm = new Home(_vm,
+                Doors.OfType<iDoor>().ToList(),
+                HasConcierge,
+                FirstDoor,
+                _vm.Floors,
+                _vm.Entrances);
+
+            return _vm;
         }
 
-        public IList<iDoor> Doors
+        public string AggresiveRange
         {
-            get => _doors;
-            set => SetProperty(ref _doors, value);
+            get => _aggresiveRange;
+            set => SetProperty(ref _aggresiveRange, value);
+        }
+
+        public string NoWorryRange
+        {
+            get => _noWorryRange;
+            set => SetProperty(ref _noWorryRange, value);
+        }
+
+        public string RestrictedRange
+        {
+            get => _restrictedRange;
+            set => SetProperty(ref _restrictedRange, value);
         }
 
         public bool HasConcierge
@@ -180,28 +203,15 @@ namespace Districts.New.ViewModel
             get => _firstDoor;
             set => SetProperty(ref _firstDoor, value);
         }
-
-        public int Floors
+        public ObservableCollection<DoorVm> Doors
         {
-            get => _floors;
-            set => SetProperty(ref _floors, value);
+            get => _doors;
+            set => SetProperty(ref _doors, value);
         }
 
-        public int Entrances
+        public bool SameObject(HomeVm obj)
         {
-            get => _entrances;
-            set => SetProperty(ref _entrances, value);
-        }
-
-        public string Comments
-        {
-            get => _comments;
-            set => SetProperty(ref _comments, value);
-        }
-
-        public override string ToString()
-        {
-            return _home?.ToString();
+            return _vm.SameObject(obj?._vm);
         }
     }
 

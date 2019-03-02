@@ -157,7 +157,9 @@
     <Compile Include="Parser\Migrate_v1_v2.cs" />
     <Compile Include="Parser\v1\Parser.cs" />
     <Compile Include="New\Interfaces\IParser.cs" />
+    <Compile Include="Parser\v2\CardConverter.cs" />
     <Compile Include="Parser\v2\DoorStatusParser.cs" />
+    <Compile Include="Parser\v2\ListConverter.cs" />
     <Compile Include="Parser\v2\Parser.cs" />
     <Compile Include="Settings\v2\AppSettings.cs" />
     <Compile Include="New\Implementation\IAppSettings.cs" />

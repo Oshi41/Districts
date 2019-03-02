@@ -31,7 +31,8 @@ namespace Districts.Parser.v2
                 {
                     var startIndex = i;
 
-                    while (i < numbers.Count() && numbers[i + 1] + 1 == numbers[i])
+                    while (i < numbers.Count() - 1 
+                           && Math.Abs(numbers[i] - numbers[i + 1]) == 1)
                     {
                         i++;
                     }
@@ -47,7 +48,7 @@ namespace Districts.Parser.v2
                     }
                 }
 
-                return result;
+                return result.TrimStart(',', ' ');
             }
 
             return string.Empty;

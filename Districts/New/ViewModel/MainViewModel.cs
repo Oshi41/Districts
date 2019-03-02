@@ -41,7 +41,10 @@ namespace Districts.New.ViewModel
 
             if (_provider.ShowDialog(vm, 400))
             {
-                _parser.SaveHomes(vm.StreetHomes.SelectMany(x => x.Homes).ToList());
+                _parser.SaveHomes(vm.StreetHomes.SelectMany(x => x
+                        .Homes
+                        .Select(h => h.ToHome()))
+                    .ToList());
             }
         }
     }

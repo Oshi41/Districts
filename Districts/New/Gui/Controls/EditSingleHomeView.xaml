@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Districts.New.Gui.Controls"
-             xmlns:converters="clr-namespace:Districts.New.Gui.Converters"
              xmlns:interfaces="clr-namespace:Districts.New.Interfaces"
              xmlns:viewModel="clr-namespace:Districts.New.ViewModel"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -15,8 +14,6 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <converters:DoorStatusConverter x:Key="StatusConverter"
-                                            Doors="{Binding Path=Doors}"/>
 
             <system:String x:Key="Tooltip">Нужно внести список номеров через запятую, либо промежуток с тире</system:String> 
         </ResourceDictionary>
@@ -36,9 +33,7 @@
                  ToolTip="{StaticResource Tooltip}"/>
         <TextBox Grid.Row="1"
                  TextChanged="RestrictText"
-                 Text="{Binding Path=Doors, 
-            Converter={StaticResource StatusConverter},
-            ConverterParameter={x:Static interfaces:DoorStatus.Aggressive}}"
+                 Text="{Binding Path=AggresiveRange}"
                  ToolTip="{StaticResource Tooltip}"/>
 
         <TextBlock Grid.Row="2"
@@ -46,9 +41,7 @@
                  Text="Просили не приходить:"/>
         <TextBox Grid.Row="3"
                  TextChanged="RestrictText"
-                 Text="{Binding Path=Doors, 
-            Converter={StaticResource StatusConverter},
-            ConverterParameter={x:Static interfaces:DoorStatus.NoWorry}}"
+                 Text="{Binding Path=NoWorryRange}"
                  ToolTip="{StaticResource Tooltip}"/>
 
         <TextBlock Grid.Row="4"
@@ -56,9 +49,7 @@
                  Text="Не беспокоить:"/>
         <TextBox Grid.Row="5"
                  TextChanged="RestrictText"
-                 Text="{Binding Path=Doors, 
-            Converter={StaticResource StatusConverter},
-            ConverterParameter={x:Static interfaces:DoorStatus.Restricted}}"
+                 Text="{Binding Path=RestrictedRange}"
                  ToolTip="{StaticResource Tooltip}"/>    
 </Grid>
 </UserControl>

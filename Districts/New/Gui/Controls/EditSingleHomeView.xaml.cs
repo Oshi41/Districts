@@ -52,7 +52,7 @@ namespace Districts.New.Gui.Controls
             temp = Regex.Replace(temp, @"(-+)", "-");
             box.Text = temp;
 
-            box.CaretIndex = carretIndex - addToCarretIndex;
+            box.CaretIndex = Math.Max(carretIndex - addToCarretIndex, 0);
         }
     }
 }
