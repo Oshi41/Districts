@@ -8,10 +8,64 @@
              xmlns:controls="clr-namespace:Districts.New.Gui.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type viewModel:MainViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type viewModel:MainViewModel}}"
+             Width="350" Height="400">
 
+    <UserControl.Resources>
+        <ResourceDictionary>
 
-    <StackPanel Orientation="Vertical">
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" SharedSizeGroup="G1"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Streets -->
+        <Button Content="Редактировать список улиц"
+                Command="{Binding Path=StreetsViewModel.SetStreetCommand}"
+                ToolTip="{Binding Path=StreetsViewModel.StreetsShort}"/>
+
+        <!-- Download -->
+        <Button Grid.Row="1"
+                Margin="0,10"
+                Content="Загрузить дома"
+                Command="{Binding Path=StreetsViewModel.SetStreetCommand}"/>
+
+        <!-- Edit homes -->
+        <Button Grid.Row="2"
+                Content="Редактировать информацию"
+                Command="{Binding Path=OpenEditHomes}"/>
+
+        <!-- Card generation -->
+        <Button Grid.Row="3"
+                Margin="0,10"
+                Content="Генерация карточек"/>
+
+        <!-- Edit homes -->
+        <Button Grid.Row="4"
+                Content="Архивация"/>
+
+        <!-- Edit homes -->
+        <Button Grid.Row="5"
+                Margin="0,10"
+                Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                Content="Помощь"/>
+    </Grid>
+
+    <!--<StackPanel Orientation="Vertical">
 
         <controls:StreetView DataContext="{Binding Path=StreetsViewModel}"/>
 
@@ -23,5 +77,5 @@
                 Margin="10"
                 Command="{Binding Path=OpenEditHomes}"/>
 
-    </StackPanel>
+    </StackPanel>-->
 </UserControl>

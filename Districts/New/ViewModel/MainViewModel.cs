@@ -17,8 +17,7 @@ namespace Districts.New.ViewModel
 
         public StreetsViewModel StreetsViewModel { get; }
         public HomesViewModel HomesViewModel { get; }
-
-        //public EditHomesViewModel EditHomesViewModel { get; }
+        
         public ICommand OpenEditHomes { get; }
 
         public MainViewModel()
@@ -38,7 +37,7 @@ namespace Districts.New.ViewModel
 
         private void OnEditHomes()
         {
-            var vm = new EditHomesViewModel(_parser);
+            var vm = new EditHomesViewModel(_parser, _provider);
 
             if (_provider.ShowDialog(vm, 400))
             {

@@ -19,14 +19,10 @@
             <Button DockPanel.Dock="Left"
                     Content="Добавить"
                     IsDefault="True"
-                    Width="80"
-                    Height="40"
                     Command="{Binding Path=AddPath}"/>
 
             <Button DockPanel.Dock="Left"
                     Content="Удалить"
-                    Width="80"
-                    Height="40"
                     Margin="10,0"
                     Command="{Binding Path=DeletePath}">
             </Button>
@@ -49,4 +45,5 @@
                         Command="{Binding Path=DeletePath}"/>
         </Grid.InputBindings>
     </Grid>
+
 </UserControl>

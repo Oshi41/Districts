@@ -41,7 +41,7 @@
                   VerticalScrollBarVisibility="Auto">
 
         <TreeView ItemsSource="{Binding StreetHomes, Mode=OneWay}"
-                  x:Name="TreeView">
+                  x:Name="TreeView" >
             <TreeView.InputBindings>
                 <KeyBinding Key="Delete"
                             Command="{Binding Delete}"/>
@@ -54,7 +54,12 @@
                     <i:InvokeCommandAction Command="{Binding SetSelection}"
                                            CommandParameter="{Binding ElementName=TreeView, Path=SelectedItem}" />
                 </i:EventTrigger>
+
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding EditHomeCommand}" />
+                </i:EventTrigger>
             </i:Interaction.Triggers>
+
         </TreeView>
     </ScrollViewer>
 </UserControl>

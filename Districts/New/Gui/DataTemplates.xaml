@@ -16,4 +16,8 @@
         <controls:EditHomes/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type viewModel:HomeVm}">
+        <controls:EditSingleHomeView/>
+    </DataTemplate>
+
 </ResourceDictionary>

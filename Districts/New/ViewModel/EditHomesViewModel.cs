@@ -17,6 +17,7 @@ namespace Districts.New.ViewModel
     class EditHomesViewModel : BindableBase
     {
         private readonly IParser _parser;
+        private readonly IDialogProvider _provider;
         private ObservableCollection<StreetVm> streets;
 
         private object _selectedItem;
@@ -27,14 +28,35 @@ namespace Districts.New.ViewModel
             set => SetProperty(ref streets, value);
         }
 
-        public EditHomesViewModel(IParser parser)
+        public EditHomesViewModel(IParser parser, IDialogProvider provider)
         {
             _parser = parser;
+            _provider = provider;
 
             Delete = new DelegateCommand(OnDelete, OnCanDelete);
             SetSelection = new DelegateCommand<object>(OnSetSelection);
+            EditHomeCommand = new DelegateCommand(OnEditHome, OnCanEdit);
 
             Refresh();
+        }
+
+        private bool OnCanEdit()
+        {
+            return _selectedItem is HomeVm;
+        }
+
+        private void OnEditHome()
+        {
+            if (_selectedItem is HomeVm vm)
+            {
+                var copy = new HomeVm(vm);
+
+                if (_provider.ShowDialog(copy, 350))
+                {
+
+                }
+            }
+           
         }
 
         private bool OnCanDelete()
@@ -74,6 +96,8 @@ namespace Districts.New.ViewModel
         public ICommand Delete { get; }
         public ICommand SetSelection { get; }
 
+        public ICommand EditHomeCommand { get; }
+
         private void Refresh()
         {
             var homes = _parser.LoadHomes().GroupBy(x => x.Street);
@@ -112,12 +136,13 @@ namespace Districts.New.ViewModel
         private int _firstDoor;
         private int _floors;
         private int _entrances;
+        private IList<iDoor> _doors;
 
         public HomeVm(iHome home)
         {
             _home = home;
 
-            Doors = home.Doors.Select(x => (iDoor)new DoorVm(x)).ToList();
+            _doors = home.Doors.Select(x => (iDoor)new DoorVm(x)).ToList();
             Comments = home.Comments;
             HasConcierge = home.HasConcierge;
             FirstDoor = home.FirstDoor;
@@ -138,7 +163,11 @@ namespace Districts.New.ViewModel
             return _home.SameObject(obj, conditions);
         }
 
-        public IList<iDoor> Doors { get; }
+        public IList<iDoor> Doors
+        {
+            get => _doors;
+            set => SetProperty(ref _doors, value);
+        }
 
         public bool HasConcierge
         {

@@ -58,7 +58,7 @@ namespace Districts.New.ViewModel
         {
             var vm = new EditStreetViewModel(_web, _streets);
 
-            if (_provider.ShowDialog(vm, 400))
+            if (_provider.ShowDialog(vm, 450))
             {
                 _parser.SaveStreets(vm.Streets);
 

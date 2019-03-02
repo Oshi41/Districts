@@ -5,7 +5,7 @@ using Districts.Settings.v1;
 namespace Districts.Views
 {
     /// <summary>
-    ///     Логика взаимодействия для MainView.xaml
+    /// Логика взаимодействия для MainView.xaml
     /// </summary>
     public partial class MainView : Window
     {
@@ -13,13 +13,14 @@ namespace Districts.Views
 
         public MainView()
         {
-            //var window = new Window
-            //{
-            //    Content = new MainViewModel()
-            //};
+            var window = new Window
+            {
+                Content = new MainViewModel(),
+                SizeToContent = SizeToContent.WidthAndHeight,
+            };
 
-            //window.ShowDialog();
-            //App.Current.Shutdown();
+            window.ShowDialog();
+            // App.Current.Shutdown();
 
             InitializeComponent();
             settings = ApplicationSettings.ReadOrCreate();
