@@ -6,6 +6,10 @@ namespace Districts.New.Interfaces
     {
         IList<iDoor> Doors { get; }
 
+        bool HasConcierge { get; }
+        int FirstDoor { get; }
+        int Floors { get; }
+        int Entrances { get; }
         string Comments { get; set; }
     }
 }

@@ -19,41 +19,6 @@ namespace Districts.Parser.v2
             _settings = settings;
         }
 
-        public void UpdateRelationships()
-        {
-            var infos = LoadHomeInfos();
-            var homes = LoadHomes();
-
-            foreach (var info in infos)
-            {
-                var home = homes.FirstOrDefault(x => x.SameObject(info));
-                if (home == null)
-                    continue;
-
-                homes.Remove(home);
-
-                var doors = home
-                    .Doors
-                    .Select(x =>
-                    {
-                        var number = -1 + x.DoorNumber + info.FirstDoor;
-                        info.Codes.TryGetValue(number, out var codes);
-                        return (iDoor)new Door(x, number, x.Entrance, x.Status, codes);
-                    });
-
-                home = new Home(home.Street, 
-                    home.HomeNumber, 
-                    home.Housing,
-                    home.AfterSlash,
-                    doors.ToList());
-
-                homes.Add(home);
-            }
-
-
-            SaveHomes(homes);
-        }
-
         #region Save
 
         /// <summary>
@@ -72,13 +37,6 @@ namespace Districts.Parser.v2
         public void SaveManagements(IList<Manage> history)
         {
             Save(history, _settings.ManagementPath, m => $"{m.Card.Number}.json");
-        }
-
-        public void SaveHomesInfo(IList<iHomeInfo> infos)
-        {
-            SaveFolders(infos.GroupBy(x => x.Street), _settings.CommonHomeInfoPath, i => $"{i}.json");
-
-            UpdateRelationships();
         }
 
         public void SaveCards(IList<Card> cards)
@@ -150,13 +108,6 @@ namespace Districts.Parser.v2
         {
             return Load<Manage>(_settings.ManagementPath)
                 .Cast<iManage>()
-                .ToList();
-        }
-
-        public IList<iHomeInfo> LoadHomeInfos()
-        {
-            return LoadFolders<Home>(_settings.CommonHomeInfoPath)
-                .Cast<iHomeInfo>()
                 .ToList();
         }
 

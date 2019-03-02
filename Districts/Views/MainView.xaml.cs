@@ -13,13 +13,13 @@ namespace Districts.Views
 
         public MainView()
         {
-            var window = new Window
-            {
-                Content = new MainViewModel()
-            };
+            //var window = new Window
+            //{
+            //    Content = new MainViewModel()
+            //};
 
-            window.ShowDialog();
-            App.Current.Shutdown();
+            //window.ShowDialog();
+            //App.Current.Shutdown();
 
             InitializeComponent();
             settings = ApplicationSettings.ReadOrCreate();

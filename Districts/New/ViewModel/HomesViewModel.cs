@@ -56,7 +56,6 @@ namespace Districts.New.ViewModel
             var homes = await _worker.DownloadHomes(_streets);
 
             _parser.SaveHomes(homes);
-            _parser.UpdateRelationships();
 
             _isWorking = true;
             _messageHelper.ShowDone();

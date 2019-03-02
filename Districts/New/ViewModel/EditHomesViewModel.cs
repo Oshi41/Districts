@@ -49,7 +49,7 @@ namespace Districts.New.ViewModel
 
         private void OnDelete()
         {
-            if (_selectedItem is StreetVm street 
+            if (_selectedItem is StreetVm street
                 && StreetHomes.Contains(street))
             {
                 StreetHomes.Remove(street);
@@ -71,8 +71,8 @@ namespace Districts.New.ViewModel
             }
         }
 
-        public ICommand Delete { get;  }
-        public ICommand SetSelection { get;  }
+        public ICommand Delete { get; }
+        public ICommand SetSelection { get; }
 
         private void Refresh()
         {
@@ -108,13 +108,21 @@ namespace Districts.New.ViewModel
     {
         private iHome _home;
         private string _comments;
+        private bool _hasConcierge;
+        private int _firstDoor;
+        private int _floors;
+        private int _entrances;
 
         public HomeVm(iHome home)
         {
             _home = home;
 
-            Doors = home.Doors.Select(x => (iDoor) new DoorVm(x)).ToList();
+            Doors = home.Doors.Select(x => (iDoor)new DoorVm(x)).ToList();
             Comments = home.Comments;
+            HasConcierge = home.HasConcierge;
+            FirstDoor = home.FirstDoor;
+            Floors = home.Floors;
+            Entrances = home.Entrances;
         }
 
         public string Street => _home.Street;
@@ -131,6 +139,30 @@ namespace Districts.New.ViewModel
         }
 
         public IList<iDoor> Doors { get; }
+
+        public bool HasConcierge
+        {
+            get => _hasConcierge;
+            set => SetProperty(ref _hasConcierge, value);
+        }
+
+        public int FirstDoor
+        {
+            get => _firstDoor;
+            set => SetProperty(ref _firstDoor, value);
+        }
+
+        public int Floors
+        {
+            get => _floors;
+            set => SetProperty(ref _floors, value);
+        }
+
+        public int Entrances
+        {
+            get => _entrances;
+            set => SetProperty(ref _entrances, value);
+        }
 
         public string Comments
         {
@@ -159,7 +191,7 @@ namespace Districts.New.ViewModel
             DoorNumber = door.DoorNumber;
             Entrance = door.Entrance;
             Status = door.Status;
-            Codes = door.Codes.Select(x => (iCode) new CodeVm(x)).ToList();
+            Codes = door.Codes.Select(x => (iCode)new CodeVm(x)).ToList();
         }
 
         public string Street => _door.Street;

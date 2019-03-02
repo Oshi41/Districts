@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Districts.Comparers;
 using Districts.Helper;
@@ -13,11 +14,13 @@ namespace Districts.Parser
 {
     public class Migrate_v1_v2
     {
+        private readonly IHomeParser _homeParser;
         private readonly v1.Parser _oldParser;
         private readonly v2.Parser _newParser;
 
-        public Migrate_v1_v2(IAppSettings settings)
+        public Migrate_v1_v2(IAppSettings settings, IHomeParser homeParser)
         {
+            _homeParser = homeParser;
             _oldParser = new v1.Parser();
             _newParser = new v2.Parser(settings);
         }
@@ -62,22 +65,33 @@ namespace Districts.Parser
             // смапировали
             var map = new HomeMap(allHomes, allCodes, allRules);
 
-            var result = new List<iHomeInfo>();
+            var homes = _newParser.LoadHomes();
 
-            foreach (var oldHome in map)
+            var comparer = new HouseNumberComparerFromString();
+
+            foreach (var full in map)
             {
-                result.Add(new CommonHomeInfo(
-                    oldHome.Building.Street,
-                    oldHome.Building.HouseNumber,
-                    oldHome
-                        .HomeInfo
-                        .AllCodes
-                        .ToDictionary(x => x.Key, x => ToCodes(x.Value)),
-                    oldHome.Building.HasConcierge,
-                    oldHome.HomeInfo.Begin));
+                var home = homes.FirstOrDefault(x => string.Equals(x.Street, full.Building.Street)
+                                                     && 0 == comparer.Compare(x.ToString(), full.Building.HouseNumber));
+                if (home == null)
+                    continue;
+
+                homes.Remove(home);
+
+                var doors = home
+                    .Doors
+                    .Select(x => ToDoor(x, full));
+
+                var copy = new Home(home, doors.ToList(),
+                    full.Building.HasConcierge,
+                    full.HomeInfo.Begin,
+                    full.Building.Floors,
+                    full.Building.Entrances);
+
+                homes.Add(home);
             }
 
-            _newParser.SaveHomesInfo(result);
+            _newParser.SaveHomes(homes);
         }
         
         private IList<iCode> ToCodes(IEnumerable<string> texts)
@@ -87,23 +101,40 @@ namespace Districts.Parser
 
         private iDoor ToDoor(Door door, ForbiddenElement element)
         {
-            var status = DoorStatus.Good;
-
-            if (element.Aggressive.Contains(door.Number))
-                status |= DoorStatus.Aggressive;
-            if (element.NoWorried.Contains(door.Number))
-                status |= DoorStatus.NoWorry;
-            if (element.NoVisit.Contains(door.Number))
-                status |= DoorStatus.Restricted;
-
-
-
             return new New.Implementation.Classes.Door(door.Street,
                 door.HouseNumber,
                 door.Number,
                 door.Entrance,
-                status,
+                GetStatus(element, door.Number),
                 ToCodes(door.Codes));
+        }
+
+        private iDoor ToDoor(iDoor door, FullHomeInfo full)
+        {
+            var number = full.HomeInfo.Begin - 1 + door.DoorNumber;
+            var entrance = _homeParser.GetEntrance(number, 
+                full.Building.Doors, 
+                full.Building.Entrances);
+
+            return new New.Implementation.Classes.Door(door,
+                number,
+                entrance,
+                GetStatus(full.ForbiddenElement, number),
+                ToCodes(full.HomeInfo.GetCodesByEntrance(entrance)));
+        }
+
+        private DoorStatus GetStatus(ForbiddenElement element, int number)
+        {
+            var status = DoorStatus.Good;
+
+            if (element.Aggressive.Contains(number))
+                status |= DoorStatus.Aggressive;
+            if (element.NoWorried.Contains(number))
+                status |= DoorStatus.NoWorry;
+            if (element.NoVisit.Contains(number))
+                status |= DoorStatus.Restricted;
+
+            return status;
         }
     }
 

@@ -45,11 +45,6 @@
         string CardsPath { get; }
 
         /// <summary>
-        /// Путь к пользовательской информации о доме
-        /// </summary>
-        string CommonHomeInfoPath { get; }
-
-        /// <summary>
         /// Читаем настройки
         /// </summary>
         void Read();

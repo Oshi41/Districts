@@ -123,7 +123,6 @@
     <Compile Include="New\Implementation\Args\MessageArgs.cs" />
     <Compile Include="New\Implementation\Classes\Card.cs" />
     <Compile Include="New\Implementation\Classes\Code.cs" />
-    <Compile Include="New\Implementation\Classes\CommonHomeInfo.cs" />
     <Compile Include="New\Implementation\Classes\Door.cs" />
     <Compile Include="New\Implementation\Classes\FindBase.cs" />
     <Compile Include="New\Implementation\Classes\Home.cs" />
@@ -137,7 +136,6 @@
     <Compile Include="New\Interfaces\iDoor.cs" />
     <Compile Include="New\Interfaces\iFind.cs" />
     <Compile Include="New\Interfaces\iHome.cs" />
-    <Compile Include="New\Interfaces\iHomeInfo.cs" />
     <Compile Include="New\Interfaces\IHomeParser.cs" />
     <Compile Include="New\Interfaces\iManage.cs" />
     <Compile Include="New\Interfaces\IMessage.cs" />

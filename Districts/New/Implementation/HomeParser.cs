@@ -60,11 +60,8 @@ namespace Districts.New.Implementation
 
             Tracer.Tracer.Instance.Write($"Parsed home - {street} {houseNumber}");
 
-            return new Home(street, houseNumber, result)
-                .WithComments(elevators);
+            return new Home(street, houseNumber, result, false, 1, floors, entrances);
         }
-
-        #region helping
 
         /// <summary>
         /// Высчитывает подъезд, в котором находится
@@ -73,7 +70,7 @@ namespace Districts.New.Implementation
         /// <param name="total">Всего квартир</param>
         /// <param name="totalEntrances">Всего подъездов</param>
         /// <returns></returns>
-        private int GetEntrance(int door, int total, int totalEntrances)
+        public int GetEntrance(int door, int total, int totalEntrances)
         {
             // квартиры в подъезде
             var onEntrance = Math.Ceiling((double)total / totalEntrances);
@@ -89,6 +86,8 @@ namespace Districts.New.Implementation
 
             return 1;
         }
+
+        #region helping
 
         /// <summary>
         ///     Находит значене по имени ноды
