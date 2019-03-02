@@ -17,5 +17,11 @@
 
         <controls:HomesView DataContext="{Binding Path=HomesViewModel}"/>
 
+        <Button Content="Открыть скачанные дома"
+                HorizontalAlignment="Left"
+                Padding="15"
+                Margin="10"
+                Command="{Binding Path=OpenEditHomes}"/>
+
     </StackPanel>
 </UserControl>

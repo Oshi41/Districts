@@ -11,5 +11,9 @@
     <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
         <controls:MainView/>
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type viewModel:EditHomesViewModel}">
+        <controls:EditHomes/>
+    </DataTemplate>
+
 </ResourceDictionary>

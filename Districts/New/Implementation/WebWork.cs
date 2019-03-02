@@ -60,7 +60,8 @@ namespace Districts.New.Implementation
 
                     // скачали инфу о всех домах
                     var parsed = streetHomes
-                        .Select(async x => await _homeParser.DownloadAndParse(x));
+                        .Select(async x => await _homeParser.DownloadAndParse(x))
+                        .ToList();
 
                     // подожжём пока все скачается
                     await Task.WhenAll(parsed);

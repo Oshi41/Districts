@@ -11,6 +11,7 @@ namespace Districts.Tracer
     /// </summary>
     public class Tracer : ITrace
     {
+        private readonly object _obj = new object();
         public static ITrace Instance => _instance ?? (_instance = new Tracer(IoC.Instance.Get<IAppSettings>().LogsPath));
         private static ITrace _instance;
 
@@ -40,9 +41,10 @@ namespace Districts.Tracer
         /// <param name="message"></param>
         public void Write(string message)
         {
-            File.AppendAllText(_filename, $@"{GetTime()}{message}
-
-");
+            lock (_obj)
+            {
+                File.AppendAllText(_filename, $"{GetTime()}{message}\n\n");
+            }
         }
 
         /// <summary>

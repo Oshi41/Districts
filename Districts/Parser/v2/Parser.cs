@@ -193,7 +193,7 @@ namespace Districts.Parser.v2
 
             return files
                 .Select(x => JsonConvert
-                    .DeserializeObject<T>(File.ReadAllText(x)));
+                    .DeserializeObject<T>(File.ReadAllText(Path.Combine(folder, x))));
         }
 
         private void Save<T>(IList<T> items, string folder, Func<T, string> fileName)
@@ -205,7 +205,8 @@ namespace Districts.Parser.v2
 
             foreach (var item in items)
             {
-                File.WriteAllText(fileName(item), JsonConvert.SerializeObject(item, Formatting.Indented));
+                var path = Path.Combine(folder, fileName(item));
+                File.WriteAllText(path, JsonConvert.SerializeObject(item, Formatting.Indented));
             }
         }
 

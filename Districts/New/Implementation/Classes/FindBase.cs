@@ -107,7 +107,7 @@ namespace Districts.New.Implementation.Classes
 
             if (AfterSlash >= 0)
             {
-                result += "/ " + AfterSlash;
+                result += $" ({AfterSlash})";
             }
 
             return result;
