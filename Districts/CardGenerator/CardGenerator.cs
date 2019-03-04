@@ -17,7 +17,7 @@ namespace Districts.CardGenerator
     /// <summary>
     ///     Генератор карточек
     /// </summary>
-    internal class CardGenerator
+    public class CardGenerator
     {
         /// <summary>
         ///     настройки приложения

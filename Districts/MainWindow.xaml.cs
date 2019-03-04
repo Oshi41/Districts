@@ -10,8 +10,6 @@ namespace Districts
         public MainWindow()
         {
             InitializeComponent();
-
-            Tests.Tests.StartTests();
         }
     }
 }

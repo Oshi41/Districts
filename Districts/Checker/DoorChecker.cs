@@ -9,7 +9,7 @@ namespace Districts.Checker
     /// <summary>
     ///     Класс для проверки созданных карточек на повторения квартир
     /// </summary>
-    internal class DoorChecker
+    public class DoorChecker
     {
         /// <summary>
         ///     Возвращает список повторяющихся дверей
