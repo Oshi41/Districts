@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Districts.Views.Controls.EditStreetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Districts.Views.Controls"
+             xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type={x:Type tabsVm:EditStreetViewModel}}">
+   
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel>
+            <Button DockPanel.Dock="Left"
+                    Padding="4"
+                    Content="Добавить"
+                    Command="{Binding Path=AddCommand}"/>
+
+            <Button DockPanel.Dock="Left"
+                    Padding="4"
+                    Margin="10 0"
+                    Content="Удалить"
+                    Command="{Binding Path=RemoveCommand}"/>
+
+            <ComboBox IsEditable="True"
+                      VerticalContentAlignment="Center"
+                      Text="{Binding Path=CurrentText, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding Path=Hints}"
+                      IsDropDownOpen="{Binding Path=IsOpen}"/>
+        </DockPanel>
+
+        <ListBox Grid.Row="1"
+                 Margin="0,5,0,0"
+                 Grid.IsSharedSizeScope="True"
+                 ItemsSource="{Binding Path=Streets}"
+                 SelectedValue="{Binding Path=SelectedStreet}">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

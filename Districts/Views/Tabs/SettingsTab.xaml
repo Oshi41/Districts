@@ -57,34 +57,28 @@
                 </HeaderedContentControl>
 
                 <HeaderedContentControl Header="Улицы">
-                    <TextBox x:Name="StreetBox"
-                             Padding="0 5 0 0"
-                             FontSize="18"
-                             Height="200"
-                             Text="{Binding Streets}"
-                             BorderThickness="1"
-                             TextWrapping="Wrap"
-                             VerticalAlignment="Stretch"
-                             AcceptsReturn="True"
-                             VerticalScrollBarVisibility="Auto"
-                             HorizontalScrollBarVisibility="Disabled" />
+
+                    <controls1:EditStreetsView DataContext="{Binding Path=EditStreetViewModel}"
+                                               Height="200"/>
                 </HeaderedContentControl>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="32*"/>
+                        <ColumnDefinition Width="19*"/>
                     </Grid.ColumnDefinitions>
 
                     <Button Content="По умолчанию"
-                            Margin="5"
+                            Margin="5,5,4,5"
                             Padding="4 2"
                             Command="{Binding Path=SaveDefault}"
                             Click="CloseSettingsEdit" />
 
                     <Button Grid.Column="1"
                             Content="Сохранить"
-                            Margin="5"
+                            Margin="6,5,3,5"
                             Padding="4 2"
                             Command="{Binding SaveSettings}"
                             Click="CloseSettingsEdit" />

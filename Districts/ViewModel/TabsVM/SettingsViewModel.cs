@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Districts.Helper;
 using Districts.MVVM;
 using Districts.Settings;
+using Districts.WebRequest;
 
 namespace Districts.ViewModel.TabsVM
 {
@@ -20,6 +21,8 @@ namespace Districts.ViewModel.TabsVM
 
         private double _maxDoors;
         private string _streets;
+        private string _currentText;
+        private EditStreetViewModel _editStreetViewModel;
 
 
         public SettingsViewModel()
@@ -32,6 +35,12 @@ namespace Districts.ViewModel.TabsVM
         public ICommand ToggleSettingsLoad { get; set; }
         public ICommand SaveSettings { get; set; }
         public ICommand SaveDefault { get; set; }
+
+        public EditStreetViewModel EditStreetViewModel
+        {
+            get => _editStreetViewModel;
+            set => Set(ref _editStreetViewModel, value);
+        }
 
 
         // Оставил, может пригодится
@@ -107,17 +116,6 @@ namespace Districts.ViewModel.TabsVM
             }
         }
 
-        public string Streets
-        {
-            get => _streets;
-            set
-            {
-                if (value == _streets) return;
-                _streets = value;
-                OnPropertyChanged();
-            }
-        }
-
         public string BaseFolderPath
         {
             get => _baseFolderPath;
@@ -129,6 +127,11 @@ namespace Districts.ViewModel.TabsVM
             }
         }
 
+        public string CurrentText
+        {
+            get => _currentText;
+            set => Set(ref _currentText, value);
+        }
 
         private void OnSaveDefault()
         {
@@ -143,7 +146,7 @@ namespace Districts.ViewModel.TabsVM
             var settings = ApplicationSettings.GetDefault();
 
             settings.BaseFolder = BaseFolderPath;
-            settings.MaxDoors = (int) MaxDoors;
+            settings.MaxDoors = (int)MaxDoors;
             //settings.BuildingPath = BuildingPath;
             //settings.CardsPath = CardsPath;
             //settings.HomeInfoPath = HomeInfoPath;
@@ -153,7 +156,7 @@ namespace Districts.ViewModel.TabsVM
 
             settings.Write();
 
-            var text = Streets.RemoveEmptyLines();
+            var text = string.Join("\n", EditStreetViewModel.Streets);
             try
             {
                 File.WriteAllText(settings.StreetsPath, text);
@@ -181,8 +184,12 @@ namespace Districts.ViewModel.TabsVM
                 //LogPath = settings.LogPath;
                 //ManageRecordsPath = settings.ManageRecordsPath;
 
-                var temp = File.ReadAllText(settings.StreetsPath);
-                Streets = temp.RemoveEmptyLines();
+                var temp = File
+                        .ReadAllText(settings.StreetsPath)
+                        .RemoveEmptyLines()
+                        .Split('\n');
+
+                EditStreetViewModel = new EditStreetViewModel(temp, new StreetDownloader());
             }
             else
             {
@@ -194,7 +201,7 @@ namespace Districts.ViewModel.TabsVM
                 //RestrictionsPath = null;
                 //LogPath = null;
                 //ManageRecordsPath = null;
-                Streets = null;
+                EditStreetViewModel = null;
             }
         }
     }

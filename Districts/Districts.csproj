@@ -120,6 +120,7 @@
     <Compile Include="ViewModel\StreetViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\BackupViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\DownloadViewModel.cs" />
+    <Compile Include="ViewModel\TabsVM\EditStreetViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\GenerateViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\ManageViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\OpenFolderViewModel.cs" />
@@ -127,6 +128,9 @@
     <Compile Include="ViewModel\TabsVM\SettingsViewModel.cs" />
     <Compile Include="ViewModel\TabsVM\TreeViewModel.cs" />
     <Compile Include="Views\Controls\DataGridWithCommand.cs" />
+    <Compile Include="Views\Controls\EditStreetsView.xaml.cs">
+      <DependentUpon>EditStreetsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Converter\EnumToDescrConverter.cs" />
     <Compile Include="Views\Controls\FindTextBox.xaml.cs">
       <DependentUpon>FindTextBox.xaml</DependentUpon>
@@ -213,6 +217,10 @@
     <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\EditStreetsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\FindTextBox.xaml">
       <SubType>Designer</SubType>

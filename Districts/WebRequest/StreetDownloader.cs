@@ -12,11 +12,17 @@ using Newtonsoft.Json;
 
 namespace Districts.WebRequest
 {
-    public class StreetDownloader
+    public interface IStreetDownloader
+    {
+        int MaxAPI { get; }
+        Task<List<Building>> DownloadStreet(string street);
+        Task<List<StreetDownloader.HomeJson>> RequestHomes(string name);
+    }
+
+    public class StreetDownloader : IStreetDownloader
     {
         private static readonly string _uriStrFormat = "http://www.dom.mos.ru/Lookups/GetSearchAutoComplete?term={0}&section=Buildings";
 
-        private static readonly int _apiMax = 50;
         private static readonly int _maxBuilding = 1000;
 
         #region Nested class
@@ -30,12 +36,17 @@ namespace Districts.WebRequest
 
             public string GetStreetName()
             {
+                return Compress(GetFullStreetName());
+            }
+
+            public string GetFullStreetName()
+            {
                 if (string.IsNullOrWhiteSpace(label))
                     return string.Empty;
 
                 var start = label.IndexOf(",", StringComparison.Ordinal);
                 var result = label.Substring(0, start);
-                return Compress(result);
+                return result;
             }
 
             private string Compress(string text)
@@ -110,6 +121,8 @@ namespace Districts.WebRequest
 
         #region Web Request
 
+        public int MaxAPI => 50;
+
         public async Task<List<Building>> DownloadStreet(string street)
         {
             var result = new List<Building>();
@@ -135,28 +148,28 @@ namespace Districts.WebRequest
         private async Task<List<HomeJson>> DownloadWholeStreet(string street)
         {
             var quarry = string.Format(_uriStrFormat, street);
-            var result = await GetParsedResponse(quarry);
+            var result = await RequestHomes(quarry);
 
-            if (result.Count <= _apiMax)
+            if (result.Count <= MaxAPI)
                 return result;
 
             // list of all homes
             var dict = new ConcurrentDictionary<string, HomeJson>();
 
-            result.RemoveAt(_apiMax);
+            result.RemoveAt(MaxAPI);
             foreach (var json in result)
             {
                 dict[json.label] = json;
             }
 
             var tasks = new List<Task>();
-            for (int i = 1; i < _maxBuilding / _apiMax; i++)
+            for (int i = 1; i < _maxBuilding / MaxAPI; i++)
             {
                 tasks.Add(Task.Run(async () =>
                 {
-                    var parsed = await GetParsedResponse(string.Format(_uriStrFormat, $"{street} {i}"));
+                    var parsed = await RequestHomes(street + " " + i);
 
-                    foreach (var json in parsed.Take(_apiMax).ToList())
+                    foreach (var json in parsed.Take(MaxAPI).ToList())
                     {
                         dict.TryAdd(json.label, json);
                     }
@@ -168,14 +181,16 @@ namespace Districts.WebRequest
             return dict.Values.ToList();
         }
 
-        private async Task<List<HomeJson>> GetParsedResponse(string uri)
+        public async Task<List<HomeJson>> RequestHomes(string name)
         {
             string result;
+            string quarry = string.Format(_uriStrFormat, name);
+
             using (var client = new WebClient())
             {
                 client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
                 client.Encoding = Encoding.UTF8;
-                result = await client.DownloadStringTaskAsync(uri);
+                result = await client.DownloadStringTaskAsync(quarry);
             }
 
             return JsonConvert.DeserializeObject<List<HomeJson>>(result) ?? new List<HomeJson>();
