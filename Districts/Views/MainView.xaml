@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Districts.Views"
         xmlns:tabs="clr-namespace:Districts.Views.Tabs"
         xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
+        xmlns:viewModel="clr-namespace:Districts.ViewModel"
         mc:Ignorable="d"
         Title="Генерация участков" Height="500" Width="625">
 
@@ -56,6 +57,13 @@
             </TabItem.DataContext>
 
             <tabs:ManageTab />
+        </TabItem>
+        <TabItem Header="Переслать текст карточки">
+            <TabItem.DataContext>
+                <viewModel:CopyCardViewModel />
+            </TabItem.DataContext>
+
+            <tabs:CopyCardTab />
         </TabItem>
         <TabItem Header="Архивирование">
             <TabItem.DataContext>

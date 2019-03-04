@@ -109,6 +109,7 @@
     <Compile Include="Printing\CustomDocumentPaginator.cs" />
     <Compile Include="Printing\FastCardPrinter.cs" />
     <Compile Include="Settings\ApplicationSettings.cs" />
+    <Compile Include="ViewModel\TabsVM\CopyCardViewModel.cs" />
     <Compile Include="ViewModel\EditHomeInfoViewModel.cs" />
     <Compile Include="ViewModel\EditTreeViewModel.cs" />
     <Compile Include="ViewModel\Manage\ActionViewModel.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Views\Converter\InvertBoolConverter.cs" />
     <Compile Include="Views\Converter\MathConverter.cs" />
     <Compile Include="Views\Converter\MultiBoolValueConverter.cs" />
+    <Compile Include="Views\Converter\DoorStrComparer.cs" />
     <Compile Include="Views\EditHomeInfo.xaml.cs">
       <DependentUpon>EditHomeInfo.xaml</DependentUpon>
     </Compile>
@@ -165,6 +167,9 @@
     </Compile>
     <Compile Include="Views\Tabs\BackupTab.xaml.cs">
       <DependentUpon>BackupTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\CopyCardTab.xaml.cs">
+      <DependentUpon>CopyCardTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\DownloadTab.xaml.cs">
       <DependentUpon>DownloadTab.xaml</DependentUpon>
@@ -255,6 +260,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\BackupTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\CopyCardTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

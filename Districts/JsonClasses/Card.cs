@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Districts.Comparers;
+using Districts.Helper;
 
 namespace Districts.JsonClasses
 {
@@ -46,5 +48,28 @@ namespace Districts.JsonClasses
         }
 
         #endregion
+
+        //#region Overrides of Object
+
+        //public string ToString(bool sorted = true)
+        //{
+        //    var doors = Doors.ToList();
+
+        //    if (sorted)
+        //    {
+        //        var comparer = new HouseNumberComparerFromDoor(new HouseNumberComparerFromString());
+        //        doors.Sort(comparer);
+        //    }
+        //    else
+        //    {
+        //        doors = doors.Shuffle().ToList();
+        //    }
+
+        //    return string.Join("\n", doors
+        //        .Select(x => $"{x.Street,40} {x.HouseNumber,6} " +
+        //                     $"{x.Number,3} {string.Join(", ", x.Codes)}"));
+        //}
+
+        //#endregion
     }
 }
