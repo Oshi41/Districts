@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,8 +14,10 @@ namespace Districts.WebRequest
 {
     public class StreetDownloader
     {
-        private static readonly string BaseUri = "http://www.dom.mos.ru/Lookups/GetSearchAutoComplete?term=";
-        private static readonly string FindHousePrefix = "&section=Buildings";
+        private static readonly string _uriStrFormat = "http://www.dom.mos.ru/Lookups/GetSearchAutoComplete?term={0}&section=Buildings";
+
+        private static readonly int _apiMax = 50;
+        private static readonly int _maxBuilding = 1000;
 
         #region Nested class
 
@@ -89,6 +93,17 @@ namespace Districts.WebRequest
 
                 return text;
             }
+
+            public override bool Equals(object obj)
+            {
+                return obj is HomeJson json
+                       && string.Equals(label, json.label);
+            }
+
+            public override int GetHashCode()
+            {
+                return 0;
+            }
         }
 
         #endregion
@@ -97,11 +112,9 @@ namespace Districts.WebRequest
 
         public async Task<List<Building>> DownloadStreet(string street)
         {
-            var sendRequest = GetUri(street);
-            var json = await GetJsonResponse(sendRequest);
             var result = new List<Building>();
+            var value = await DownloadWholeStreet(street);
 
-            var value = JsonConvert.DeserializeObject<List<HomeJson>>(json);
             foreach (var oneHome in value)
             {
                 var homeDownloader = new HomeDownloader();
@@ -113,13 +126,49 @@ namespace Districts.WebRequest
             return result;
         }
 
-        private string GetUri(string rusName)
+        /// <summary>
+        /// Скачивает уникальный дома
+        /// <para>Необходимо, т.к API возвращает 50 результатов.</para>
+        /// </summary>
+        /// <param name="street"></param>
+        /// <returns>Делает 20 запросов на каждую улицу, мб переделать, но в скорости потеряем</returns>
+        private async Task<List<HomeJson>> DownloadWholeStreet(string street)
         {
-            var request = HttpUtility.UrlEncode(rusName);
-            return BaseUri + request + FindHousePrefix;
+            var quarry = string.Format(_uriStrFormat, street);
+            var result = await GetParsedResponse(quarry);
+
+            if (result.Count <= _apiMax)
+                return result;
+
+            // list of all homes
+            var dict = new ConcurrentDictionary<string, HomeJson>();
+
+            result.RemoveAt(_apiMax);
+            foreach (var json in result)
+            {
+                dict[json.label] = json;
+            }
+
+            var tasks = new List<Task>();
+            for (int i = 1; i < _maxBuilding / _apiMax; i++)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    var parsed = await GetParsedResponse(string.Format(_uriStrFormat, $"{street} {i}"));
+
+                    foreach (var json in parsed.Take(_apiMax).ToList())
+                    {
+                        dict.TryAdd(json.label, json);
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+
+            return dict.Values.ToList();
         }
 
-        private async Task<string> GetJsonResponse(string uri)
+        private async Task<List<HomeJson>> GetParsedResponse(string uri)
         {
             string result;
             using (var client = new WebClient())
@@ -129,7 +178,7 @@ namespace Districts.WebRequest
                 result = await client.DownloadStringTaskAsync(uri);
             }
 
-            return result;
+            return JsonConvert.DeserializeObject<List<HomeJson>>(result) ?? new List<HomeJson>();
         }
 
         #endregion

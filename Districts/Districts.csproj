@@ -88,7 +88,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include=".Tests\Tests.cs" />
     <Compile Include="Backup\BackupManager.cs" />
     <Compile Include="Behaviors\BlockTabsBehavior.cs" />
     <Compile Include="Behaviors\TabSwitchBehavior.cs" />
