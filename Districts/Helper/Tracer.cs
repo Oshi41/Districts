@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Timers;
 using Districts.Settings;
 
 namespace Districts.Helper
@@ -10,53 +13,99 @@ namespace Districts.Helper
     /// </summary>
     public class Tracer
     {
-        protected static Tracer Instance = new Tracer();
+        #region Static
+
+        private static readonly object _lock = new object();
+        private static Tracer _instance;
+
+        public static Tracer Instance
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _instance ?? (_instance = new Tracer());
+                }
+            }
+        }
+        
+
+        #endregion
+
+        private readonly object _writerLock = new object();
+        private readonly ConcurrentQueue<string> _messages = new ConcurrentQueue<string>();
+        private readonly Timer _timer;
         private readonly string _filename;
 
         private Tracer()
         {
-            _filename = Path.Combine(ApplicationSettings.ReadOrCreate().LogPath, Guid.NewGuid().ToString());
-            var stream = File.CreateText(_filename);
-            stream.Close();
+            _filename = Path.Combine(ApplicationSettings.ReadOrCreate().LogPath, DateTime.Now.ToShortDateString() + ".log");
+
+            if (!File.Exists(_filename))
+                File.CreateText(_filename).Close();
+
+            _timer = new Timer(500);
+            _timer.Elapsed += TryWriteToFile;
         }
 
-        /// <summary>
-        ///     Возвращает время в данный момент
-        /// </summary>
-        /// <returns></returns>
-        private static string GetTime()
+        private void TryWriteToFile(object sender, ElapsedEventArgs e)
         {
-            var time = DateTime.Now;
-            var timeToWrite = $"{time.Hour}:{time.Minute}:{time.Second}  ->  ";
-            return timeToWrite;
+            try
+            {
+                lock (_writerLock)
+                {
+                    while (!_messages.IsEmpty)
+                    {
+                        if (_messages.TryDequeue(out var msg))
+                        {
+                            File.AppendAllText(_filename, msg);
+                        }
+                    }
+
+                    _timer.Stop();
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+        }
+
+        private void EnqueueMessage(string msg)
+        {
+            _messages.Enqueue(msg);
+
+            lock (_writerLock)
+            {
+                _timer.Start();
+            }
         }
 
         /// <summary>
-        ///     Записывает сообщение
+        /// Записывает сообщение
         /// </summary>
         /// <param name="message"></param>
-        public static void Write(string message)
+        /// <param name="file">Имя файла</param>
+        /// <param name="lineNumer">Номер строчки</param>
+        public static void Write(string message, [CallerMemberName] string file = null, [CallerLineNumber] int lineNumer = -1)
         {
-            File.AppendAllText(Instance._filename, $"{GetTime()}{message}\n\n");
+            var now = DateTime.Now;
+            var msg = $"{now:hh:mm:ss.FFF} [{file}] [{lineNumer}] -> {message}\n";
+
+            Instance.EnqueueMessage(msg);
         }
 
         /// <summary>
         ///     Пишет ошибку
         /// </summary>
         /// <param name="e">Исключение</param>
-        /// <param name="message">Сообщение пользователя</param>
         /// <param name="file"></param>
-        /// <param name="lineNumer"></param>
-        public static void WriteError(Exception e, string message = null,
+        /// <param name="lineNumber"></param>
+        public static void WriteError(Exception e,
             [CallerMemberName] string file = null,
-            [CallerLineNumber] int lineNumer = -1)
+            [CallerLineNumber] int lineNumber = -1)
         {
-            var result = $"{GetTime()} File - \'{file}\',line\'{lineNumer}\' ОШИБКА\n" +
-                         (string.IsNullOrEmpty(message)
-                             ? string.Empty
-                             : message + "\n") +
-                         $"{e.Message}\n\n";
-            Write(result);
+            Write($"ОШИБКА: {e.Message}", file, lineNumber);
         }
     }
 }
