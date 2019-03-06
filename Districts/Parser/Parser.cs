@@ -24,7 +24,7 @@ namespace Districts.Parser
         public void SaveManage(List<CardManagement> manage)
         {
             SaveFiles(ApplicationSettings.ReadOrCreate().ManageRecordsPath,
-                manage.Select(x => new KeyValuePair<string, CardManagement>(x.Number.ToString(), x))
+                manage.Select(x => new KeyValuePair<string, CardManagement>($"{x.Number}.json", x))
                     .ToList());
         }
 
@@ -37,7 +37,7 @@ namespace Districts.Parser
         {
             SaveFiles(ApplicationSettings.ReadOrCreate().CardsPath, 
                 cards
-                    .Select(x => new KeyValuePair<string, Card>(x.Number.ToString(), x))
+                    .Select(x => new KeyValuePair<string, Card>($"{x.Number}.json", x))
                     .ToList());
         }
 
@@ -50,7 +50,8 @@ namespace Districts.Parser
 
         public void SaveRules(List<ForbiddenElement> rules)
         {
-            SaveFiles(ApplicationSettings.ReadOrCreate().RestrictionsPath, rules.GroupBy(x => x.Street));
+            SaveFiles(ApplicationSettings.ReadOrCreate().RestrictionsPath, 
+                rules.GroupBy(x => $"{x.Street}.json"));
         }
 
         public List<HomeInfo> LoadCodes()
@@ -62,7 +63,8 @@ namespace Districts.Parser
 
         public void SaveCodes(List<HomeInfo> codes)
         {
-            SaveFiles(ApplicationSettings.ReadOrCreate().HomeInfoPath, codes.GroupBy(x => x.Street));
+            SaveFiles(ApplicationSettings.ReadOrCreate().HomeInfoPath, 
+                codes.GroupBy(x => $"{x.Street}.json"));
         }
 
         #endregion
@@ -108,6 +110,9 @@ namespace Districts.Parser
 
         private void Save(string file, object value)
         {
+            if (!Directory.Exists(Path.GetDirectoryName(file)))
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
+
             if (!File.Exists(file))
             {
                 File.Create(file).Close();

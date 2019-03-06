@@ -84,7 +84,6 @@ namespace Tests
 
             parser.SaveCards(newCards);
 
-
             Task.WaitAll(api.Download());
 
             var loaded = parser.LoadCards();
