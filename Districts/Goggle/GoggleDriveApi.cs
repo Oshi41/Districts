@@ -7,10 +7,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Districts.Helper;
+using Districts.JsonClasses;
+using Districts.JsonClasses.Manage;
+using Districts.Parser;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Newtonsoft.Json;
 using File = Google.Apis.Drive.v3.Data.File;
 
 namespace Districts.Goggle
@@ -49,6 +53,8 @@ namespace Districts.Goggle
     {
         #region Fields
 
+        private readonly string _fileName = "1.json";
+
         /// <summary>
         /// Данные для авторизации
         /// </summary>
@@ -62,7 +68,7 @@ namespace Districts.Goggle
         /// <summary>
         /// Разрешения приложения
         /// </summary>
-        private readonly string[] _scopes = {DriveService.Scope.DriveAppdata };
+        private readonly string[] _scopes = { DriveService.Scope.DriveAppdata };
 
         /// <summary>
         /// Папка где хранится кэш
@@ -73,8 +79,6 @@ namespace Districts.Goggle
         /// Подключение к API Goggle Drive
         /// </summary>
         private DriveService _driveService;
-
-        private string _appFolder;
 
         #endregion
 
@@ -94,14 +98,43 @@ namespace Districts.Goggle
         #region Implementation of IGoggleDriveApi
 
         public string AppFolder { get; }
+
         public async Task Upload()
         {
+            using (var memory =
+                new MemoryStream(
+                    Encoding.UTF8.GetBytes(
+                        JsonConvert.SerializeObject(
+                            new google_data(
+                                new Parser.Parser())))))
+            {
+                var folder = await GetFolder();
 
+                var meta = new File
+                {
+                    Name = _fileName,
+                    Parents = new List<string>
+                    {
+                        folder.Id
+                    }
+                };
+
+                var req = _driveService.Files.Create(
+                    meta, memory, "text/x-json");
+                req.Fields = "id";
+
+                var resp = await req.UploadAsync(_cancellation.Token);
+
+                if (resp.Exception != null)
+                {
+                    Tracer.WriteError(resp.Exception);
+                }
+            }
         }
 
         public async Task Download()
         {
-            throw new NotImplementedException();
+            var folder = await GetFolder();
         }
 
         public async Task ConnectAsync(string login)
@@ -139,22 +172,8 @@ namespace Districts.Goggle
         /// </summary>
         /// <returns></returns>
         private async Task CheckFolder()
-        {
-            // создал запрос
-            var request = _driveService
-                .Files
-                .List();
-
-            // заполнил запрос
-            request.PageSize = 5;
-            request.Q = $"name='{AppFolder}'";
-            request.Fields = "files(name)";
-
-            // выполнил запрос
-            var response = await request.ExecuteAsync(_cancellation.Token);
-
-            // если нашли папку, выходим
-            if (response.Files.Any())
+        {// если нашли папку, выходим
+            if (await GetFolder() != null)
                 return;
 
             var meta = new File
@@ -169,5 +188,49 @@ namespace Districts.Goggle
 
             Tracer.Write($"Created folder - {file.Id}");
         }
+
+        private async Task<File> GetFolder()
+        {
+            // создал запрос
+            var request = _driveService
+                .Files
+                .List();
+
+            // заполнил запрос
+            request.PageSize = 5;
+            request.Q = $"name='{AppFolder}'";
+            request.Fields = "files(name, id)";
+
+            // выполнил запрос
+            var response = await request.ExecuteAsync(_cancellation.Token);
+
+            return response.Files.FirstOrDefault();
+        }
+
+        #region Nested
+
+        class google_data
+        {
+            private readonly IParser _parser;
+
+            public google_data(IParser parser)
+            {
+                _parser = parser;
+
+                Cards = _parser.LoadCards();
+                Codes = _parser.LoadCodes();
+                Managements = _parser.LoadManage();
+                Restrictions = _parser.LoadRules();
+            }
+
+            public List<Card> Cards { get; }
+            public List<HomeInfo> Codes { get; }
+            public List<CardManagement> Managements { get; }
+            public List<ForbiddenElement> Restrictions { get; }
+        }
+
+        #endregion
     }
+
+
 }

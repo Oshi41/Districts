@@ -18,6 +18,7 @@ namespace Tests
             var login = "user";
             var api = new GoggleDriveApi(Districts.Properties.Resources.credentials, "tokens");
             Task.WaitAll(api.ConnectAsync(login));
+            Task.WaitAll(api.Upload());
         }
     }
 }
