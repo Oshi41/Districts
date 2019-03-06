@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Districts.Parser
 {
-    class Parser : IParser
+    public class Parser : IParser
     {
         #region Implementation of IParser
 
@@ -23,8 +23,9 @@ namespace Districts.Parser
 
         public void SaveManage(List<CardManagement> manage)
         {
-            SaveFiles(ApplicationSettings.ReadOrCreate().ManageRecordsPath, 
-                manage.ToDictionary(x => x.Number.ToString(), x => x));
+            SaveFiles(ApplicationSettings.ReadOrCreate().ManageRecordsPath,
+                manage.Select(x => new KeyValuePair<string, CardManagement>(x.Number.ToString(), x))
+                    .ToList());
         }
 
         public List<Card> LoadCards()
@@ -35,7 +36,9 @@ namespace Districts.Parser
         public void SaveCards(List<Card> cards)
         {
             SaveFiles(ApplicationSettings.ReadOrCreate().CardsPath, 
-                cards.ToDictionary(x => x.Number.ToString(), x => x.Doors));
+                cards
+                    .Select(x => new KeyValuePair<string, Card>(x.Number.ToString(), x))
+                    .ToList());
         }
 
         public List<ForbiddenElement> LoadRules()
@@ -79,8 +82,11 @@ namespace Districts.Parser
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(file));
         }
 
-        private void SaveFiles<T>(string folder, Dictionary<string, T> grouped)
+        private void SaveFiles<T>(string folder, IList<KeyValuePair<string, T>> grouped)
         {
+            if (!grouped.Any())
+                return;
+
             if (Directory.Exists(folder))
                 Directory.Delete(folder, true);
 
@@ -88,17 +94,25 @@ namespace Districts.Parser
 
             foreach (var file in grouped)
             {
-                Save(file.Key, file.Value);
+                Save(Path.Combine(folder, file.Key), file.Value);
             }
         }
 
         private void SaveFiles<T>(string folder, IEnumerable<IGrouping<string, T>> grouped)
         {
-            SaveFiles(folder, grouped.ToDictionary(x => x.Key, x => x.GetEnumerator().ToList()));
+            SaveFiles(folder, grouped
+                .ToDictionary(x => x.Key,
+                    x => x.GetEnumerator().ToList())
+                .ToList());
         }
 
         private void Save(string file, object value)
         {
+            if (!File.Exists(file))
+            {
+                File.Create(file).Close();
+            }
+
             File.WriteAllText(file, JsonConvert.SerializeObject(value, Formatting.Indented));
         }
 

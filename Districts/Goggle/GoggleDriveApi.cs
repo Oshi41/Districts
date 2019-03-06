@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -12,8 +13,10 @@ using Districts.JsonClasses.Manage;
 using Districts.Parser;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
+using Google.Apis.Json;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using Ionic.Zip;
 using Newtonsoft.Json;
 using File = Google.Apis.Drive.v3.Data.File;
 
@@ -101,40 +104,49 @@ namespace Districts.Goggle
 
         public async Task Upload()
         {
-            using (var memory =
-                new MemoryStream(
-                    Encoding.UTF8.GetBytes(
-                        JsonConvert.SerializeObject(
-                            new google_data(
-                                new Parser.Parser())))))
+            var file = await GetFile();
+
+            var compressed = new ZipFile();
+            compressed.AddEntry(_fileName, 
+                JsonConvert.SerializeObject(new google_data()), Encoding.UTF8);
+
+            using (var stream = new MemoryStream())
             {
-                var folder = await GetFolder();
+                compressed.Save(stream);
 
-                var meta = new File
+                var request = _driveService.Files.Update(new File(), file.Id, stream, file.MimeType);
+                request.AddParents = file.Parents.FirstOrDefault();
+
+                var result = await request.UploadAsync(_cancellation.Token);
+
+                if (result.Exception != null)
                 {
-                    Name = _fileName,
-                    Parents = new List<string>
-                    {
-                        folder.Id
-                    }
-                };
-
-                var req = _driveService.Files.Create(
-                    meta, memory, "text/x-json");
-                req.Fields = "id";
-
-                var resp = await req.UploadAsync(_cancellation.Token);
-
-                if (resp.Exception != null)
-                {
-                    Tracer.WriteError(resp.Exception);
+                    throw result.Exception;
                 }
             }
         }
 
         public async Task Download()
         {
-            var folder = await GetFolder();
+            var file = await GetFile();
+            var request = _driveService.Files.Get(file.Id);
+            var compressed = new MemoryStream();
+            var result = await request.DownloadAsync(compressed);
+
+            if (result.Exception != null)
+            {
+                Tracer.WriteError(result.Exception);
+            }
+
+            using (var zip = new ZipArchive(compressed))
+            {
+                var info = NewtonsoftJsonSerializer
+                    .Instance
+                    .Deserialize<google_data>(
+                        zip.GetEntry(_fileName).Open());
+
+                info.Save();
+            }
         }
 
         public async Task ConnectAsync(string login)
@@ -156,8 +168,6 @@ namespace Districts.Goggle
             _driveService = new DriveService(initializer);
 
             Tracer.Write($"Connected to Google Drive as {login}");
-
-            await CheckFolder();
         }
 
         public void Cancel()
@@ -167,30 +177,11 @@ namespace Districts.Goggle
 
         #endregion
 
-        /// <summary>
-        /// Создает папку, если это необходимо
-        /// </summary>
-        /// <returns></returns>
-        private async Task CheckFolder()
-        {// если нашли папку, выходим
-            if (await GetFolder() != null)
-                return;
-
-            var meta = new File
-            {
-                Name = AppFolder,
-                MimeType = "application/vnd.google-apps.folder"
-            };
-
-            var createRequest = _driveService.Files.Create(meta);
-            createRequest.Fields = "id";
-            var file = await createRequest.ExecuteAsync(_cancellation.Token);
-
-            Tracer.Write($"Created folder - {file.Id}");
-        }
-
-        private async Task<File> GetFolder()
+        private async Task<File> GetFile()
         {
+            string mimeType = "application/vnd.google-apps.folder";
+            string fields = "id, name";
+
             // создал запрос
             var request = _driveService
                 .Files
@@ -199,12 +190,56 @@ namespace Districts.Goggle
             // заполнил запрос
             request.PageSize = 5;
             request.Q = $"name='{AppFolder}'";
-            request.Fields = "files(name, id)";
+            request.Fields = $"files({fields})";
 
             // выполнил запрос
             var response = await request.ExecuteAsync(_cancellation.Token);
 
-            return response.Files.FirstOrDefault();
+            var folder = response.Files.FirstOrDefault();
+
+            if (folder == null)
+            {
+                var meta = new File
+                {
+                    Name = AppFolder,
+                    MimeType = mimeType
+                };
+
+                var createRequest = _driveService.Files.Create(meta);
+                createRequest.Fields = "id, name";
+                folder = await createRequest.ExecuteAsync(_cancellation.Token);
+
+                Tracer.Write($"Created folder - {folder.Name}");
+            }
+
+            fields += ", mimeType, parents";
+
+            var fileReq = _driveService.Files.List();
+            fileReq.Q = $"name='{_fileName}' and '{folder.Id}' in parents";
+            fileReq.Fields = $"files({fields})";
+
+            response = await fileReq.ExecuteAsync(_cancellation.Token);
+            var file = response.Files.FirstOrDefault();
+
+            if (file == null)
+            {
+                var meta = new File
+                {
+                    Name = _fileName,
+                    Parents = new List<string>
+                    {
+                        folder.Id
+                    }
+                };
+
+                var createRequest = _driveService.Files.Create(meta);
+                createRequest.Fields = fields;
+                file = await createRequest.ExecuteAsync(_cancellation.Token);
+
+                Tracer.Write($"Created file - {file.Name}");
+            }
+
+            return file;
         }
 
         #region Nested
@@ -213,9 +248,9 @@ namespace Districts.Goggle
         {
             private readonly IParser _parser;
 
-            public google_data(IParser parser)
+            public google_data()
             {
-                _parser = parser;
+                _parser = new Parser.Parser();
 
                 Cards = _parser.LoadCards();
                 Codes = _parser.LoadCodes();
@@ -227,6 +262,14 @@ namespace Districts.Goggle
             public List<HomeInfo> Codes { get; }
             public List<CardManagement> Managements { get; }
             public List<ForbiddenElement> Restrictions { get; }
+
+            public void Save()
+            {
+                _parser.SaveCodes(Codes);
+                _parser.SaveCards(Cards);
+                _parser.SaveManage(Managements);
+                _parser.SaveRules(Restrictions);
+            }
         }
 
         #endregion
