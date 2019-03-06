@@ -11,6 +11,7 @@ using Districts.Settings;
 using Districts.ViewModel.TabsVM;
 using Newtonsoft.Json;
 using Districts.Comparers;
+using Districts.Parser;
 
 namespace Districts.CardGenerator
 {
@@ -23,6 +24,13 @@ namespace Districts.CardGenerator
         ///     настройки приложения
         /// </summary>
         private readonly ApplicationSettings _settings = ApplicationSettings.ReadOrCreate();
+
+        private readonly IParser _parser;
+
+        public CardGenerator()
+        {
+            _parser = new Parser.Parser();
+        }
 
         #region Public
 
@@ -126,12 +134,7 @@ namespace Districts.CardGenerator
                 Tracer.Write("Данных квартир нет в участках: \n\n" + string.Join("\n", needToAdd));
             }
 
-            foreach (var pair in allCards)
-            {
-                // записали карточку
-                var toWrite = JsonConvert.SerializeObject(pair.Value, Formatting.Indented);
-                File.WriteAllText(pair.Key, toWrite);
-            }
+            _parser.SaveCards(allCards.Select(x => x.Value).ToList());
         }
 
         /// <summary>
@@ -175,12 +178,7 @@ namespace Districts.CardGenerator
 
         private void Write(List<Card> cards)
         {
-            for (var i = 0; i < cards.Count; i++)
-            {
-                var toWrite = JsonConvert.SerializeObject(cards[i], Formatting.Indented);
-                var filepath = Path.Combine(_settings.CardsPath, "Карточка № " + cards[i].Number);
-                File.WriteAllText(filepath, toWrite);
-            }
+            _parser.SaveCards(cards);
         }
 
         private void PrintVisual(List<Card> cards)

@@ -6,6 +6,7 @@ using Districts.Comparers;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
 using Districts.JsonClasses.Manage;
+using Districts.Parser;
 using Districts.Settings;
 using Newtonsoft.Json;
 
@@ -13,6 +14,12 @@ namespace Districts.Helper
 {
     public static class LoadingWork
     {
+        private static readonly IParser _parser;
+        static LoadingWork()
+        {
+            _parser = new Parser.Parser();
+        }
+
         /// <summary>
         ///     Загружаю все файлы из папки и сериализую их из json формата
         /// </summary>

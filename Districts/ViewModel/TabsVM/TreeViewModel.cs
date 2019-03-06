@@ -8,6 +8,7 @@ using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Base;
 using Districts.MVVM;
+using Districts.Parser;
 using Districts.Settings;
 using Districts.Views;
 using Newtonsoft.Json;
@@ -16,6 +17,7 @@ namespace Districts.ViewModel.TabsVM
 {
     internal class TreeViewModel : ObservableObject
     {
+        private readonly IParser _parser;
         public TreeViewModel()
         {
             LoadCommand = new Command(OnLoad);
@@ -23,6 +25,8 @@ namespace Districts.ViewModel.TabsVM
             DeleteCommand = new Command(OnDelete);
             EditCommand = new Command(OnEdit);
             SetSelectedItemCommand = new Command(SetSelectedItem);
+
+            _parser = new Parser.Parser();
         }
 
         #region Fields
@@ -280,13 +284,11 @@ namespace Districts.ViewModel.TabsVM
                 // дома всегда есть, см условие выше
                 var streetName = homes.FirstOrDefault().Street;
 
-
                 // сохраняем дома
                 SaveObj(homes, Path.Combine(settings.BuildingPath, streetName));
-                // сохраняем правила доступа
-                SaveObj(rules, Path.Combine(settings.RestrictionsPath, streetName));
-                // сохраняем инф. о доме
-                SaveObj(homeInfos, Path.Combine(settings.HomeInfoPath, streetName));
+
+                _parser.SaveCodes(homeInfos);
+                _parser.SaveRules(rules);
             }
 
             OnLoad(false);

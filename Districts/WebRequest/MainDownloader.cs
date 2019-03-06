@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Districts.Comparers;
 using Districts.Helper;
 using Districts.JsonClasses;
+using Districts.Parser;
 using Districts.Settings;
 using Newtonsoft.Json;
 
@@ -15,6 +16,7 @@ namespace Districts.WebRequest
     /// </summary>
     public class MainDownloader
     {
+        private readonly IParser _parser = new Parser.Parser();
         public async Task DownloadInfo()
         {
             var settings = ApplicationSettings.ReadOrCreate();
@@ -100,26 +102,16 @@ namespace Districts.WebRequest
 
         private void WriteRestrictions(List<Building> buildings)
         {
-            var settings = ApplicationSettings.ReadOrCreate();
-
-            var writableObj = buildings
+            _parser.SaveRules(buildings
                 .Select(x => new ForbiddenElement(x))
-                .ToList();
-
-            var writtableStr = JsonConvert.SerializeObject(writableObj, Formatting.Indented);
-            var filePath = Path.Combine(settings.RestrictionsPath, writableObj.First().Street);
-            File.WriteAllText(filePath, writtableStr);
+                .ToList());
         }
 
         private void WriteCodes(List<Building> buildings)
         {
-            var settings = ApplicationSettings.ReadOrCreate();
-            var writableObj = buildings
+            _parser.SaveCodes(buildings
                 .Select(x => new HomeInfo(x))
-                .ToList();
-            var writtableStr = JsonConvert.SerializeObject(writableObj, Formatting.Indented);
-            var filePath = Path.Combine(settings.HomeInfoPath, writableObj.First().Street);
-            File.WriteAllText(filePath, writtableStr);
+                .ToList());
         }
 
         #endregion

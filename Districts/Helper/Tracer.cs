@@ -18,7 +18,7 @@ namespace Districts.Helper
         private static readonly object _lock = new object();
         private static Tracer _instance;
 
-        public static Tracer Instance
+        protected static Tracer Instance
         {
             get
             {

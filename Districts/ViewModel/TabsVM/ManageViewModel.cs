@@ -9,6 +9,7 @@ using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Manage;
 using Districts.MVVM;
+using Districts.Parser;
 using Districts.Settings;
 using Districts.ViewModel.Manage;
 using Newtonsoft.Json;
@@ -17,6 +18,8 @@ namespace Districts.ViewModel.TabsVM
 {
     internal class ManageViewModel : ObservableObject
     {
+        private readonly IParser _parser;
+
         public ManageViewModel()
         {
             LoadCommand = new Command(OnLoadCommand);
@@ -24,6 +27,8 @@ namespace Districts.ViewModel.TabsVM
             CancelSearchCommand = new Command(OnClearSearch);
             SaveCommand = new Command(OnSave);
             EditRecord = new Command(OnEdit);
+
+            _parser = new Parser.Parser();
         }
 
         /// <summary>
@@ -198,22 +203,15 @@ namespace Districts.ViewModel.TabsVM
 
         private void OnSave()
         {
-            var dictPath = ApplicationSettings.ReadOrCreate().ManageRecordsPath;
+            var vals = _mappedCards.Values.ToList();
 
-            foreach (var record in _mappedCards.Values)
+            foreach (var card in vals)
             {
-                SortByDate(record);
-                var file = Path.Combine(dictPath, record.Number.ToString());
-                var json = JsonConvert.SerializeObject(record, Formatting.Indented);
-                try
-                {
-                    File.WriteAllText(file, json);
-                }
-                catch (Exception e)
-                {
-                    Tracer.WriteError(e);
-                }
+                SortByDate(card);
             }
+
+            _parser.SaveManage(vals);
+
 
             OnLoadCommand(false);
         }
