@@ -137,5 +137,28 @@ namespace Districts.JsonClasses.Manage
                 ? Actions.LastOrDefault().Subject
                 : null;
         }
+
+        #region Equality members
+
+        protected bool Equals(CardManagement other)
+        {
+            return Number == other.Number
+                   && Actions.IsTermwiseEquals(other.Actions);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CardManagement) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
+
+        #endregion
     }
 }

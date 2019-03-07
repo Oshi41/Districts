@@ -32,5 +32,29 @@ namespace Districts.JsonClasses.Manage
         ///     Тип события
         /// </summary>
         public ActionTypes ActionType { get; set; }
+
+        #region Equality members
+
+        protected bool Equals(ManageRecord other)
+        {
+            return Date.Equals(other.Date)
+                   && string.Equals(Subject, other.Subject)
+                   && ActionType == other.ActionType;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ManageRecord) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
+
+        #endregion
     }
 }

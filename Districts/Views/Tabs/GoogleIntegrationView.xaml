@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="Districts.Views.Tabs.GoogleIntegrationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Districts.Views.Tabs"
+             xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance Type={x:Type tabsVm:GoogleIntegrationVm}}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Как вас зовут?"
+                   Margin="10"
+                   HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="1"
+                 Text="{Binding Path=Login, UpdateSourceTrigger=PropertyChanged}"
+                 HorizontalAlignment="Center"
+                 MinWidth="100"
+                 MaxWidth="300"/>
+
+        <Button Grid.Row="2"
+                HorizontalAlignment="Center"
+                Content="Подключиться"
+                Padding="7"
+                Margin="10"
+                Command="{Binding Path=ConnectCommand}"/>
+
+        <Grid Grid.Row="3"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Скачать"
+                    Padding="10"
+                    Margin="10"
+                    Width="100"
+                    ToolTip="Обновляем информацию по хранящейся в Google"
+                    Command="{Binding Path=DownloadCommand}"/>
+
+            <Button Grid.Column="1"
+                    Content="Загрузить"
+                    Padding="10"
+                    Margin="10"
+                    Width="100"
+                    ToolTip="Загружаем информацию в Google"
+                    Command="{Binding Path=DownloadCommand}"/>
+
+        </Grid>
+        
+    </Grid>
+</UserControl>

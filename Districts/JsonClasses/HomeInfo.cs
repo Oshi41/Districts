@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Districts.Helper;
 using Districts.JsonClasses.Base;
 
 namespace Districts.JsonClasses
@@ -46,29 +47,47 @@ namespace Districts.JsonClasses
 
         public override bool Equals(object obj)
         {
-            if (!base.Equals(obj))
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((HomeInfo) obj);
+        }
+
+        #region Equality members
+
+        protected bool Equals(HomeInfo other)
+        {
+            return base.Equals(other)
+                   && SafeEqualsCodes(AllCodes, other.AllCodes)
+                   && Begin == other.Begin;
+        }
+
+        private bool SafeEqualsCodes(Dictionary<int, List<string>> allCodes, Dictionary<int, List<string>> otherAllCodes)
+        {
+            if (allCodes == otherAllCodes)
+                return true;
+
+            if (allCodes.Count != otherAllCodes.Count)
                 return false;
 
-            if (obj is HomeInfo x)
+            if (!allCodes.Keys.IsTermwiseEquals(otherAllCodes.Keys))
+                return false;
+
+            foreach (var code in allCodes)
             {
-                if (x.AllCodes.Count != AllCodes.Count)
+                if (!code.Value.IsTermwiseEquals(otherAllCodes[code.Key]))
                     return false;
-
-                var keyes = AllCodes.Keys;
-                foreach (var key in keyes)
-                {
-                    if (!x.AllCodes.ContainsKey(key))
-                        return false;
-
-                    if (!AllCodes[key].SequenceEqual(x.AllCodes[key]))
-                        return false;
-                }
-
-                return true;
             }
 
-            return false;
+            return true;
         }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
+
+        #endregion
 
         public static bool operator ==(HomeInfo x, HomeInfo y)
         {

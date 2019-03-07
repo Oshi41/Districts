@@ -110,8 +110,10 @@ namespace Districts.Parser
 
         private void Save(string file, object value)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(file)))
-                Directory.CreateDirectory(Path.GetDirectoryName(file));
+            var folder = Path.GetDirectoryName(file);
+
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
 
             if (!File.Exists(file))
             {

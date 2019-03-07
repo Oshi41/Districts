@@ -156,8 +156,12 @@ namespace Districts.Helper
             if (comparer == null)
                 comparer = EqualityComparer<T>.Default;
 
-            return source.Count() == list.Count()
-                   && !source.Except(list, comparer).Any();
+            if (source.Count() != list.Count())
+                return false;
+
+            var except = source.Except(list, comparer);
+
+            return !except.Any();
         }
 
         #endregion

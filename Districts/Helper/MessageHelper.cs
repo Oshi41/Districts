@@ -6,6 +6,10 @@ namespace Districts.Helper
 {
     public static class MessageHelper
     {
+        public static void ShowMessage(string header, string message)
+        {
+            MessageBox.Show(message, header);
+        }
         public static void ShowDone()
         {
             MessageBox.Show("Готово");

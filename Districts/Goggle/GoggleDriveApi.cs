@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -22,142 +23,72 @@ using File = Google.Apis.Drive.v3.Data.File;
 
 namespace Districts.Goggle
 {
-    public interface IGoggleDriveApi
+    public interface IGoogleDriveApi
     {
         /// <summary>
-        /// Асинхронно подключаемся
+        /// Получает файл и статус был ли он создан
         /// </summary>
-        /// <param name="login">Имя пользователя</param>
         /// <returns></returns>
-        Task ConnectAsync(string login);
+        Task Connect(string name);
 
         /// <summary>
-        /// Отмена подключения
+        /// Загружаем сохранённую информацию
         /// </summary>
-        void Cancel();
-
-        /// <summary>
-        /// Имя папки в GoggleDrive
-        /// </summary>
-        string AppFolder { get; }
-
-        /// <summary>
-        /// Загружает инф-у на Goggle
-        /// </summary>
+        /// <returns></returns>
         Task Upload();
 
         /// <summary>
-        /// Скачивает информацию с Goggle и сохраняет в локальных файлах
+        /// Скачивает и обновляет локальную информацию 
         /// </summary>
-        Task Download();
+        /// <returns></returns>
+        Task DownloadAndUpdate();
     }
 
-    public class GoggleDriveApi : IGoggleDriveApi
+    public class GoogleDriveApi : IGoogleDriveApi
     {
         #region Fields
 
-        private readonly string _fileName = "1.json";
+        private readonly IParser _parser;
+
+        private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
 
         /// <summary>
-        /// Данные для авторизации
+        /// Имя файла для настроек
         /// </summary>
-        private readonly GoogleClientSecrets _secrets;
+        private readonly string _fileName = "districts.config";
 
         /// <summary>
-        /// Отмена подключения
-        /// </summary>
-        private readonly CancellationTokenSource _cancellation;
-
-        /// <summary>
-        /// Разрешения приложения
-        /// </summary>
-        private readonly string[] _scopes = { DriveService.Scope.DriveAppdata };
-
-        /// <summary>
-        /// Папка где хранится кэш
-        /// </summary>
-        private readonly string _tokensPath;
-
-        /// <summary>
-        /// Подключение к API Goggle Drive
+        /// Сервис Google Drive
         /// </summary>
         private DriveService _driveService;
 
+
         #endregion
 
-        public GoggleDriveApi(byte[] credentials,
-            string tokensPath)
+        public GoogleDriveApi(IParser parser)
         {
-            _tokensPath = tokensPath;
-            _cancellation = new CancellationTokenSource();
-
-            // Создал секреты приложения
-            _secrets = GoogleClientSecrets.Load(new MemoryStream(credentials));
-
-            // вот такая будет папка
-            AppFolder = "Districts Data";
+            _parser = parser;
         }
 
-        #region Implementation of IGoggleDriveApi
+        #region Implementation of IGoogleDriveApi
 
-        public string AppFolder { get; }
-
-        public async Task Upload()
+        public async Task Connect(string name)
         {
-            var file = await GetFile();
+            var googleCredentials = GoogleClientSecrets
+                .Load(
+                    new MemoryStream(
+                        Properties.Resources.credentials));
+            var scope = new[] {DriveService.Scope.DriveAppdata};
 
-            var compressed = new ZipFile();
-            compressed.AddEntry(_fileName, 
-                JsonConvert.SerializeObject(new google_data()), Encoding.UTF8);
-
-            using (var stream = new MemoryStream())
-            {
-                compressed.Save(stream);
-
-                var request = _driveService.Files.Update(new File(), file.Id, stream, file.MimeType);
-                request.AddParents = file.Parents.FirstOrDefault();
-
-                var result = await request.UploadAsync(_cancellation.Token);
-
-                if (result.Exception != null)
-                {
-                    throw result.Exception;
-                }
-            }
-        }
-
-        public async Task Download()
-        {
-            var file = await GetFile();
-            var request = _driveService.Files.Get(file.Id);
-            var compressed = new MemoryStream();
-            var result = await request.DownloadAsync(compressed);
-
-            if (result.Exception != null)
-            {
-                Tracer.WriteError(result.Exception);
-            }
-
-            using (var zip = new ZipArchive(compressed))
-            {
-                var info = NewtonsoftJsonSerializer
-                    .Instance
-                    .Deserialize<google_data>(
-                        zip.GetEntry(_fileName).Open());
-
-                info.Save();
-            }
-        }
-
-        public async Task ConnectAsync(string login)
-        {
             var credential = await GoogleWebAuthorizationBroker
                 .AuthorizeAsync(
-                    _secrets.Secrets,
-                    _scopes,
-                    login,
-                    _cancellation.Token,
-                    new FileDataStore(_tokensPath, true));
+                    googleCredentials.Secrets,
+                    scope,
+                    name,
+                    _cancellation.Token);
+
+            Tracer.Write($"Connected to Google Drive as {name}");
+
 
             var initializer = new BaseClientService.Initializer
             {
@@ -166,114 +97,154 @@ namespace Districts.Goggle
             };
 
             _driveService = new DriveService(initializer);
-
-            Tracer.Write($"Connected to Google Drive as {login}");
         }
 
-        public void Cancel()
+        public async Task Upload()
         {
-            _cancellation.Cancel();
+            var data = new google_data(_parser);
+            Stream stream = new MemoryStream(
+                Encoding.UTF8.GetBytes(
+                    JsonConvert.SerializeObject(data)));
+
+            stream = Compress(stream);
+
+            var existingFile = await GetFile();
+
+            var request = _driveService
+                .Files
+                .Update(new File(), existingFile.Id, stream, existingFile.MimeType);
+            request.Fields = "id";
+
+            var response = await request.UploadAsync(_cancellation.Token);
+
+            if (response.Exception != null)
+            {
+                throw response.Exception;
+            }
         }
+
+        public async Task DownloadAndUpdate()
+        {
+            var file = await GetFile();
+            var request = _driveService.Files.Get(file.Id);
+
+            Stream stream = new MemoryStream();
+            var result = await request.DownloadAsync(stream);
+
+            if (result.Exception != null)
+            {
+                throw result.Exception;
+            }
+
+            stream = Decompress(stream);
+
+            var data = NewtonsoftJsonSerializer.Instance.Deserialize<google_data>(stream);
+            data?.Save(_parser);
+        }
+
 
         #endregion
 
         private async Task<File> GetFile()
         {
-            string mimeType = "application/vnd.google-apps.folder";
-            string fields = "id, name";
-
             // создал запрос
             var request = _driveService
                 .Files
                 .List();
 
-            // заполнил запрос
-            request.PageSize = 5;
-            request.Q = $"name='{AppFolder}'";
+            var fields = "id, name, lastModifyingUser, modifiedTime, mimeType";
+
+            request.Spaces = "appDataFolder";
             request.Fields = $"files({fields})";
 
-            // выполнил запрос
             var response = await request.ExecuteAsync(_cancellation.Token);
 
-            var folder = response.Files.FirstOrDefault();
-
-            if (folder == null)
-            {
-                var meta = new File
-                {
-                    Name = AppFolder,
-                    MimeType = mimeType
-                };
-
-                var createRequest = _driveService.Files.Create(meta);
-                createRequest.Fields = "id, name";
-                folder = await createRequest.ExecuteAsync(_cancellation.Token);
-
-                Tracer.Write($"Created folder - {folder.Name}");
-            }
-
-            fields += ", mimeType, parents";
-
-            var fileReq = _driveService.Files.List();
-            fileReq.Q = $"name='{_fileName}' and '{folder.Id}' in parents";
-            fileReq.Fields = $"files({fields})";
-
-            response = await fileReq.ExecuteAsync(_cancellation.Token);
             var file = response.Files.FirstOrDefault();
+            if (file != null)
+                return file;
 
-            if (file == null)
+
+            file = new File
             {
-                var meta = new File
+                Name = _fileName,
+                Parents = new List<string>
                 {
-                    Name = _fileName,
-                    Parents = new List<string>
-                    {
-                        folder.Id
-                    }
-                };
+                    "appDataFolder"
+                }
+            };
 
-                var createRequest = _driveService.Files.Create(meta);
-                createRequest.Fields = fields;
-                file = await createRequest.ExecuteAsync(_cancellation.Token);
+            var createReq = _driveService.Files.Create(file);
+            createReq.Fields = fields;
+            file = await createReq.ExecuteAsync(_cancellation.Token);
 
-                Tracer.Write($"Created file - {file.Name}");
-            }
+            Tracer.Write($"Created file - {file?.Name}");
 
             return file;
+            
+        }
+
+        private Stream Compress(Stream origin)
+        {
+            var result = new MemoryStream();
+
+            var compressed = new ZipFile();
+            compressed.AddEntry(_fileName, origin);
+            compressed.Save(result);
+
+            origin.Close();
+
+            return result;
+        }
+
+        private Stream Decompress(Stream origin)
+        {
+            using (var zip = new ZipArchive(origin))
+            {
+                var result = new MemoryStream();
+                zip.GetEntry(_fileName)?.Open().CopyTo(result);
+                return result;
+            }
         }
 
         #region Nested
 
         class google_data
         {
-            private readonly IParser _parser;
-
-            public google_data()
+            [JsonConstructor]
+            public google_data(List<Card> cards, 
+                List<HomeInfo> codes,
+                List<CardManagement> managements,
+                List<ForbiddenElement> restrictions)
             {
-                _parser = new Parser.Parser();
-
-                Cards = _parser.LoadCards();
-                Codes = _parser.LoadCodes();
-                Managements = _parser.LoadManage();
-                Restrictions = _parser.LoadRules();
+                Cards = cards;
+                Codes = codes;
+                Managements = managements;
+                Restrictions = restrictions;
             }
 
-            public List<Card> Cards { get; }
-            public List<HomeInfo> Codes { get; }
-            public List<CardManagement> Managements { get; }
-            public List<ForbiddenElement> Restrictions { get; }
-
-            public void Save()
+            public google_data(IParser parser)
             {
-                _parser.SaveCodes(Codes);
-                _parser.SaveCards(Cards);
-                _parser.SaveManage(Managements);
-                _parser.SaveRules(Restrictions);
+                Cards = parser.LoadCards();
+                Codes = parser.LoadCodes();
+                Managements = parser.LoadManage();
+                Restrictions = parser.LoadRules();
+            }
+
+            public List<Card> Cards { get; private set; }
+            public List<HomeInfo> Codes { get; private set; }
+            public List<CardManagement> Managements { get; private set; }
+            public List<ForbiddenElement> Restrictions { get; private set; }
+
+            public void Save(IParser parser)
+            {
+                parser.SaveCodes(Codes);
+                parser.SaveCards(Cards);
+                parser.SaveManage(Managements);
+                parser.SaveRules(Restrictions);
             }
         }
 
         #endregion
+        
     }
-
-
 }

@@ -103,13 +103,28 @@ namespace Districts.JsonClasses.Base
             return sameStreet;
         }
 
-
         public override bool Equals(object obj)
         {
-            if (obj is BaseFindableObject x) return x.Street == Street && x.HouseNumber == HouseNumber;
-
-            return false;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((BaseFindableObject) obj);
         }
+
+        #region Equality members
+
+        protected bool Equals(BaseFindableObject other)
+        {
+            return string.Equals(Street, other.Street, StringComparison.Ordinal)
+                   && string.Equals(HouseNumber, other.HouseNumber, StringComparison.Ordinal);
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
+
+        #endregion
 
         #region Properties
 

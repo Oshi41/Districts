@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Districts.Views"
+        xmlns:p="clr-namespace:Districts.Properties"
         xmlns:tabs="clr-namespace:Districts.Views.Tabs"
         xmlns:tabsVm="clr-namespace:Districts.ViewModel.TabsVM"
         xmlns:viewModel="clr-namespace:Districts.ViewModel"
+        xmlns:converter="clr-namespace:Districts.Views.Converter"
         mc:Ignorable="d"
         Title="Генерация участков" Height="500" Width="625">
 
@@ -15,6 +16,8 @@
             <Setter Property="OverridesDefaultStyle" Value="False" />
             <Setter Property="Padding" Value="10 5" />
         </Style>
+
+        <converter:IconConverter x:Key="IconConverter"/>
     </Window.Resources>
 
     <TabControl TabStripPlacement="Left">
@@ -36,6 +39,25 @@
                 <tabsVm:TreeViewModel />
             </TabItem.DataContext>
             <tabs:EditTreeTab />
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <DockPanel>
+                    <Image DockPanel.Dock="Left"
+                           Width="16"
+                           Source="{Binding Source={x:Static p:Resources.gIcon},
+                        Converter={StaticResource IconConverter}}"/>
+
+                    <TextBlock DockPanel.Dock="Left"
+                               Margin="10,0"
+                               Text="Google интеграция"/>
+                </DockPanel>
+            </TabItem.Header>
+            <TabItem.DataContext>
+                <tabsVm:GoogleIntegrationVm />
+            </TabItem.DataContext>
+
+            <tabs:GoogleIntegrationView />
         </TabItem>
         <TabItem Header="Генерация участков">
             <TabItem.DataContext>

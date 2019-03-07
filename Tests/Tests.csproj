@@ -71,6 +71,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EqualsTests.cs" />
     <Compile Include="GoogleDriveApi.cs" />
     <Compile Include="ResourceTests.cs" />
     <Compile Include="TracerTests.cs" />
