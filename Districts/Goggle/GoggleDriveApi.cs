@@ -12,6 +12,7 @@ using Districts.Helper;
 using Districts.JsonClasses;
 using Districts.JsonClasses.Manage;
 using Districts.Parser;
+using Districts.Settings;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Json;
@@ -80,12 +81,15 @@ namespace Districts.Goggle
                         Properties.Resources.credentials));
             var scope = new[] {DriveService.Scope.DriveAppdata};
 
+            var fileStore = new FileDataStore(ApplicationSettings.ReadOrCreate().TokensPath, true);
+
             var credential = await GoogleWebAuthorizationBroker
                 .AuthorizeAsync(
                     googleCredentials.Secrets,
                     scope,
                     name,
-                    _cancellation.Token);
+                    _cancellation.Token,
+                    fileStore);
 
             Tracer.Write($"Connected to Google Drive as {name}");
 

@@ -65,9 +65,16 @@ namespace Districts.Settings
         public string BackupFolder => BaseFolder + "\\Backups";
 
         /// <summary>
+        /// Путь к токенам
+        /// </summary>
+        public string TokensPath => Path.Combine(BaseFolder, "tokens");
+
+        /// <summary>
         ///     Путь к конфигу всегда один и тот же!!!!
         /// </summary>
         public static string ConfigPath => GetLocalFolder() + "\\config";
+
+        
 
         #region Helping
 
