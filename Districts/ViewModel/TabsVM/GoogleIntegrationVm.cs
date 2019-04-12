@@ -8,6 +8,7 @@ using Districts.Goggle;
 using Districts.Helper;
 using Districts.MVVM;
 using Districts.Parser;
+using Districts.Settings;
 
 namespace Districts.ViewModel.TabsVM
 {
@@ -40,6 +41,8 @@ namespace Districts.ViewModel.TabsVM
             ConnectCommand = new CommandAsync(OnConnect, () => !string.IsNullOrWhiteSpace(Login) && !_connected);
             SyncCommand = new CommandAsync(OnUpload, () => _connected);
             DownloadCommand = new CommandAsync(OnDownload, () => _connected);
+
+            Login = ApplicationSettings.ReadOrCreate().Login;
         }
 
         private async Task OnDownload()
@@ -62,6 +65,11 @@ namespace Districts.ViewModel.TabsVM
             {
                 await _api.Connect(Login);
                 Connected = true;
+
+                // Сохраняю имя при коннекте
+                var settings = ApplicationSettings.ReadOrCreate();
+                settings.Login = Login;
+                settings.Write();
             }
             catch (Exception e)
             {

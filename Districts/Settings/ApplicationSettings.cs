@@ -74,7 +74,10 @@ namespace Districts.Settings
         /// </summary>
         public static string ConfigPath => GetLocalFolder() + "\\config";
 
-        
+        /// <summary>
+        /// Имя для истории Google
+        /// </summary>
+        public string Login { get; set; } = string.Empty;
 
         #region Helping
 
