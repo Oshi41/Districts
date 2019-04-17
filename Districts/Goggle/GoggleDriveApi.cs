@@ -110,7 +110,7 @@ namespace Districts.Goggle
                 Encoding.UTF8.GetBytes(
                     JsonConvert.SerializeObject(data)));
 
-            stream = Compress(stream);
+            // stream = Compress(stream);
 
             var existingFile = await GetFile();
 
@@ -132,18 +132,29 @@ namespace Districts.Goggle
             var file = await GetFile();
             var request = _driveService.Files.Get(file.Id);
 
-            Stream stream = new MemoryStream();
-            var result = await request.DownloadAsync(stream);
+            var temp = Path.GetTempFileName();
 
-            if (result.Exception != null)
+            using (var raw = new MemoryStream())
             {
-                throw result.Exception;
+                var result = await request.DownloadAsync(raw);
+
+                if (result.Exception != null)
+                {
+                    throw result.Exception;
+                }
+
+                using (var fileStream = new FileStream(temp, FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    raw.WriteTo(fileStream);
+                    fileStream.Close();
+                }
+
+                var data = JsonConvert.DeserializeObject<google_data>(System.IO.File.ReadAllText(temp));
+                data?.Save(_parser);
             }
 
-            stream = Decompress(stream);
-
-            var data = NewtonsoftJsonSerializer.Instance.Deserialize<google_data>(stream);
-            data?.Save(_parser);
+            if (System.IO.File.Exists(temp))
+                System.IO.File.Delete(temp);
         }
 
 

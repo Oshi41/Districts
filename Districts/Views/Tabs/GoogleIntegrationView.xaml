@@ -54,7 +54,7 @@
                     Margin="10"
                     Width="100"
                     ToolTip="Загружаем информацию в Google"
-                    Command="{Binding Path=DownloadCommand}"/>
+                    Command="{Binding Path=SyncCommand}"/>
 
         </Grid>
         
