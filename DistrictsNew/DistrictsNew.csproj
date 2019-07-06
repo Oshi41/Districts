@@ -127,5 +127,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DistrictsLib\DistrictsLib.csproj">
+      <Project>{639AD5AC-A1ED-4B9F-9C4D-FB30AF843432}</Project>
+      <Name>DistrictsLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

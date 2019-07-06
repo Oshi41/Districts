@@ -52,7 +52,6 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-
                         <TextBlock>
                             <Run Text="{Binding Path=Street, StringFormat={}{0}\,}" />
                             <Run Text="{Binding Number}" />

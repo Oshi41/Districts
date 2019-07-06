@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace DistrictsLib.Interfaces
+namespace DistrictsLib.Interfaces.GoogleApi
 {
     public interface IGoogleDriveApi
     {
@@ -28,5 +24,10 @@ namespace DistrictsLib.Interfaces
         /// <param name="destination">Куда скачиваем</param>
         /// <returns></returns>
         Task<bool> TryDownload(string destination);
+
+        /// <summary>
+        /// Отмена асинхронныйх действий
+        /// </summary>
+        void Cancel();
     }
 }

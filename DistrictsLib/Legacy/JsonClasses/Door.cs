@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DistrictsLib.Extentions;
 using DistrictsLib.Legacy.JsonClasses.Base;
 
 namespace DistrictsLib.Legacy.JsonClasses

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces;
 using DistrictsLib.Legacy.Comparers;
 using DistrictsLib.Legacy.JsonClasses;
@@ -84,43 +86,44 @@ namespace DistrictsLib.Implementation
 
         public void SaveManage(List<CardManagement> manages)
         {
-            ClearFolder(_managementFolder);
-
-            foreach (var manage in manages)
-            {
-                var name = Path.Combine(_managementFolder,$"{manage.Number}.json");
-                var json = JsonConvert.SerializeObject(manage);
-
-                File.WriteAllText(name, json);
-            }
+            SaveInFolder(_managementFolder, manages, m => $"{m.Number}.json");
         }
 
         public void SaveCards(List<Card> cards)
         {
-            ClearFolder(_cardsFolder);
-
-            foreach (var card in cards)
-            {
-                var name = Path.Combine(_cardsFolder, $"{card.Number}.json");
-                var json = JsonConvert.SerializeObject(card);
-
-                File.WriteAllText(name, json);
-            }
+            SaveInFolder(_managementFolder, cards, c => $"{c.Number}.json");
         }
 
         public void SaveRules(List<ForbiddenElement> rules)
         {
-            throw new NotImplementedException();
+            var groupped = rules
+                .GroupBy(x => x.Street)
+                .Select(x => x.GetEnumerator().ToIEnumerable());
+
+            SaveInFolder(_forbiddenFolder, groupped, elements => $"{elements.FirstOrDefault()?.Street}.json");
         }
 
         public void SaveCodes(List<HomeInfo> codes)
         {
-            throw new NotImplementedException();
+            var groupped = codes
+                .GroupBy(x => x.Street)
+                .Select(x => x.GetEnumerator().ToIEnumerable());
+
+            SaveInFolder(_infosFolder, groupped, elements => $"{elements.FirstOrDefault()?.Street}.json");
         }
 
         public void SaveSortedHomes(List<Building> homes)
         {
-            throw new NotImplementedException();
+            var groupped = homes
+                .GroupBy(x => x.Street)
+                .Select(x =>
+                {
+                    var result = x.GetEnumerator().ToIEnumerable().ToList();
+                    result.Sort(new HouseNumberComparer());
+                    return result;
+                });
+
+            SaveInFolder(_homesPath, groupped, list => $"{homes.FirstOrDefault()?.Street}.json");
         }
 
         #endregion
@@ -143,9 +146,24 @@ namespace DistrictsLib.Implementation
             if (Directory.Exists(folder))
             {
                 Directory.Delete(folder, true);
+                Trace.WriteLine($"Folder deleted {folder}");
             }
 
             Directory.CreateDirectory(folder);
+        }
+
+        private void SaveInFolder<T>(string folder, IEnumerable<T> source, Func<T, string> getName)
+        {
+            ClearFolder(folder);
+
+            foreach (var item in source)
+            {
+                var name = Path.Combine(folder, getName(item));
+                var json = JsonConvert.SerializeObject(item);
+                Trace.WriteLine($"Saving {name}");
+
+                File.WriteAllText(name, json);
+            }
         }
     }
 }

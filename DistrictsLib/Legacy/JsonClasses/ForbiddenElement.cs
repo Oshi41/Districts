@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DistrictsLib.Extentions;
 using DistrictsLib.Legacy.JsonClasses.Base;
 
 namespace DistrictsLib.Legacy.JsonClasses
@@ -38,10 +39,10 @@ namespace DistrictsLib.Legacy.JsonClasses
         protected bool Equals(ForbiddenElement other)
         {
             return base.Equals(other) 
-                   && Helper.Helper.IsTermwiseEquals(Aggressive, other.Aggressive) 
-                   && Helper.Helper.IsTermwiseEquals(NoWorried, other.NoWorried) 
-                   && Helper.Helper.IsTermwiseEquals(NoVisit, other.NoVisit) 
-                   && string.Equals(Comments, other.Comments);
+                   && Aggressive.IsTermwiseEquals(other?.Aggressive)
+                   && NoWorried.IsTermwiseEquals(other?.NoWorried)
+                   && NoVisit.IsTermwiseEquals(other?.NoVisit)
+                   && string.Equals(Comments, other?.Comments);
         }
 
         public override bool Equals(object obj)

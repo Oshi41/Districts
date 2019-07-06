@@ -15,13 +15,13 @@ namespace Tests.API.Downloader
         [TestMethod]
         public void TestHint()
         {
-            var text = "пролетарск";
+            //var text = "пролетарск";
 
-            var api = new StreetDownload();
+            //var api = new StreetDownload();
 
-            var result = api.RequestStreetHints(text).Result;
+            //var result = api.RequestStreetHints(text).Result;
 
-            Assert.IsTrue(result.Any());
+            //Assert.IsTrue(result.Any());
         }
     }
 }

@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DistrictsNew"
         xmlns:view="clr-namespace:DistrictsNew.View"
+        xmlns:wpf="clr-namespace:DistrictsLib.Implementation.Printing.WPF;assembly=DistrictsLib"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <StackPanel Orientation="Vertical">
         <view:Settings/>
-    </Grid>
+
+        <wpf:PaperSide Loaded="FrameworkElement_OnLoaded"/>
+    </StackPanel>
 </Window>
