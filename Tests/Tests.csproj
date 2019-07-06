@@ -89,6 +89,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Downloader\HintsTests.cs" />
     <Compile Include="EqualsTests.cs" />
     <Compile Include="GoogleDriveApi.cs" />
     <Compile Include="ResourceTests.cs" />
@@ -101,6 +102,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DistrictsLib\DistrictsLib.csproj">
+      <Project>{639AD5AC-A1ED-4B9F-9C4D-FB30AF843432}</Project>
+      <Name>DistrictsLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Districts\Districts.csproj">
       <Project>{F07D1F61-C8A3-4A55-A015-B5E448517D22}</Project>
       <Name>Districts</Name>
