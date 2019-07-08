@@ -117,11 +117,59 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Manage_All" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="Manage_CardName" xml:space="preserve">
+    <value>Имя карточки</value>
+  </data>
+  <data name="Manage_LastPassDate" xml:space="preserve">
+    <value>Дата сдачи</value>
+  </data>
+  <data name="Manage_LastTaskeDate" xml:space="preserve">
+    <value>Дата выдачи на руки</value>
+  </data>
+  <data name="Manage_NotOnHands" xml:space="preserve">
+    <value>Не на руках</value>
+  </data>
+  <data name="Manage_NotOnHands3" xml:space="preserve">
+    <value>Брали более 3 месяцев назад</value>
+  </data>
+  <data name="Manage_NotOnHands6" xml:space="preserve">
+    <value>Брали более полугода назад</value>
+  </data>
+  <data name="Manage_NotOnHandsYear" xml:space="preserve">
+    <value>Брали более года назад</value>
+  </data>
+  <data name="Manage_OnHandMore3" xml:space="preserve">
+    <value>На руках более 3 месяцев</value>
+  </data>
+  <data name="Manage_OnHandMore6" xml:space="preserve">
+    <value>На руках более полугода</value>
+  </data>
+  <data name="Manage_OnHandMoreYear" xml:space="preserve">
+    <value>На руках более года</value>
+  </data>
+  <data name="Manage_OnHands" xml:space="preserve">
+    <value>На руках</value>
+  </data>
+  <data name="Manage_Title" xml:space="preserve">
+    <value>Ведение участков</value>
+  </data>
+  <data name="Manage_LastOwner" xml:space="preserve">
+    <value>Последний владелец</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
   </data>
   <data name="Settings_Add" xml:space="preserve">
     <value>Добавить</value>
@@ -134,5 +182,23 @@
   </data>
   <data name="Settings_StreetList" xml:space="preserve">
     <value>Список улиц</value>
+  </data>
+  <data name="Manage_Action" xml:space="preserve">
+    <value>Действие</value>
+  </data>
+  <data name="Manage_Date" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="Manage_Lost" xml:space="preserve">
+    <value>Утерян</value>
+  </data>
+  <data name="Manage_Owner" xml:space="preserve">
+    <value>Ответственный</value>
+  </data>
+  <data name="Manage_Passed" xml:space="preserve">
+    <value>Сдан</value>
+  </data>
+  <data name="Manage_Taken" xml:space="preserve">
+    <value>Взят</value>
   </data>
 </root>

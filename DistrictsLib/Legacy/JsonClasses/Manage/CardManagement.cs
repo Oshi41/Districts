@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DistrictsLib.Extentions;
+using DistrictsLib.Interfaces.Json;
 
 namespace DistrictsLib.Legacy.JsonClasses.Manage
 {
     /// <summary>
     ///     Записи использования карточки
     /// </summary>
-    public class CardManagement : IClonable<CardManagement>
+    public class CardManagement : ICardManagement, IClonable<CardManagement>
     {
         /// <summary>
         ///     Номер карточки
@@ -19,7 +20,7 @@ namespace DistrictsLib.Legacy.JsonClasses.Manage
         /// <summary>
         ///     События
         /// </summary>
-        public List<ManageRecord> Actions { get; set; } = new List<ManageRecord>();
+        public IList<IManageRecord> Actions { get; set; } = new List<IManageRecord>();
 
         ///// <summary>
         ///// Владелец в данный момент
@@ -81,7 +82,7 @@ namespace DistrictsLib.Legacy.JsonClasses.Manage
 
         public CardManagement Clone()
         {
-            var copied = Actions.Select(x => new ManageRecord
+            var copied = Actions.Select(x => (IManageRecord)new ManageRecord
             {
                 ActionType = x.ActionType,
                 Date = x.Date,
@@ -108,20 +109,20 @@ namespace DistrictsLib.Legacy.JsonClasses.Manage
 
         public DateTime? GetLastDroppedTime()
         {
-            var find = Actions.FindLast(x => x.ActionType == ActionTypes.Dropped);
+            var find = Actions.LastOrDefault(x => x.ActionType == ActionTypes.Dropped);
             return find?.Date;
         }
 
         public DateTime? GetLastTakenTime(string name = "")
         {
-            Predicate<ManageRecord> nameCondition = record =>
+            Predicate<IManageRecord> nameCondition = record =>
                 record.Subject.Equals(name, StringComparison.InvariantCultureIgnoreCase);
 
-            Predicate<ManageRecord> mainCondition = record =>
+            Predicate<IManageRecord> mainCondition = record =>
                 record.ActionType == ActionTypes.Taken;
 
             // если пришло пустое имя, ищем без этого условия
-            var find = Actions.FindLast(x => mainCondition(x) &&
+            var find = Actions.LastOrDefault(x => mainCondition(x) &&
                                              (string.IsNullOrWhiteSpace(name)
                                               || nameCondition(x)));
 

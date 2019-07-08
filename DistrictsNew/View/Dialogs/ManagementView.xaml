@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="DistrictsNew.View.ManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DistrictsNew.View"
+             xmlns:p="clr-namespace:DistrictsNew.Properties"
+             xmlns:dialogs="clr-namespace:DistrictsNew.ViewModel.Dialogs"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:controls="clr-namespace:DistrictsNew.View.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400"
+             d:DataContext="{d:DesignInstance Type={x:Type dialogs:ManageViewModel}}">
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="{x:Static p:Resources.Manage_Title}"
+                   />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBox MinWidth="100" 
+                     Margin="5"
+                     materialDesign:HintAssist.IsFloating="True"
+                     materialDesign:HintAssist.Hint="{x:Static p:Resources.Search}"
+                     Text="{Binding Path=SearchText}"/>
+
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Content="{x:Static p:Resources.Add}"
+                    Margin="5,0,10,0"
+                    Command="{Binding Path=AddCardCommand}"/>
+        </Grid>
+
+
+        <materialDesign:DialogHost Grid.Row="2"
+                                   Identifier="CardsHost">
+            <controls:DataGridDoubleClick IsReadOnly="True"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          ItemsSource="{Binding Path=Cards}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{x:Static p:Resources.Manage_CardName}"
+                                        Binding="{Binding Path=Number}"/>
+                    <DataGridTextColumn Header="{x:Static p:Resources.Manage_LastTaskeDate}"
+                                        Binding="{Binding Path=LastTakeStr}"
+                                        SortMemberPath="LastTake"/>
+                    <DataGridTextColumn Header="{x:Static p:Resources.Manage_LastPassDate}"
+                                        Binding="{Binding Path=LastPassStr}"
+                                        SortMemberPath="LastPass"/>
+                    <DataGridTextColumn Header="{x:Static p:Resources.Manage_LastOwner}"
+                                        Binding="{Binding Path=LastOwner}"/>
+                </DataGrid.Columns>
+            </controls:DataGridDoubleClick>
+        </materialDesign:DialogHost>
+
+    </Grid>
+
+</UserControl>

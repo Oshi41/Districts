@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using DistrictsLib.Interfaces.Json;
 
 namespace DistrictsLib.Legacy.JsonClasses.Manage
 {
@@ -16,7 +17,7 @@ namespace DistrictsLib.Legacy.JsonClasses.Manage
         [Description("сдан")] Dropped
     }
 
-    public class ManageRecord
+    public class ManageRecord : IManageRecord
     {
         /// <summary>
         ///     Время записи

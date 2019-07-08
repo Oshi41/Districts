@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace DistrictsNew.TimedAction
+namespace DistrictsLib.Interfaces.ActionArbiter
 {
     public interface IActionArbiter
     {
+        void Do(Action action);
+
         void Do(Func<Task> action);
     }
 }

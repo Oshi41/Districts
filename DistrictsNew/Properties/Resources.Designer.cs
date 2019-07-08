@@ -61,6 +61,15 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Добавить.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Отмена.
         /// </summary>
         public static string Cancel {
@@ -70,11 +79,200 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Действие.
+        /// </summary>
+        public static string Manage_Action {
+            get {
+                return ResourceManager.GetString("Manage_Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Все.
+        /// </summary>
+        public static string Manage_All {
+            get {
+                return ResourceManager.GetString("Manage_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Имя карточки.
+        /// </summary>
+        public static string Manage_CardName {
+            get {
+                return ResourceManager.GetString("Manage_CardName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Дата.
+        /// </summary>
+        public static string Manage_Date {
+            get {
+                return ResourceManager.GetString("Manage_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Последний владелец.
+        /// </summary>
+        public static string Manage_LastOwner {
+            get {
+                return ResourceManager.GetString("Manage_LastOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Дата сдачи.
+        /// </summary>
+        public static string Manage_LastPassDate {
+            get {
+                return ResourceManager.GetString("Manage_LastPassDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Дата выдачи на руки.
+        /// </summary>
+        public static string Manage_LastTaskeDate {
+            get {
+                return ResourceManager.GetString("Manage_LastTaskeDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Утерян.
+        /// </summary>
+        public static string Manage_Lost {
+            get {
+                return ResourceManager.GetString("Manage_Lost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не на руках.
+        /// </summary>
+        public static string Manage_NotOnHands {
+            get {
+                return ResourceManager.GetString("Manage_NotOnHands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Брали более 3 месяцев назад.
+        /// </summary>
+        public static string Manage_NotOnHands3 {
+            get {
+                return ResourceManager.GetString("Manage_NotOnHands3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Брали более полугода назад.
+        /// </summary>
+        public static string Manage_NotOnHands6 {
+            get {
+                return ResourceManager.GetString("Manage_NotOnHands6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Брали более года назад.
+        /// </summary>
+        public static string Manage_NotOnHandsYear {
+            get {
+                return ResourceManager.GetString("Manage_NotOnHandsYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to На руках более 3 месяцев.
+        /// </summary>
+        public static string Manage_OnHandMore3 {
+            get {
+                return ResourceManager.GetString("Manage_OnHandMore3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to На руках более полугода.
+        /// </summary>
+        public static string Manage_OnHandMore6 {
+            get {
+                return ResourceManager.GetString("Manage_OnHandMore6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to На руках более года.
+        /// </summary>
+        public static string Manage_OnHandMoreYear {
+            get {
+                return ResourceManager.GetString("Manage_OnHandMoreYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to На руках.
+        /// </summary>
+        public static string Manage_OnHands {
+            get {
+                return ResourceManager.GetString("Manage_OnHands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ответственный.
+        /// </summary>
+        public static string Manage_Owner {
+            get {
+                return ResourceManager.GetString("Manage_Owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сдан.
+        /// </summary>
+        public static string Manage_Passed {
+            get {
+                return ResourceManager.GetString("Manage_Passed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Взят.
+        /// </summary>
+        public static string Manage_Taken {
+            get {
+                return ResourceManager.GetString("Manage_Taken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ведение участков.
+        /// </summary>
+        public static string Manage_Title {
+            get {
+                return ResourceManager.GetString("Manage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {
             get {
                 return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Поиск.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

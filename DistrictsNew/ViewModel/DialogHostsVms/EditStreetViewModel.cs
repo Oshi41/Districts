@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using DistrictsNew.Interfaces;
+using DistrictsLib.Interfaces.ActionArbiter;
 using Mvvm;
 
 namespace DistrictsNew.ViewModel.DialogHostsVms
 {
-    public class EditStreetViewModel : BindableBase
+    public class EditStreetViewModel : ExtendedBindable
     {
         private readonly List<string> _exclude;
         private readonly ITimedAction _action;

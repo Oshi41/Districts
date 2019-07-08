@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using DistrictsLib.Legacy.Comparers;
-using DistrictsLib.Legacy.JsonClasses;
-using Newtonsoft.Json;
-
-namespace DistrictsLib.Legacy.WebRequest
+﻿namespace DistrictsLib.Legacy.WebRequest
 {
     ///// <summary>
     /////     Скачивает всю информаию об улицах

@@ -64,17 +64,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Interfaces\ITimedAction.cs" />
-    <Compile Include="TimedAction\IActionArbiter.cs" />
-    <Compile Include="TimedAction\TimedAction.cs" />
     <Compile Include="ViewModel\DialogHostsVms\EditStreetViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="View\EditStreetView.xaml.cs">
+    <Compile Include="ViewModel\Dialogs\ManageViewModel.cs" />
+    <Compile Include="ViewModel\ExtendedBindable.cs" />
+    <Compile Include="ViewModel\Dialogs\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\Manage\CardManagementViewModel.cs" />
+    <Compile Include="ViewModel\Manage\ManageRecordViewModel.cs" />
+    <Compile Include="View\Controls\DataGridDoubleClick.cs" />
+    <Compile Include="View\DialogHostViews\EditStreetView.xaml.cs">
       <DependentUpon>EditStreetView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Settings.xaml.cs">
+    <Compile Include="View\DialogHostViews\EidtCardView.xaml.cs">
+      <DependentUpon>EidtCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\ManagementView.xaml.cs">
+      <DependentUpon>ManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WpfConverters\IsEmptyStrConverter.cs" />
     <Page Include="DataTemplate\DataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -91,11 +100,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\EditStreetView.xaml">
+    <Page Include="View\DialogHostViews\EditStreetView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Settings.xaml">
+    <Page Include="View\DialogHostViews\EidtCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\ManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -117,6 +134,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -133,5 +151,6 @@
       <Name>DistrictsLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

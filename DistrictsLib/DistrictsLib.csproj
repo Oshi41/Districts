@@ -72,7 +72,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extentions\DateTimeExtenstions.cs" />
     <Compile Include="Extentions\LinqExtensions.cs" />
+    <Compile Include="Extentions\ManageExtensions.cs" />
+    <Compile Include="Implementation\ActionArbiter\ActionArbiter.cs" />
+    <Compile Include="Implementation\ActionArbiter\BlockedAction.cs" />
+    <Compile Include="Implementation\ActionArbiter\TimedAction.cs" />
     <Compile Include="Implementation\Archiver.cs" />
     <Compile Include="Implementation\CardGenerator.cs" />
     <Compile Include="Implementation\GoogleApi\GoogleDataJson.cs" />
@@ -90,7 +95,10 @@
     <Compile Include="Implementation\SortedRepare.cs" />
     <Compile Include="Implementation\LoadingManager.cs" />
     <Compile Include="Implementation\StreetDownload.cs" />
+    <Compile Include="Interfaces\ActionArbiter\IBlockedAction.cs" />
+    <Compile Include="Interfaces\ActionArbiter\ITimedAction.cs" />
     <Compile Include="Interfaces\GoogleApi\IGoogleData.cs" />
+    <Compile Include="Interfaces\ActionArbiter\IActionArbiter.cs" />
     <Compile Include="Interfaces\IArchiver.cs" />
     <Compile Include="Interfaces\ICardGenerator.cs" />
     <Compile Include="Interfaces\ICardRepare.cs" />
@@ -99,6 +107,8 @@
     <Compile Include="Interfaces\IPrintable.cs" />
     <Compile Include="Interfaces\ISerializer.cs" />
     <Compile Include="Interfaces\IStreetDownload.cs" />
+    <Compile Include="Interfaces\Json\ICardManagement.cs" />
+    <Compile Include="Interfaces\Json\IManageRecord.cs" />
     <Compile Include="Legacy\Comparers\BaseFindableObjectComparer.cs" />
     <Compile Include="Legacy\Comparers\DoorComparer.cs" />
     <Compile Include="Legacy\Comparers\HouseNumberComparer.cs" />

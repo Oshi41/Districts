@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces;
 using DistrictsLib.Legacy.Comparers;
 using DistrictsLib.Legacy.JsonClasses;
@@ -7,6 +9,13 @@ namespace DistrictsLib.Implementation
 {
     class SortedRepare : ICardRepare
     {
+        private readonly bool _isSorted;
+
+        public SortedRepare(bool isSorted)
+        {
+            _isSorted = isSorted;
+        }
+
         #region Implementation of ICardRepare
 
         public bool? Repare(IList<Card> cards)
@@ -15,7 +24,14 @@ namespace DistrictsLib.Implementation
 
             foreach (var card in cards)
             {
-                card.Doors.Sort(comparer);
+                if (_isSorted)
+                {
+                    card.Doors.Sort(comparer);
+                }
+                else
+                {
+                    card.Doors = card.Doors.Shuffle().ToList();
+                }
             }
 
             return true;

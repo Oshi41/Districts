@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DistrictsLib.Implementation.ActionArbiter;
+using DistrictsLib.Interfaces.ActionArbiter;
 using DistrictsNew.ViewModel.DialogHostsVms;
 using MaterialDesignThemes.Wpf;
 using Mvvm;
@@ -42,7 +44,7 @@ namespace DistrictsNew.ViewModel
 
         private async Task OnAddStreet()
         {
-            var vm = new EditStreetViewModel(Streets, new TimedAction.TimedAction());
+            var vm = new EditStreetViewModel(Streets, new TimedAction(new ActionArbiter()));
             var result = await DialogHost.Show(vm, "Settings");
 
             if (Equals(true, result))
