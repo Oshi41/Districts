@@ -9,12 +9,17 @@ namespace DistrictsLib.Legacy.JsonClasses.Manage
         /// <summary>
         ///     Участок взят
         /// </summary>
-        [Description("взят")] Taken,
+        Taken,
 
         /// <summary>
         ///     Участок возвращён
         /// </summary>
-        [Description("сдан")] Dropped
+        Dropped,
+
+        /// <summary>
+        /// Утерян
+        /// </summary>
+        Lost,
     }
 
     public class ManageRecord : IManageRecord

@@ -201,4 +201,16 @@
   <data name="Manage_Taken" xml:space="preserve">
     <value>Взят</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="AddCard_AlreadyExisting" xml:space="preserve">
+    <value>Карточка с таким именем уже существует</value>
+  </data>
+  <data name="AddCard_EnterCardName" xml:space="preserve">
+    <value>Введите номер карточки</value>
+  </data>
+  <data name="Main_Menu_Actions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
 </root>

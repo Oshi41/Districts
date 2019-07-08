@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using DistrictsLib.Legacy.JsonClasses.Manage;
+using DistrictsNew.Extensions;
 
 namespace DistrictsNew.WpfConverters
 {
-    public class IsEmptyStrConverter : IValueConverter
+    class EnumDescrConverter : IValueConverter
     {
-        #region Implementation of IValueConverter
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string s)
+            if (value is ActionTypes type)
             {
-                return string.IsNullOrEmpty(s);
+                return type.Description();
             }
 
             return Binding.DoNothing;
@@ -22,7 +22,5 @@ namespace DistrictsNew.WpfConverters
         {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
 }

@@ -2,39 +2,43 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DistrictsLib.Extentions;
 using DistrictsLib.Implementation.ActionArbiter;
+using DistrictsLib.Implementation.ChangesNotifier;
+using DistrictsLib.Interfaces;
 using DistrictsLib.Interfaces.ActionArbiter;
 using DistrictsLib.Interfaces.Json;
+using DistrictsLib.Legacy.JsonClasses.Manage;
+using DistrictsNew.ViewModel.Base;
+using DistrictsNew.ViewModel.HostDialogs;
 using DistrictsNew.ViewModel.Manage;
+using MaterialDesignThemes.Wpf;
+using Mvvm;
+using Mvvm.Commands;
 
 namespace DistrictsNew.ViewModel.Dialogs
 {
-    class ManageViewModel : ExtendedBindable
+    class ManageViewModel : ChangesViewModel
     {
+        #region Fields
+
         private readonly IActionArbiter _arbiter;
         private readonly DateTime _today = DateTime.Today;
 
         private string _searchText;
         private SortPresets _selectedSort;
+        private ObservableCollection<CardManagementViewModel> _cards;
+        private readonly ICollection<ICardManagement> _origin;
 
-        public string SearchText
-        {
-            get => _searchText;
-            set
-            {
-                if (SetProperty(ref _searchText, value))
-                {
-                    PerformSearch();
-                }
-            }
-        }
+        #endregion
 
-        public ObservableCollection<CardManagementViewModel> Cards { get; set; }
+        #region PRops
 
+        /// <summary>
+        /// Типы сортировок
+        /// </summary>
         public List<SortPresets> SortTypes => new List<SortPresets>
         {
             new SortPresets(x => true, Properties.Resources.Manage_All),
@@ -64,12 +68,35 @@ namespace DistrictsNew.ViewModel.Dialogs
                                  && _today - x.LastTaking() > TimeSpan.FromDays(365) , Properties.Resources.Manage_NotOnHandsYear),
         };
 
+        /// <summary>
+        /// Имя хоста
+        /// </summary>
+        public string HostName { get; } = nameof(ManageExtensions);
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (SetProperty(ref _searchText, value))
+                {
+                    PerformSearch();
+                }
+            }
+        }
+
+        public ObservableCollection<CardManagementViewModel> Cards
+        {
+            get => _cards;
+            set => SetProperty(ref _cards, value);
+        }
+
         public SortPresets SelectedSort
         {
             get => _selectedSort;
             set
             {
-                if (SetProperty(ref _selectedSort, value) 
+                if (SetProperty(ref _selectedSort, value)
                     && value == null)
                 {
                     SetProperty(ref _selectedSort, SortTypes.First());
@@ -77,22 +104,74 @@ namespace DistrictsNew.ViewModel.Dialogs
             }
         }
 
-        public ICommand AddCardCommand { get; }
-
         /// <summary>
         /// оригинальная копия
         /// </summary>
-        public IReadOnlyCollection<ICardManagement> Origin { get; }
+        public IReadOnlyCollection<ICardManagement> Origin => (IReadOnlyCollection<ICardManagement>)_origin;
 
-        public ManageViewModel(IList<ICardManagement> cards)
+        public ICommand DeleteRowCommand { get; }
+
+        public ICommand EditCardCommand { get; }
+
+        public ICommand AddCardCommand { get; }
+
+        #endregion
+
+        public ManageViewModel(IList<ICardManagement> cards,
+            IChangeNotifier notifier)
+            : base(notifier)
         {
-            Origin = cards.ToList();
+            DeleteRowCommand = new DelegateCommand<CardManagementViewModel>(OnDeleteRow, OnCanDeleteRow);
+            AddCardCommand = DelegateCommand.FromAsyncHandler(OnAddCard);
+            EditCardCommand = new DelegateCommand<ICardManagement>(OnEditCard, OnCanEditCard);
+
+            _origin = cards.ToList();
             PerformSearch();
         }
 
+        #region Command handlers
+
+        private bool OnCanDeleteRow(CardManagementViewModel arg)
+        {
+            return arg != null && Cards.Contains(arg);
+        }
+
+        private void OnDeleteRow(CardManagementViewModel obj)
+        {
+            Cards.Remove(obj);
+            ChangeNotifier.SetChange(nameof(Cards));
+        }
+
+        private async Task OnAddCard()
+        {
+            var addVm = new AddCardViewModel(new SimpleNotifier(), Origin.Select(x => x.Number).ToList());
+            if (await Show(addVm))
+            {
+                _origin.Add(new CardManagement { Number = HostName });
+            }
+        }
+
+        private void OnEditCard(ICardManagement obj)
+        {
+
+        }
+
+        private bool OnCanEditCard(ICardManagement arg)
+        {
+            return arg != null;
+        }
+
+        #endregion
+
         private void PerformSearch()
         {
-            var all = Origin.Select(x => new CardManagementViewModel(x, new ActionArbiter())).ToList();
+            var all = Origin
+                .Select(x => new CardManagementViewModel(x,
+                                                         new SafeThreadActionArbiter(new ActionArbiter()), 
+                                                         GetAllSubjects,
+                                                         new SimpleNotifier()))
+                .ToList();
+
             IEnumerable<CardManagementViewModel> find = all.Select(x => x);
 
             if (!string.IsNullOrWhiteSpace(SearchText))
@@ -103,6 +182,21 @@ namespace DistrictsNew.ViewModel.Dialogs
             find = find.Where(x => SelectedSort.Predicate(x));
 
             Cards = new ObservableCollection<CardManagementViewModel>(find);
+        }
+
+        private async Task<bool> Show(BindableBase vm)
+        {
+            var result = await DialogHost.Show(vm, HostName);
+            return Equals(true, result);
+        }
+
+        private IList<string> GetAllSubjects()
+        {
+            return Origin
+                .SelectMany(x => x.Actions)
+                .Select(x => x.Subject)
+                .Distinct()
+                .ToList();
         }
     }
 

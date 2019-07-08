@@ -2,10 +2,19 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:view="clr-namespace:DistrictsNew.View"
                     xmlns:viewModel="clr-namespace:DistrictsNew.ViewModel"
-                    xmlns:dialogHostsVms="clr-namespace:DistrictsNew.ViewModel.DialogHostsVms">
+                    xmlns:hostDialogs="clr-namespace:DistrictsNew.ViewModel.HostDialogs"
+                    xmlns:dialogHostViews="clr-namespace:DistrictsNew.View.DialogHostViews"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:p="clr-namespace:DistrictsNew.Properties">
 
-    <DataTemplate DataType="dialogHostsVms:EditStreetViewModel">
-        <view:EditStreetView/>
+    <DataTemplate DataType="{x:Type hostDialogs:AddCardViewModel}">
+        <dialogHostViews:ConfirmDialogView>
+            <TextBox HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     MinWidth="150"
+                     materialDesign:HintAssist.IsFloating="True"
+                     materialDesign:HintAssist.Hint="{x:Static p:Resources.AddCard_EnterCardName}"/>
+        </dialogHostViews:ConfirmDialogView>
     </DataTemplate>
     
 </ResourceDictionary>

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace DistrictsNew.View.DialogHostViews
 {
     /// <summary>
-    /// Interaction logic for EidtCardView.xaml
+    /// Interaction logic for EditCardView.xaml
     /// </summary>
-    public partial class EidtCardView : UserControl
+    public partial class EditCardView : UserControl
     {
-        public EidtCardView()
+        public EditCardView()
         {
             InitializeComponent();
         }

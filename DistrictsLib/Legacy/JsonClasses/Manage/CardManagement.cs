@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces.Json;
+using DistrictsLib.Json;
+using Newtonsoft.Json;
 
 namespace DistrictsLib.Legacy.JsonClasses.Manage
 {
@@ -20,6 +22,7 @@ namespace DistrictsLib.Legacy.JsonClasses.Manage
         /// <summary>
         ///     События
         /// </summary>
+        [JsonConverter(typeof(ListConverter<IManageRecord,ManageRecord>))]
         public IList<IManageRecord> Actions { get; set; } = new List<IManageRecord>();
 
         ///// <summary>

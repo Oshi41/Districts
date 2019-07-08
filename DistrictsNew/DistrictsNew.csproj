@@ -35,8 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
+    <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.5.1.1345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.5.1\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
@@ -64,18 +64,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModel\DialogHostsVms\EditStreetViewModel.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="ViewModel\Base\ChangesViewModel.cs" />
+    <Compile Include="ViewModel\Base\ErrorViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ManageViewModel.cs" />
-    <Compile Include="ViewModel\ExtendedBindable.cs" />
-    <Compile Include="ViewModel\Dialogs\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\Base\HostViewModelBase.cs" />
+    <Compile Include="ViewModel\ErrorInfo\ErrorInfo.cs" />
+    <Compile Include="ViewModel\HostDialogs\AddCardViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Manage\CardManagementViewModel.cs" />
     <Compile Include="ViewModel\Manage\ManageRecordViewModel.cs" />
-    <Compile Include="View\Controls\DataGridDoubleClick.cs" />
-    <Compile Include="View\DialogHostViews\EditStreetView.xaml.cs">
-      <DependentUpon>EditStreetView.xaml</DependentUpon>
+    <Compile Include="View\ActionView.xaml.cs">
+      <DependentUpon>ActionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\DialogHostViews\EidtCardView.xaml.cs">
-      <DependentUpon>EidtCardView.xaml</DependentUpon>
+    <Compile Include="View\Controls\DataGridDoubleClick.cs" />
+    <Compile Include="View\DialogHostViews\Base\ConfirmDialogView.xaml.cs">
+      <DependentUpon>ConfirmDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DialogHostViews\EditCardView.xaml.cs">
+      <DependentUpon>EditCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\DialogWindowBase.xaml.cs">
+      <DependentUpon>DialogWindowBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Dialogs\ManagementView.xaml.cs">
       <DependentUpon>ManagementView.xaml</DependentUpon>
@@ -83,6 +93,7 @@
     <Compile Include="View\Dialogs\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WpfConverters\EnumDescrConverter.cs" />
     <Compile Include="WpfConverters\IsEmptyStrConverter.cs" />
     <Page Include="DataTemplate\DataTemplates.xaml">
       <SubType>Designer</SubType>
@@ -100,11 +111,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\DialogHostViews\EditStreetView.xaml">
+    <Page Include="View\ActionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DialogHostViews\EidtCardView.xaml">
+    <Page Include="View\DialogHostViews\Base\ConfirmDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DialogHostViews\EditCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\DialogWindowBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -151,6 +170,8 @@
       <Name>DistrictsLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="View\Dialogs\Base\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

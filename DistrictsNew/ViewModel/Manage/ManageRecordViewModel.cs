@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces.Json;
 using DistrictsLib.Legacy.JsonClasses.Manage;
@@ -13,6 +14,12 @@ namespace DistrictsNew.ViewModel.Manage
         private ActionTypes _actionType;
 
         public ManageRecordViewModel(IManageRecord record)
+            : this(record, new List<string>())
+        {
+        }
+
+        public ManageRecordViewModel(IManageRecord record, 
+            IEnumerable<string> subjects)
         {
             if (record != null)
             {
@@ -20,6 +27,8 @@ namespace DistrictsNew.ViewModel.Manage
                 _subject = record.Subject;
                 _actionType = record.ActionType;
             }
+
+            AvailableSubjects = new List<string>(subjects);
         }
 
         /// <summary>
@@ -50,5 +59,7 @@ namespace DistrictsNew.ViewModel.Manage
             get => _actionType;
             set => SetProperty(ref _actionType, value);
         }
+
+        public IList<string> AvailableSubjects { get; }
     }
 }

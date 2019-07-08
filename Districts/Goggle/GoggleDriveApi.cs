@@ -198,28 +198,28 @@ namespace Districts.Goggle
             
         }
 
-        private Stream Compress(Stream origin)
-        {
-            var result = new MemoryStream();
+        //private Stream Compress(Stream origin)
+        //{
+        //    var result = new MemoryStream();
 
-            var compressed = new ZipFile();
-            compressed.AddEntry(_fileName, origin);
-            compressed.Save(result);
+        //    var compressed = new ZipFile();
+        //    compressed.AddEntry(_fileName, origin);
+        //    compressed.Save(result);
 
-            origin.Close();
+        //    origin.Close();
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        private Stream Decompress(Stream origin)
-        {
-            using (var zip = new ZipArchive(origin))
-            {
-                var result = new MemoryStream();
-                zip.GetEntry(_fileName)?.Open().CopyTo(result);
-                return result;
-            }
-        }
+        //private Stream Decompress(Stream origin)
+        //{
+        //    using (var zip = new ZipArchive(origin))
+        //    {
+        //        var result = new MemoryStream();
+        //        zip.GetEntry(_fileName)?.Open().CopyTo(result);
+        //        return result;
+        //    }
+        //}
 
         #region Nested
 

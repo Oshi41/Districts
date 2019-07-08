@@ -10,19 +10,30 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DistrictsNew.View
+namespace DistrictsNew.View.Dialogs
 {
     /// <summary>
-    /// Interaction logic for EditStreetView.xaml
+    /// Interaction logic for DialogWindowBase.xaml
     /// </summary>
-    public partial class EditStreetView : UserControl
+    public partial class DialogWindowBase : Window
     {
-        public EditStreetView()
+        public DialogWindowBase()
         {
             InitializeComponent();
+        }
+
+        private void Submit(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            Close();
+        }
+
+        private void Cancel(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            Close();
         }
     }
 }

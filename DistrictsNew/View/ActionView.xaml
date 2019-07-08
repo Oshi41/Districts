@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="DistrictsNew.View.ActionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DistrictsNew.View"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:p="clr-namespace:DistrictsNew.Properties"
+             xmlns:json="clr-namespace:DistrictsLib.Interfaces.Json;assembly=DistrictsLib"
+             xmlns:manage="clr-namespace:DistrictsNew.ViewModel.Manage"
+             xmlns:manage1="clr-namespace:DistrictsLib.Legacy.JsonClasses.Manage;assembly=DistrictsLib"
+             xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type={x:Type manage:ManageRecordViewModel}}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <wpfConverters:EnumDescrConverter x:Key="EnumDescrConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical"
+                Margin="10">
+        <DatePicker materialDesign:HintAssist.Hint="{x:Static p:Resources.Manage_Date}"
+                    materialDesign:HintAssist.IsFloating="True"
+                    Margin="0,5"/>
+
+        <ComboBox Margin="0,5"
+                  materialDesign:HintAssist.Hint="{x:Static p:Resources.Manage_Owner}"
+                  materialDesign:HintAssist.IsFloating="True"
+                  Text="{Binding Path=Subject, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Path=AvailableSubjects}"/>
+
+        <ComboBox Margin="0,5"
+                  materialDesign:HintAssist.Hint="{x:Static p:Resources.Manage_Action}"
+                  materialDesign:HintAssist.IsFloating="True"
+                  SelectedValue="{Binding Path=ActionType}"
+                  ItemsSource="{Binding Path=AvailableSubjects}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type manage1:ActionTypes}">
+                    <TextBlock Text="{Binding Converter={StaticResource EnumDescrConverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+    </StackPanel>
+
+</UserControl>

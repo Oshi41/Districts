@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces;
+using DistrictsLib.Interfaces.Json;
+using DistrictsLib.Json;
 using DistrictsLib.Legacy.Comparers;
 using DistrictsLib.Legacy.JsonClasses;
 using DistrictsLib.Legacy.JsonClasses.Manage;
@@ -20,6 +22,12 @@ namespace DistrictsLib.Implementation
         private readonly string _forbiddenFolder;
         private readonly string _cardsFolder;
         private readonly string _managementFolder;
+
+        private readonly JsonSerializerSettings _settings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            ContractResolver = new InterfaceContractResolver()
+        };
 
         public LoadingManager(string homesPath,
             string rulesPath,
@@ -38,9 +46,11 @@ namespace DistrictsLib.Implementation
 
         #region Implementation of IParser
 
-        public List<CardManagement> LoadManage()
+        public List<ICardManagement> LoadManage()
         {
-            return ReadFromFolderFiles<CardManagement>(_managementFolder);
+            return ReadFromFolderFiles<CardManagement>(_managementFolder)
+                .OfType<ICardManagement>()
+                .ToList();
         }
 
         public List<Card> LoadCards()
@@ -81,7 +91,7 @@ namespace DistrictsLib.Implementation
 
         #region Implementation of ISerializer
 
-        public void SaveManage(List<CardManagement> manages)
+        public void SaveManage(List<ICardManagement> manages)
         {
             SaveInFolder(_managementFolder, manages, m => $"{m.Number}.json");
         }
@@ -156,7 +166,7 @@ namespace DistrictsLib.Implementation
             foreach (var item in source)
             {
                 var name = Path.Combine(folder, getName(item));
-                var json = JsonConvert.SerializeObject(item);
+                var json = JsonConvert.SerializeObject(item, _settings);
                 Trace.WriteLine($"Saving {name}");
 
                 File.WriteAllText(name, json);

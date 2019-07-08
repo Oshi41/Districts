@@ -31,26 +31,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.Apis, Version=1.38.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.1.38.0\lib\net45\Google.Apis.dll</HintPath>
+    <Reference Include="Google.Apis, Version=1.40.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.40.2\lib\net45\Google.Apis.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Auth, Version=1.38.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Auth.1.38.0\lib\net45\Google.Apis.Auth.dll</HintPath>
+    <Reference Include="Google.Apis.Auth, Version=1.40.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.40.2\lib\net45\Google.Apis.Auth.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.38.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Auth.1.38.0\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.40.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.40.2\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Core, Version=1.38.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Core.1.38.0\lib\net45\Google.Apis.Core.dll</HintPath>
+    <Reference Include="Google.Apis.Core, Version=1.40.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.40.2\lib\net45\Google.Apis.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Drive.v3, Version=1.38.0.1512, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.Drive.v3.1.38.0.1512\lib\net45\Google.Apis.Drive.v3.dll</HintPath>
+    <Reference Include="Google.Apis.Drive.v3, Version=1.40.2.1631, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Drive.v3.1.40.2.1631\lib\net45\Google.Apis.Drive.v3.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.PlatformServices, Version=1.38.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Apis.1.38.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.40.2.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.40.2\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -77,9 +77,12 @@
     <Compile Include="Extentions\ManageExtensions.cs" />
     <Compile Include="Implementation\ActionArbiter\ActionArbiter.cs" />
     <Compile Include="Implementation\ActionArbiter\BlockedAction.cs" />
+    <Compile Include="Implementation\ActionArbiter\SafeThreadActionArbiter.cs" />
     <Compile Include="Implementation\ActionArbiter\TimedAction.cs" />
     <Compile Include="Implementation\Archiver.cs" />
     <Compile Include="Implementation\CardGenerator.cs" />
+    <Compile Include="Implementation\ChangesNotifier\RememberChangesNotify.cs" />
+    <Compile Include="Implementation\ChangesNotifier\SimpleNotifier.cs" />
     <Compile Include="Implementation\GoogleApi\GoogleDataJson.cs" />
     <Compile Include="Implementation\GoogleApi\GoogleDriveApi.cs" />
     <Compile Include="Implementation\GoogleApi\RegularGoogleData.cs" />
@@ -103,12 +106,15 @@
     <Compile Include="Interfaces\ICardGenerator.cs" />
     <Compile Include="Interfaces\ICardRepare.cs" />
     <Compile Include="Interfaces\GoogleApi\IGoogleDriveApi.cs" />
+    <Compile Include="Interfaces\IChangeNotifier.cs" />
     <Compile Include="Interfaces\IParser.cs" />
     <Compile Include="Interfaces\IPrintable.cs" />
     <Compile Include="Interfaces\ISerializer.cs" />
     <Compile Include="Interfaces\IStreetDownload.cs" />
     <Compile Include="Interfaces\Json\ICardManagement.cs" />
     <Compile Include="Interfaces\Json\IManageRecord.cs" />
+    <Compile Include="Json\InterfaceContractResolver.cs" />
+    <Compile Include="Json\ListConverter.cs" />
     <Compile Include="Legacy\Comparers\BaseFindableObjectComparer.cs" />
     <Compile Include="Legacy\Comparers\DoorComparer.cs" />
     <Compile Include="Legacy\Comparers\HouseNumberComparer.cs" />

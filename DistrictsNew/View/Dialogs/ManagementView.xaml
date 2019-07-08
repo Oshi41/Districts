@@ -9,7 +9,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:DistrictsNew.View.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400"
+             d:DesignHeight="450" d:DesignWidth="550"
              d:DataContext="{d:DesignInstance Type={x:Type dialogs:ManageViewModel}}">
 
     <Grid >
@@ -17,6 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -37,21 +38,31 @@
                      materialDesign:HintAssist.Hint="{x:Static p:Resources.Search}"
                      Text="{Binding Path=SearchText}"/>
 
-            <Button Grid.Column="1"
-                    HorizontalAlignment="Right"
+            <Button Grid.Column="0"
+                    HorizontalAlignment="Left"
                     Content="{x:Static p:Resources.Add}"
                     Margin="5,0,10,0"
                     Command="{Binding Path=AddCardCommand}"/>
+
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Content="{x:Static p:Resources.Delete}"
+                    Margin="5,0,10,0"
+                    Command="{Binding Path=DeleteRowCommand}"
+                    CommandParameter="{Binding ElementName=DataGrid, Path=SelectedValue}"/>
         </Grid>
 
-
         <materialDesign:DialogHost Grid.Row="2"
-                                   Identifier="CardsHost">
-            <controls:DataGridDoubleClick IsReadOnly="True"
+                                   Identifier="{Binding Path=HostName}">
+            <controls:DataGridDoubleClick x:Name="DataGrid"
+                                          IsReadOnly="True"
                                           AutoGenerateColumns="False"
                                           CanUserAddRows="False"
                                           CanUserDeleteRows="False"
-                                          ItemsSource="{Binding Path=Cards}">
+                                          ItemsSource="{Binding Path=Cards}"
+                                          SelectionUnit="FullRow"
+                                          SelectionMode="Single"
+                                          DoubleClickCommand="{Binding Path=EditCardCommand}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="{x:Static p:Resources.Manage_CardName}"
                                         Binding="{Binding Path=Number}"/>
