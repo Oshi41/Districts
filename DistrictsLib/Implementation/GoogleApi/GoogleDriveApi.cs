@@ -68,7 +68,7 @@ namespace DistrictsLib.Implementation.GoogleApi
                         _cancellation.Token,
                         fileStore);
 
-                Trace.WriteLine($"Connected to Google Drive as {author}");
+                Trace.WriteLine($"Google API: Connected to Google Drive as {author}");
 
                 var initializer = new BaseClientService.Initializer
                 {
@@ -116,7 +116,7 @@ namespace DistrictsLib.Implementation.GoogleApi
                     }
                 }
 
-                Trace.WriteLine($"Successfully loaded data");
+                Trace.WriteLine($"Google API: Successfully loaded data");
                 return true;
             }
             catch (Exception e)

@@ -59,7 +59,10 @@ namespace DistrictsNew.ViewModel.Manage
             var subjects = Actions.Select(x => x.Subject)
                 // а тут вытаскиваю все имена "снаружи" этой карточки
                 .Union(_getAllNames?.Invoke() ?? new List<string>())
-                .Distinct().ToList();
+                // все имеющие смысл значения
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .ToList();
 
             var vm = new ManageRecordViewModel(new ManageRecord(), subjects)
             {

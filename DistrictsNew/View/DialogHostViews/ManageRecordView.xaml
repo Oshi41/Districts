@@ -36,6 +36,7 @@
         </Grid.RowDefinitions>
 
         <ComboBox Margin="5"
+                  TabIndex="0"
                   materialDesign:HintAssist.IsFloating="True"
                   materialDesign:HintAssist.Hint="{x:Static p:Resources.AS_EnterName}"
                   ItemsSource="{Binding Path=AvailableSubjects}"
@@ -43,6 +44,7 @@
                   IsEditable="True"/>
 
         <DatePicker Grid.Row="1"
+                    TabIndex="1"
                     Margin="5"
                     DisplayDate="{Binding Path=Date}"
                     SelectedDateFormat="Long"
@@ -50,6 +52,7 @@
                     materialDesign:HintAssist.Hint="{x:Static p:Resources.AS_EnterDate}"/>
 
         <ComboBox Grid.Row="2"
+                  TabIndex="2"
                   Margin="5"
                   ItemsSource="{Binding Source={StaticResource enumItems}}"
                   SelectedValue="{Binding Path=ActionType}">

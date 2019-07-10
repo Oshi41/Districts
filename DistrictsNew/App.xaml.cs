@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 using DistrictsLib.Implementation;
@@ -27,6 +28,10 @@ namespace DistrictsNew
 
             var settings = DistrictsNew.Properties.Settings.Default;
 
+            Trace.Listeners.Add(new TextWriterTraceListener(Path.Combine(settings.LogFolder, "log.txt")));
+
+            Trace.WriteLine("\n\n\n************************\nApplication is started!");
+
             var loader = new LoadingManager(
                 settings.BuildingFolder,
                 settings.HomeInfoFolder,
@@ -40,6 +45,7 @@ namespace DistrictsNew
             };
 
             window.ShowDialog();
+
             App.Current.Shutdown(0);
         }
     }

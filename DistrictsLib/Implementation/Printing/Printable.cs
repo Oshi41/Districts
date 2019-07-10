@@ -40,6 +40,8 @@ namespace DistrictsLib.Implementation.Printing
                 //exists, so delete it. Possible race condition if someone else calls GetTempFileName
                 File.Delete(temp);
 
+                Trace.WriteLine($"Printable: Deleting created temp file {temp}");
+
                 using (var xpsDocument = new XpsDocument(temp, FileAccess.ReadWrite))
                 {
                     var writer = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
@@ -75,8 +77,6 @@ namespace DistrictsLib.Implementation.Printing
                 if (File.Exists(temp))
                     File.Delete(temp);
             }
-
-            return true;
         }
 
         #endregion
