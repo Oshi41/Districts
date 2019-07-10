@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace DistrictsNew.View
 {
@@ -10,6 +12,14 @@ namespace DistrictsNew.View
         public Settings()
         {
             InitializeComponent();
+        }
+
+        private void AllowOnlyNumbers(object sender, TextCompositionEventArgs e)
+        {
+            if (!e.Text.All(char.IsDigit))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

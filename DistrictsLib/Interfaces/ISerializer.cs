@@ -12,5 +12,6 @@ namespace DistrictsLib.Interfaces
         void SaveRules(List<ForbiddenElement> rules);
         void SaveCodes(List<HomeInfo> codes);
         void SaveSortedHomes(List<Building> homes);
+        void SaveStreets(IList<string> streets);
     }
 }

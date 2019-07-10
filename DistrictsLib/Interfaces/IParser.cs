@@ -16,6 +16,7 @@ namespace DistrictsLib.Interfaces
         List<HomeInfo> LoadCodes();
 
         List<Building> LoadSortedHomes();
-        
+
+        IList<string> LoadStreets();
     }
 }

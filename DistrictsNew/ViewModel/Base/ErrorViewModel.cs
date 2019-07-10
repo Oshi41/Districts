@@ -10,7 +10,7 @@ namespace DistrictsNew.ViewModel.Base
 {
     public class ErrorViewModel : BindableBase, IDataErrorInfo
     {
-        protected IDataErrorInfo Info { get; }
+        protected ErrorInfo.ErrorInfo Info { get; }
 
         public ErrorViewModel()
         {

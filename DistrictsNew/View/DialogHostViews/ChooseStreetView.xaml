@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="DistrictsNew.View.DialogHostViews.ChooseStreetView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DistrictsNew.View.DialogHostViews"
+             xmlns:p="clr-namespace:DistrictsNew.Properties"
+             xmlns:hostDialogs="clr-namespace:DistrictsNew.ViewModel.HostDialogs"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200"
+             d:DataContext="{d:DesignInstance Type={x:Type hostDialogs:ChooseStreetViewModel}}">
+
+    <StackPanel Orientation="Vertical"
+                Margin="5">
+        <TextBlock HorizontalAlignment="Center"
+                   Margin="5"
+                   Text="{x:Static p:Resources.Settings_EnterStreetName}"/>
+
+        <ComboBox ItemsSource="{Binding Path=Hints}"
+                  IsEditable="True"
+                  Margin="5,5,5,15"
+                  Text="{Binding Path=Street, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+    </StackPanel>
+</UserControl>

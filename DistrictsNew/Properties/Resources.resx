@@ -229,4 +229,13 @@
   <data name="AS_Confirm" xml:space="preserve">
     <value>Подтверждаю</value>
   </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Settings_BaseFilesFolder" xml:space="preserve">
+    <value>Путь к папке файлов</value>
+  </data>
+  <data name="AddStreet_AlreadyExisting" xml:space="preserve">
+    <value>Эта улица уже в списке</value>
+  </data>
 </root>

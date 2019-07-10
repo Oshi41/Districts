@@ -57,11 +57,19 @@
         </dialogHostViews:ConfirmDialogView>
     </DataTemplate>
 
-
+    <DataTemplate DataType="{x:Type hostDialogs:ChooseStreetViewModel}">
+        <dialogHostViews:ConfirmDialogView>
+            <dialogHostViews:ChooseStreetView/>
+        </dialogHostViews:ConfirmDialogView>
+    </DataTemplate>
 
 
     <DataTemplate DataType="{x:Type dialogs:ManageViewModel}">
         <view:ManagementView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dialogs:SettingsViewModel}">
+        <view:Settings/>
     </DataTemplate>
 
 

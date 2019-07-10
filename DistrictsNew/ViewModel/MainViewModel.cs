@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DistrictsLib.Implementation;
 using DistrictsLib.Implementation.ActionArbiter;
 using DistrictsLib.Implementation.ChangesNotifier;
 using DistrictsLib.Interfaces;
@@ -24,13 +26,37 @@ namespace DistrictsNew.ViewModel
 
         public ICommand OpenManageFolder { get; }
 
+        public ICommand OpenSettingsCommand { get; }
+
         public MainViewModel(IParser parser, ISerializer serializer)
         {
             _parser = parser;
             _serializer = serializer;
             OpenManagementcommand = new DelegateCommand(OnOpenManage);
+            OpenSettingsCommand = new DelegateCommand(OnOpenSettings);
 
             OpenManageFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.ManageFolder));
+        }
+
+        private void OnOpenSettings()
+        {
+            var settings = Properties.Settings.Default;
+
+            var vm = new SettingsViewModel(new RememberChangesNotify(),
+                Path.GetDirectoryName(settings.StreetsFile),
+                settings.MaxDoors,
+                _parser.LoadStreets(),
+                new TimedAction(new SafeThreadActionArbiter(new ActionArbiter())),
+                new StreetDownload());
+
+            if (vm.ShowDialog(Properties.Resources.Settings_Title,
+                    400) == true)
+            {
+                settings.MaxDoors = vm.DoorCount;
+                settings.Propagate(vm.BaseFolder);
+
+                _serializer.SaveStreets(vm.Streets);
+            }
         }
 
         private void OnOpenManage()

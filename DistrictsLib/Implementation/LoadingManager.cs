@@ -21,6 +21,7 @@ namespace DistrictsLib.Implementation
         private readonly string _forbiddenFolder;
         private readonly string _cardsFolder;
         private readonly string _managementFolder;
+        private readonly string _streetFile;
 
         private readonly JsonSerializerSettings _settings = new JsonSerializerSettings
         {
@@ -32,13 +33,15 @@ namespace DistrictsLib.Implementation
             string infosFolder,
             string forbiddenFolder,
             string cardsFolder,
-            string managementFolder)
+            string managementFolder,
+            string streetFile)
         {
             _homesPath = homesPath;
             _infosFolder = infosFolder;
             _forbiddenFolder = forbiddenFolder;
             _cardsFolder = cardsFolder;
             _managementFolder = managementFolder;
+            _streetFile = streetFile;
         }
 
         #region Implementation of IParser
@@ -82,6 +85,14 @@ namespace DistrictsLib.Implementation
             result.Sort(new HouseNumberComparer());
 
             return result;
+        }
+
+        public IList<string> LoadStreets()
+        {
+            return File
+                   .ReadAllText(_streetFile)
+                   .Split(new []{'\n'}, StringSplitOptions.RemoveEmptyEntries)
+                   .ToList();
         }
 
         #endregion
@@ -128,6 +139,11 @@ namespace DistrictsLib.Implementation
                 });
 
             SaveInFolder(_homesPath, groupped, list => $"{homes.FirstOrDefault()?.Street}.json");
+        }
+
+        public void SaveStreets(IList<string> streets)
+        {
+            File.WriteAllText(_streetFile, string.Join("\n", streets));
         }
 
         #endregion

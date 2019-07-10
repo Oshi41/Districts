@@ -7,6 +7,7 @@
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System"
         xmlns:p="clr-namespace:DistrictsNew.Properties"
         xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Height="450" Width="800"
         Style="{StaticResource DialogWindowStyle}">
@@ -17,9 +18,12 @@
                 <ResourceDictionary Source="../../../ResourceDictionaries/Styles/Window.xaml"/>
             </ResourceDictionary.MergedDictionaries>-->
 
-            <wpfConverters:IsEmptyStrConverter x:Key="IsEmptyStrConverter"/>
+            <wpfConverters:IsNullConverter x:Key="IsNullConverter"/>
             <wpfConverters:OpactiyConverter x:Key="OpactiyConverter"
                                             Opacity="0.75"/>
+
+            <wpfConverters:MultiBoolConverter x:Key="MultiBoolConverter"/>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -41,9 +45,37 @@
                      Grid.Row="1"
                      HorizontalAlignment="Right">
             <Button Content="{x:Static p:Resources.OK}"
-                    IsEnabled="{Binding Path=Error, Converter={StaticResource IsEmptyStrConverter}}"
                     Click="Submit"
-                    Margin="5"/>
+                    Margin="5">
+                <!--<Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource MultiBoolConverter}">
+                        <Binding Path="Error"
+                                 Converter="{StaticResource IsNullConverter}"/>
+                        <Binding Path="IsChanged"/>
+                    </MultiBinding>
+                </Button.IsEnabled>-->
+                <Button.Style>
+                    <Style TargetType="Button"
+                           BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="IsEnabled" Value="False"/>
+
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=Error}"
+                                               Value="{x:Null}"/>
+                                    <Condition Binding="{Binding Path=IsChanged}"
+                                               Value="True"/>
+                                </MultiDataTrigger.Conditions>
+
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Content="{x:Static p:Resources.Cancel}"
                     Click="Cancel"
                     Margin="5"/>

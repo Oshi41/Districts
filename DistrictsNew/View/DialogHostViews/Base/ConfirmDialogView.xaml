@@ -14,10 +14,9 @@
              d:DesignHeight="200" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance Type={x:Type componentModel:IDataErrorInfo}}">
 
-
     <UserControl.Resources>
         <ResourceDictionary>
-            <wpfConverters:IsEmptyStrConverter x:Key="IsEmptyStrConverter"/>
+            <wpfConverters:IsNullConverter x:Key="IsNullConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -39,7 +38,8 @@
                             Content="{TemplateBinding OkText}"
                             Command="materialDesign:DialogHost.CloseDialogCommand"
                             CommandParameter="{StaticResource True}"
-                            IsEnabled="{Binding Path=Error, Converter={StaticResource IsEmptyStrConverter}}"
+                            IsEnabled="{Binding Path=Error, 
+                                                Converter={StaticResource IsNullConverter}}"
                             IsDefault="True"/>
                     <Button Margin="5,0,0,0"
                             Content="{TemplateBinding CancelText}"

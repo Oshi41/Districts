@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DistrictsNew.ViewModel.ErrorInfo
 {
-    class ErrorInfo : IDataErrorInfo
+    public class ErrorInfo : IDataErrorInfo
     {
         
         #region Fields

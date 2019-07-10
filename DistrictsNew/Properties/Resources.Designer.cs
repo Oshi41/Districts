@@ -19,7 +19,7 @@ namespace DistrictsNew.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -84,6 +84,15 @@ namespace DistrictsNew.Properties {
         public static string AddCard_EnterCardName {
             get {
                 return ResourceManager.GetString("AddCard_EnterCardName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Эта улица уже в списке.
+        /// </summary>
+        public static string AddStreet_AlreadyExisting {
+            get {
+                return ResourceManager.GetString("AddStreet_AlreadyExisting", resourceCulture);
             }
         }
         
@@ -368,6 +377,15 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Путь к папке файлов.
+        /// </summary>
+        public static string Settings_BaseFilesFolder {
+            get {
+                return ResourceManager.GetString("Settings_BaseFilesFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Введите имя улицы.
         /// </summary>
         public static string Settings_EnterStreetName {
@@ -391,6 +409,15 @@ namespace DistrictsNew.Properties {
         public static string Settings_StreetList {
             get {
                 return ResourceManager.GetString("Settings_StreetList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Настройки.
+        /// </summary>
+        public static string Settings_Title {
+            get {
+                return ResourceManager.GetString("Settings_Title", resourceCulture);
             }
         }
     }

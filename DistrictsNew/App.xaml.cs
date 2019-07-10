@@ -37,7 +37,8 @@ namespace DistrictsNew
                 settings.HomeInfoFolder,
                 settings.RestrictionsFolder,
                 settings.CardsFolder,
-                settings.ManageFolder);
+                settings.ManageFolder,
+                settings.StreetsFile);
 
             var window = new MainWindow
             {

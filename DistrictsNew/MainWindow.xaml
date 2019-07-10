@@ -37,6 +37,9 @@
             <MenuItem Header="{x:Static p:Resources.Main_Menu_Actions}">
                 <MenuItem Header="{x:Static p:Resources.Manage_Title}"
                           Command="{Binding Path=OpenManagementcommand}"/>
+                <Separator/>
+                <MenuItem Header="{x:Static p:Resources.Settings_Title}"
+                          Command="{Binding Path=OpenSettingsCommand}"/>
             </MenuItem>
         </Menu>
     

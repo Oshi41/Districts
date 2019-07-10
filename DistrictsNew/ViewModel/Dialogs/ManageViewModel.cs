@@ -80,7 +80,7 @@ namespace DistrictsNew.ViewModel.Dialogs
             {
                 if (SetProperty(ref _searchText, value))
                 {
-                    _timed.ScheduleAction(PerformSearch);
+                    _timed.ScheduleAction((Action)PerformSearch);
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace DistrictsNew.ViewModel.Dialogs
             {
                 if (SetProperty(ref _selectedSort, value))
                 {
-                    _timed.ScheduleAction(PerformSearch);
+                    _timed.ScheduleAction((Action)PerformSearch);
                 }
             }
         }

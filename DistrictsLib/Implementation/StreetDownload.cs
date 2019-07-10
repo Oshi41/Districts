@@ -7,7 +7,7 @@ using DistrictsLib.Legacy.WebRequest;
 
 namespace DistrictsLib.Implementation
 {
-    class StreetDownload : IStreetDownload
+    public class StreetDownload : IStreetDownload
     {
         private readonly StreetDownloader _legacyDownloader;
 
@@ -22,7 +22,9 @@ namespace DistrictsLib.Implementation
         {
             var rawResults = await _legacyDownloader.RequestHomes(text);
 
-            return rawResults.Select(x => x.GetFullStreetName()).Distinct().ToList();
+            return rawResults
+                .Take(MaxApi())
+                .Select(x => x.GetFullStreetName()).Distinct().ToList();
         }
 
         public async Task<IList<Building>> DownloadStreet(string street)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -8,7 +10,7 @@ using DistrictsLib.Interfaces;
 
 namespace DistrictsLib.Implementation.ChangesNotifier
 {
-    class RememberChangesNotify : IChangeNotifier
+    public class RememberChangesNotify : IChangeNotifier
     {
         private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
         private readonly Dictionary<string, bool> _changedValues = new Dictionary<string, bool>();
@@ -27,6 +29,16 @@ namespace DistrictsLib.Implementation.ChangesNotifier
                 member = Guid.NewGuid().ToString();
             }
 
+            //if (old is IList oldList)
+            //{
+            //    old = (T)(IList)oldList.OfType<object>().ToList();
+            //}
+
+            //if (val is IList addList)
+            //{
+            //    val = (T)(IList)addList.OfType<object>().ToList();
+            //}
+
             // Записываем старое значение
             if (!_values.ContainsKey(member))
             {
@@ -35,6 +47,7 @@ namespace DistrictsLib.Implementation.ChangesNotifier
 
             // Сравниваем с предыдущим
             _changedValues[member] = Equals(_values[member], val);
+            OnPropertyChanged(nameof(IsChanged));
         }
 
         public void SetChange([CallerMemberName]string member = null)
@@ -45,6 +58,13 @@ namespace DistrictsLib.Implementation.ChangesNotifier
         public bool IsChanged()
         {
             return _changedValues.Any(x => !x.Value);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

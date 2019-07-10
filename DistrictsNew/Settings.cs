@@ -50,36 +50,7 @@ namespace DistrictsNew.Properties {
                 .Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Districts");
 
-            CheckFolder(baseFolder);
-
-            BuildingFolder = Path.Combine(baseFolder, "Buildings");
-            CheckFolder(BuildingFolder);
-
-            CardsFolder = Path.Combine(baseFolder, "Cards");
-            CheckFolder(CardsFolder);
-
-            StreetsFile = Path.Combine(baseFolder, "Streets.txt");
-            CheckFile(StreetsFile);
-
-            HomeInfoFolder = Path.Combine(baseFolder, "HomeInfo");
-            CheckFolder(HomeInfoFolder);
-
-            RestrictionsFolder = Path.Combine(baseFolder, "Restrictions");
-            CheckFolder(RestrictionsFolder);
-
-            ManageFolder = Path.Combine(baseFolder, "ManageRecords");
-            CheckFolder(ManageFolder);
-
-            BackupFolder = Path.Combine(baseFolder, "Backups");
-            CheckFolder(BackupFolder);
-
-            TokensFolder = Path.Combine(baseFolder, "tokens");
-            CheckFolder(TokensFolder);
-
-            LogFolder = Path.Combine(baseFolder, "Logs");
-            CheckFolder(LogFolder);
-
-            Save();
+            Propagate(baseFolder);
         }
 
         private void CheckFile(string file)
@@ -95,5 +66,43 @@ namespace DistrictsNew.Properties {
         }
 
         #endregion
+
+        /// <summary>
+        /// Устанавливаем базовую папку, в которой будет соблюдаться иерархия
+        /// </summary>
+        /// <param name="folder"></param>
+        public void Propagate(string folder)
+        {
+            CheckFolder(folder);
+
+            BuildingFolder = Path.Combine(folder, "Buildings");
+            CheckFolder(BuildingFolder);
+
+            CardsFolder = Path.Combine(folder, "Cards");
+            CheckFolder(CardsFolder);
+
+            StreetsFile = Path.Combine(folder, "Streets.txt");
+            CheckFile(StreetsFile);
+
+            HomeInfoFolder = Path.Combine(folder, "HomeInfo");
+            CheckFolder(HomeInfoFolder);
+
+            RestrictionsFolder = Path.Combine(folder, "Restrictions");
+            CheckFolder(RestrictionsFolder);
+
+            ManageFolder = Path.Combine(folder, "ManageRecords");
+            CheckFolder(ManageFolder);
+
+            BackupFolder = Path.Combine(folder, "Backups");
+            CheckFolder(BackupFolder);
+
+            TokensFolder = Path.Combine(folder, "tokens");
+            CheckFolder(TokensFolder);
+
+            LogFolder = Path.Combine(folder, "Logs");
+            CheckFolder(LogFolder);
+
+            Save();
+        }
     }
 }
