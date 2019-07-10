@@ -10,7 +10,10 @@
         xmlns:p="clr-namespace:DistrictsNew.Properties"
         xmlns:viewModel="clr-namespace:DistrictsNew.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Districts" 
+        Height="500"
+        Width="400"
+        Style="{StaticResource DialogWindowStyle}"
         d:DataContext="{d:DesignInstance Type={x:Type viewModel:MainViewModel}}">
 
     <Window.Resources>
@@ -26,6 +29,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -35,5 +39,17 @@
                           Command="{Binding Path=OpenManagementcommand}"/>
             </MenuItem>
         </Menu>
+    
+        <materialDesign:Card Grid.Row="1">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Файлы:"/>
+
+                <TextBlock>
+                    <Hyperlink Command="{Binding Path=OpenManageFolder}">
+                        <Run Text="Папка с историей ведения карточек"/>
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </materialDesign:Card>
     </Grid>
 </Window>

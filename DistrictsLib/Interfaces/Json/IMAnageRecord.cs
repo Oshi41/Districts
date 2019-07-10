@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DistrictsLib.Legacy.JsonClasses.Manage;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace DistrictsLib.Interfaces.Json
 {
@@ -22,6 +24,7 @@ namespace DistrictsLib.Interfaces.Json
         /// <summary>
         ///     Тип события
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         ActionTypes ActionType { get; set; }
     }
 }

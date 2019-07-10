@@ -41,7 +41,7 @@ namespace DistrictsNew.ViewModel.Manage
         {
             _arbiter = arbiter;
             _getAllNames = getAllNames;
-            DeleteActionCommand = new DelegateCommand<IManageRecord>(OnDeleteCommand, OnCanDeleteCommand);
+            DeleteActionCommand = DelegateCommand<IManageRecord>.FromAsyncHandler(OnDeleteCommand, OnCanDeleteCommand);
             AddActionCommand = DelegateCommand.FromAsyncHandler(OnAdd);
 
             if (card != null)
@@ -55,16 +55,18 @@ namespace DistrictsNew.ViewModel.Manage
 
         private async Task OnAdd()
         {
-            var subjects = _getAllNames?.Invoke() ?? new List<string>();
+            // Вытаскиваю те, которые мог добавить, но ещё не сохранил
+            var subjects = Actions.Select(x => x.Subject)
+                // а тут вытаскиваю все имена "снаружи" этой карточки
+                .Union(_getAllNames?.Invoke() ?? new List<string>())
+                .Distinct().ToList();
 
             var vm = new ManageRecordViewModel(new ManageRecord(), subjects)
             {
                 Date = DateTime.Today
             };
 
-            var result = await DialogHost.Show(vm, HostName);
-
-            if (Equals(result, true))
+            if (await Show(vm))
             {
                 Actions.Add(vm);
                 ChangeNotifier.SetChange(nameof(Actions));
@@ -77,9 +79,12 @@ namespace DistrictsNew.ViewModel.Manage
                    && Actions.Contains(manageRecord);
         }
 
-        private void OnDeleteCommand(IManageRecord manageRecord)
+        private async Task OnDeleteCommand(IManageRecord manageRecord)
         {
             if (!OnCanDeleteCommand(manageRecord))
+                return;
+
+            if (!await Show(new WarningMessage(Properties.Resources.AS_DeleteRecordConfirmation, true)))
                 return;
 
             Actions.Remove(manageRecord);
@@ -145,7 +150,7 @@ namespace DistrictsNew.ViewModel.Manage
 
         public ICommand DeleteActionCommand { get; }
 
-        public string HostName { get; } = nameof(CardManagementViewModel);
+        public static string HostName { get; } = nameof(CardManagementViewModel);
         #endregion
 
         public bool Contains(string text)
@@ -167,6 +172,12 @@ namespace DistrictsNew.ViewModel.Manage
                 LastPass = this.LastPassed();
                 LastTake = this.LastTaking();
             });
+        }
+
+        private async Task<bool> Show(BindableBase vm)
+        {
+            var result = await DialogHost.Show(vm, HostName);
+            return Equals(true, result);
         }
     }
 }

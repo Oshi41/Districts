@@ -8,13 +8,25 @@
         xmlns:p="clr-namespace:DistrictsNew.Properties"
         xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
         mc:Ignorable="d"
-        Title="DialogWindowBase" Height="450" Width="800">
+        Height="450" Width="800"
+        Style="{StaticResource DialogWindowStyle}">
 
     <Window.Resources>
         <ResourceDictionary>
+            <!--<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../ResourceDictionaries/Styles/Window.xaml"/>
+            </ResourceDictionary.MergedDictionaries>-->
+
             <wpfConverters:IsEmptyStrConverter x:Key="IsEmptyStrConverter"/>
+            <wpfConverters:OpactiyConverter x:Key="OpactiyConverter"
+                                            Opacity="0.75"/>
         </ResourceDictionary>
     </Window.Resources>
+
+    <!--<Window.Style>
+        <Style TargetType="{x:Type Window}"
+               BasedOn="{StaticResource DialogWindowStyle}"/>
+    </Window.Style>-->
 
     <Grid>
         <Grid.RowDefinitions>

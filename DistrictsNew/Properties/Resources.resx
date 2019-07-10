@@ -208,9 +208,25 @@
     <value>Карточка с таким именем уже существует</value>
   </data>
   <data name="AddCard_EnterCardName" xml:space="preserve">
-    <value>Введите номер карточки</value>
+    <value>Введите имя карточки</value>
   </data>
   <data name="Main_Menu_Actions" xml:space="preserve">
     <value>Действия</value>
+  </data>
+  <data name="AS_EnterName" xml:space="preserve">
+    <value>Введите имя </value>
+  </data>
+  <data name="AS_EnterDate" xml:space="preserve">
+    <value>Выберите дату</value>
+  </data>
+  <data name="AS_Filter" xml:space="preserve">
+    <value>Фильтр:</value>
+  </data>
+  <data name="AS_DeleteRecordConfirmation" xml:space="preserve">
+    <value>Удаление записи может ошибочно стереть историю ведения карточки.
+Подтвердить вменяемость?</value>
+  </data>
+  <data name="AS_Confirm" xml:space="preserve">
+    <value>Подтверждаю</value>
   </data>
 </root>

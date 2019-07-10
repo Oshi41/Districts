@@ -7,7 +7,7 @@ namespace DistrictsLib.Interfaces
 {
     public interface ISerializer
     {
-        void SaveManage(List<ICardManagement> manage);
+        void SaveManage(IReadOnlyCollection<ICardManagement> manage);
         void SaveCards(List<Card> cards);
         void SaveRules(List<ForbiddenElement> rules);
         void SaveCodes(List<HomeInfo> codes);

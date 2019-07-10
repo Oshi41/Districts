@@ -14,10 +14,9 @@ using Newtonsoft.Json;
 
 namespace DistrictsLib.Implementation
 {
-    class LoadingManager : IParser, ISerializer
+    public class LoadingManager : IParser, ISerializer
     {
         private readonly string _homesPath;
-        private readonly string _rulesPath;
         private readonly string _infosFolder;
         private readonly string _forbiddenFolder;
         private readonly string _cardsFolder;
@@ -30,14 +29,12 @@ namespace DistrictsLib.Implementation
         };
 
         public LoadingManager(string homesPath,
-            string rulesPath,
             string infosFolder,
             string forbiddenFolder,
             string cardsFolder,
             string managementFolder)
         {
             _homesPath = homesPath;
-            _rulesPath = rulesPath;
             _infosFolder = infosFolder;
             _forbiddenFolder = forbiddenFolder;
             _cardsFolder = cardsFolder;
@@ -60,7 +57,7 @@ namespace DistrictsLib.Implementation
 
         public List<ForbiddenElement> LoadRules()
         {
-            var result = ReadFromFolderFiles<List<ForbiddenElement>>(_rulesPath)
+            var result = ReadFromFolderFiles<List<ForbiddenElement>>(_forbiddenFolder)
                 .SelectMany(x => x)
                 .ToList();
 
@@ -91,14 +88,14 @@ namespace DistrictsLib.Implementation
 
         #region Implementation of ISerializer
 
-        public void SaveManage(List<ICardManagement> manages)
+        public void SaveManage(IReadOnlyCollection<ICardManagement> manages)
         {
             SaveInFolder(_managementFolder, manages, m => $"{m.Number}.json");
         }
 
         public void SaveCards(List<Card> cards)
         {
-            SaveInFolder(_managementFolder, cards, c => $"{c.Number}.json");
+            SaveInFolder(_cardsFolder, cards, c => $"{c.Number}.json");
         }
 
         public void SaveRules(List<ForbiddenElement> rules)

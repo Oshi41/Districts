@@ -79,11 +79,57 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Введите номер карточки.
+        ///   Looks up a localized string similar to Введите имя карточки.
         /// </summary>
         public static string AddCard_EnterCardName {
             get {
                 return ResourceManager.GetString("AddCard_EnterCardName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Подтверждаю.
+        /// </summary>
+        public static string AS_Confirm {
+            get {
+                return ResourceManager.GetString("AS_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Удаление записи может ошибочно стереть историю ведения карточки.
+        ///Подтвердить вменяемость?.
+        /// </summary>
+        public static string AS_DeleteRecordConfirmation {
+            get {
+                return ResourceManager.GetString("AS_DeleteRecordConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выберите дату.
+        /// </summary>
+        public static string AS_EnterDate {
+            get {
+                return ResourceManager.GetString("AS_EnterDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Введите имя .
+        /// </summary>
+        public static string AS_EnterName {
+            get {
+                return ResourceManager.GetString("AS_EnterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Фильтр:.
+        /// </summary>
+        public static string AS_Filter {
+            get {
+                return ResourceManager.GetString("AS_Filter", resourceCulture);
             }
         }
         

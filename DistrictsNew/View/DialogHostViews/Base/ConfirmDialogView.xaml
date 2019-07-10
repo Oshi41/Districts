@@ -9,6 +9,7 @@
              xmlns:p="clr-namespace:DistrictsNew.Properties"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System"
              xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
+             xmlns:dialogHostViews="clr-namespace:DistrictsNew.View.DialogHostViews"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance Type={x:Type componentModel:IDataErrorInfo}}">
@@ -16,36 +17,38 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <system:Boolean x:Key="True">True</system:Boolean>
-            <system:Boolean x:Key="False">False</system:Boolean>
-
             <wpfConverters:IsEmptyStrConverter x:Key="IsEmptyStrConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <UserControl.Template>
+        <ControlTemplate TargetType="{x:Type local:ConfirmDialogView}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        <ContentControl Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Content}"
-                        Margin="10"/>
+                <ContentControl Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}"
+                                Margin="10"/>
 
-        <UniformGrid Grid.Row="1"
-                     HorizontalAlignment="Right"
-                     Columns="2">
-            <Button Margin="0,0,5,0"
-                    Content="{x:Static p:Resources.OK}"
-                    Command="materialDesign:DialogHost.CloseDialogCommand"
-                    CommandParameter="{StaticResource True}"
-                    IsEnabled="{Binding Path=Error, Converter={StaticResource IsEmptyStrConverter}}"
-                    IsDefault="True"/>
-            <Button Margin="5,0,0,0"
-                    Content="{x:Static p:Resources.Cancel}"
-                    Command="materialDesign:DialogHost.CloseDialogCommand"
-                    CommandParameter="{StaticResource False}"
-                    IsCancel="True"/>
-        </UniformGrid>
-    </Grid>
+                <UniformGrid Grid.Row="1"
+                             HorizontalAlignment="Right"
+                             Columns="2">
+                    <Button Margin="0,0,5,0"
+                            Content="{TemplateBinding OkText}"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            CommandParameter="{StaticResource True}"
+                            IsEnabled="{Binding Path=Error, Converter={StaticResource IsEmptyStrConverter}}"
+                            IsDefault="True"/>
+                    <Button Margin="5,0,0,0"
+                            Content="{TemplateBinding CancelText}"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            CommandParameter="{StaticResource False}"
+                            IsCancel="True"/>
+                </UniformGrid>
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Template>
+
 </UserControl>

@@ -24,6 +24,7 @@ namespace DistrictsLib.Implementation.ActionArbiter
         private void PerformAction(object sender, ElapsedEventArgs e)
         {
             _arbiter.Do(_action);
+            _timer.Stop();
         }
 
         #region Implementation of ITimedAction

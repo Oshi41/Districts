@@ -4,6 +4,8 @@ using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces.Json;
 using DistrictsLib.Legacy.JsonClasses.Manage;
 using Mvvm;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace DistrictsNew.ViewModel.Manage
 {
@@ -54,6 +56,7 @@ namespace DistrictsNew.ViewModel.Manage
         /// <summary>
         ///     Тип события
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public ActionTypes ActionType
         {
             get => _actionType;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using DistrictsLib.Interfaces.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace DistrictsLib.Legacy.JsonClasses.Manage
 {
@@ -37,6 +39,7 @@ namespace DistrictsLib.Legacy.JsonClasses.Manage
         /// <summary>
         ///     Тип события
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public ActionTypes ActionType { get; set; }
 
         #region Equality members

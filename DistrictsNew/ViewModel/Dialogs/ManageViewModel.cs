@@ -24,7 +24,7 @@ namespace DistrictsNew.ViewModel.Dialogs
     {
         #region Fields
 
-        private readonly IActionArbiter _arbiter;
+        private readonly ITimedAction _timed;
         private readonly DateTime _today = DateTime.Today;
 
         private string _searchText;
@@ -71,7 +71,7 @@ namespace DistrictsNew.ViewModel.Dialogs
         /// <summary>
         /// Имя хоста
         /// </summary>
-        public string HostName { get; } = nameof(ManageExtensions);
+        public static string HostName { get; } = nameof(ManageExtensions);
 
         public string SearchText
         {
@@ -80,7 +80,7 @@ namespace DistrictsNew.ViewModel.Dialogs
             {
                 if (SetProperty(ref _searchText, value))
                 {
-                    PerformSearch();
+                    _timed.ScheduleAction(PerformSearch);
                 }
             }
         }
@@ -96,10 +96,9 @@ namespace DistrictsNew.ViewModel.Dialogs
             get => _selectedSort;
             set
             {
-                if (SetProperty(ref _selectedSort, value)
-                    && value == null)
+                if (SetProperty(ref _selectedSort, value))
                 {
-                    SetProperty(ref _selectedSort, SortTypes.First());
+                    _timed.ScheduleAction(PerformSearch);
                 }
             }
         }
@@ -118,12 +117,14 @@ namespace DistrictsNew.ViewModel.Dialogs
         #endregion
 
         public ManageViewModel(IList<ICardManagement> cards,
-            IChangeNotifier notifier)
+            IChangeNotifier notifier,
+            ITimedAction timed)
             : base(notifier)
         {
+            _timed = timed;
             DeleteRowCommand = new DelegateCommand<CardManagementViewModel>(OnDeleteRow, OnCanDeleteRow);
             AddCardCommand = DelegateCommand.FromAsyncHandler(OnAddCard);
-            EditCardCommand = new DelegateCommand<ICardManagement>(OnEditCard, OnCanEditCard);
+            EditCardCommand = DelegateCommand<CardManagementViewModel>.FromAsyncHandler(OnEditCard, OnCanEditCard);
 
             _origin = cards.ToList();
             PerformSearch();
@@ -133,13 +134,16 @@ namespace DistrictsNew.ViewModel.Dialogs
 
         private bool OnCanDeleteRow(CardManagementViewModel arg)
         {
-            return arg != null && Cards.Contains(arg);
+            if (arg == null)
+                return false;
+
+            var find = _origin.FirstOrDefault(x => string.Equals(arg.Number, x.Number));
+            return find != null;
         }
 
         private void OnDeleteRow(CardManagementViewModel obj)
         {
-            Cards.Remove(obj);
-            ChangeNotifier.SetChange(nameof(Cards));
+            Replace( obj, null);
         }
 
         private async Task OnAddCard()
@@ -147,39 +151,42 @@ namespace DistrictsNew.ViewModel.Dialogs
             var addVm = new AddCardViewModel(new SimpleNotifier(), Origin.Select(x => x.Number).ToList());
             if (await Show(addVm))
             {
-                _origin.Add(new CardManagement { Number = HostName });
+                Replace(null, new CardManagement { Number = addVm.CardName });
             }
         }
 
-        private void OnEditCard(ICardManagement obj)
+        private async Task OnEditCard(CardManagementViewModel obj)
         {
+            var copy = CreateNew(obj);
 
+            if (await Show(copy))
+            {
+                Replace(obj, copy);
+            }
         }
 
-        private bool OnCanEditCard(ICardManagement arg)
+        private bool OnCanEditCard(CardManagementViewModel arg)
         {
             return arg != null;
         }
 
         #endregion
 
+        #region Private
+
         private void PerformSearch()
         {
-            var all = Origin
-                .Select(x => new CardManagementViewModel(x,
-                                                         new SafeThreadActionArbiter(new ActionArbiter()), 
-                                                         GetAllSubjects,
-                                                         new SimpleNotifier()))
-                .ToList();
-
-            IEnumerable<CardManagementViewModel> find = all.Select(x => x);
+            var find = Origin.Select(CreateNew);
 
             if (!string.IsNullOrWhiteSpace(SearchText))
             {
                 find = find.Where(x => x.Contains(SearchText));
             }
 
-            find = find.Where(x => SelectedSort.Predicate(x));
+            if (SelectedSort?.Predicate != null)
+            {
+                find = find.Where(x => SelectedSort.Predicate(x));
+            }
 
             Cards = new ObservableCollection<CardManagementViewModel>(find);
         }
@@ -198,6 +205,50 @@ namespace DistrictsNew.ViewModel.Dialogs
                 .Distinct()
                 .ToList();
         }
+
+        private CardManagementViewModel CreateNew(ICardManagement source)
+        {
+            return new CardManagementViewModel(
+                source,
+                new SafeThreadActionArbiter(new ActionArbiter()), 
+                GetAllSubjects,
+                new SimpleNotifier());
+        }
+
+        private void Replace(ICardManagement old, ICardManagement add)
+        {
+            var changed = false;
+
+            if (old != null)
+            {
+                var find = _origin.FirstOrDefault(x => string.Equals(x.Number, old.Number));
+                if (find != null)
+                {
+                    _origin.Remove(find);
+                    changed = true;
+                }
+            }
+
+            if (add != null)
+            {
+                var find = _origin.FirstOrDefault(x => string.Equals(x.Number, add.Number));
+                if (find != null)
+                {
+                    _origin.Remove(find);
+                }
+
+                _origin.Add(add);
+                changed = true;
+            }
+
+            if (changed)
+            {
+                ChangeNotifier.SetChange(nameof(Origin));
+                PerformSearch();
+            }
+        }
+
+        #endregion
     }
 
     public class SortPresets

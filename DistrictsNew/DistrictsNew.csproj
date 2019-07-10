@@ -44,6 +44,9 @@
     <Reference Include="Mvvm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Mvvm.1.0.4\lib\Mvvm.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -65,15 +68,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\WindowExtensions.cs" />
+    <Compile Include="ResourceDictionaries\Styles\Window.xaml.cs">
+      <DependentUpon>Window.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\Base\ChangesViewModel.cs" />
     <Compile Include="ViewModel\Base\ErrorViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ManageViewModel.cs" />
     <Compile Include="ViewModel\Base\HostViewModelBase.cs" />
     <Compile Include="ViewModel\ErrorInfo\ErrorInfo.cs" />
     <Compile Include="ViewModel\HostDialogs\AddCardViewModel.cs" />
+    <Compile Include="ViewModel\HostDialogs\WarningMessage.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\Manage\CardManagementViewModel.cs" />
-    <Compile Include="ViewModel\Manage\ManageRecordViewModel.cs" />
+    <Compile Include="ViewModel\HostDialogs\Manage\CardManagementViewModel.cs" />
+    <Compile Include="ViewModel\HostDialogs\Manage\ManageRecordViewModel.cs" />
     <Compile Include="View\ActionView.xaml.cs">
       <DependentUpon>ActionView.xaml</DependentUpon>
     </Compile>
@@ -84,7 +93,10 @@
     <Compile Include="View\DialogHostViews\EditCardView.xaml.cs">
       <DependentUpon>EditCardView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialogs\DialogWindowBase.xaml.cs">
+    <Compile Include="View\DialogHostViews\ManageRecordView.xaml.cs">
+      <DependentUpon>ManageRecordView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\Base\DialogWindowBase.xaml.cs">
       <DependentUpon>DialogWindowBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Dialogs\ManagementView.xaml.cs">
@@ -95,7 +107,8 @@
     </Compile>
     <Compile Include="WpfConverters\EnumDescrConverter.cs" />
     <Compile Include="WpfConverters\IsEmptyStrConverter.cs" />
-    <Page Include="DataTemplate\DataTemplates.xaml">
+    <Compile Include="WpfConverters\OpactiyConverter.cs" />
+    <Page Include="ResourceDictionaries\DataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,6 +124,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ResourceDictionaries\Styles\Window.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ActionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -123,7 +140,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Dialogs\DialogWindowBase.xaml">
+    <Page Include="View\DialogHostViews\ManageRecordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\Base\DialogWindowBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,7 +178,7 @@
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
@@ -170,8 +191,6 @@
       <Name>DistrictsLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\Dialogs\Base\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

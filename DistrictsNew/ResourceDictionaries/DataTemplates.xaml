@@ -1,0 +1,69 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:view="clr-namespace:DistrictsNew.View"
+                    xmlns:viewModel="clr-namespace:DistrictsNew.ViewModel"
+                    xmlns:hostDialogs="clr-namespace:DistrictsNew.ViewModel.HostDialogs"
+                    xmlns:dialogHostViews="clr-namespace:DistrictsNew.View.DialogHostViews"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:p="clr-namespace:DistrictsNew.Properties"
+                    xmlns:dialogs="clr-namespace:DistrictsNew.ViewModel.Dialogs"
+                    xmlns:manage="clr-namespace:DistrictsNew.ViewModel.Manage">
+
+
+    <DataTemplate DataType="{x:Type hostDialogs:AddCardViewModel}">
+        <dialogHostViews:ConfirmDialogView>
+            <TextBox HorizontalAlignment="Center"
+                     TabIndex="0"
+                     VerticalAlignment="Center"
+                     MinWidth="150"
+                     materialDesign:HintAssist.IsFloating="True"
+                     materialDesign:HintAssist.Hint="{x:Static p:Resources.AddCard_EnterCardName}"
+                     Text="{Binding Path=CardName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        </dialogHostViews:ConfirmDialogView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type manage:CardManagementViewModel}">
+        <dialogHostViews:ConfirmDialogView>
+            <dialogHostViews:EditCardView/>
+        </dialogHostViews:ConfirmDialogView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type manage:ManageRecordViewModel}">
+        <dialogHostViews:ConfirmDialogView>
+            <dialogHostViews:ManageRecordView/>
+        </dialogHostViews:ConfirmDialogView>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type hostDialogs:WarningMessage}">
+
+        <dialogHostViews:ConfirmDialogView OkText="{x:Static p:Resources.AS_Confirm}"
+                                           MaxWidth="350">
+            <TextBlock TextWrapping="Wrap"
+                       Margin="10"
+                       VerticalAlignment="Center"
+                       MinWidth="150"
+                       Text="{Binding Path=Text}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock"
+                           BasedOn="{StaticResource MaterialDesignBody1TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsError}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource SecondaryAccentBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </dialogHostViews:ConfirmDialogView>
+    </DataTemplate>
+
+
+
+
+    <DataTemplate DataType="{x:Type dialogs:ManageViewModel}">
+        <view:ManagementView/>
+    </DataTemplate>
+
+
+    
+</ResourceDictionary>

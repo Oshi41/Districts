@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
+using System.Windows.Threading;
+using DistrictsLib.Implementation;
+using DistrictsNew.ViewModel;
 
 namespace DistrictsNew
 {
@@ -7,5 +11,36 @@ namespace DistrictsNew
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            DispatcherUnhandledException += TraceUnhandledEx;
+        }
+
+        private void TraceUnhandledEx(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            Trace.WriteLine($"!!! UNHANDLED !!!\n{e.Exception}");
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var settings = DistrictsNew.Properties.Settings.Default;
+
+            var loader = new LoadingManager(
+                settings.BuildingFolder,
+                settings.HomeInfoFolder,
+                settings.RestrictionsFolder,
+                settings.CardsFolder,
+                settings.ManageFolder);
+
+            var window = new MainWindow
+            {
+                DataContext = new MainViewModel(loader, loader)
+            };
+
+            window.ShowDialog();
+            App.Current.Shutdown(0);
+        }
     }
 }

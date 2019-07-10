@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="DistrictsNew.View.DialogHostViews.ManageRecordView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:manage="clr-namespace:DistrictsNew.ViewModel.Manage"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:p="clr-namespace:DistrictsNew.Properties"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:manage1="clr-namespace:DistrictsLib.Legacy.JsonClasses.Manage;assembly=DistrictsLib"
+             xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200"
+             d:DataContext="{d:DesignInstance Type={x:Type manage:ManageRecordViewModel}}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ObjectDataProvider x:Key="enumItems"
+                                MethodName="GetValues"
+                                ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="manage1:ActionTypes"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <wpfConverters:EnumDescrConverter x:Key="EnumDescrConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox Margin="5"
+                  materialDesign:HintAssist.IsFloating="True"
+                  materialDesign:HintAssist.Hint="{x:Static p:Resources.AS_EnterName}"
+                  ItemsSource="{Binding Path=AvailableSubjects}"
+                  Text="{Binding Path=Subject, UpdateSourceTrigger=PropertyChanged}"
+                  IsEditable="True"/>
+
+        <DatePicker Grid.Row="1"
+                    Margin="5"
+                    DisplayDate="{Binding Path=Date}"
+                    SelectedDateFormat="Long"
+                    materialDesign:HintAssist.IsFloating="True"
+                    materialDesign:HintAssist.Hint="{x:Static p:Resources.AS_EnterDate}"/>
+
+        <ComboBox Grid.Row="2"
+                  Margin="5"
+                  ItemsSource="{Binding Source={StaticResource enumItems}}"
+                  SelectedValue="{Binding Path=ActionType}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type manage1:ActionTypes}">
+                    <TextBlock Text="{Binding Converter={StaticResource EnumDescrConverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </Grid>
+</UserControl>
