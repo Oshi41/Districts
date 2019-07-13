@@ -234,6 +234,33 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Папка с архивными копиями данных.
+        /// </summary>
+        public static string Main_BackupFolder {
+            get {
+                return ResourceManager.GetString("Main_BackupFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Файлы:.
+        /// </summary>
+        public static string Main_Files {
+            get {
+                return ResourceManager.GetString("Main_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Папка с историей ведения карточек.
+        /// </summary>
+        public static string Main_ManagementFolder {
+            get {
+                return ResourceManager.GetString("Main_ManagementFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Действия.
         /// </summary>
         public static string Main_Menu_Actions {

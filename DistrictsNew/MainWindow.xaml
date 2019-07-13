@@ -47,11 +47,17 @@
     
         <materialDesign:Card Grid.Row="1">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Файлы:"/>
+                <TextBlock Text="{x:Static p:Resources.Main_Files}"/>
+
+                <TextBlock >
+                    <Hyperlink Command="{Binding Path=OpenManageFolder}">
+                        <Run Text="{x:Static p:Resources.Main_ManagementFolder}"/>
+                    </Hyperlink>
+                </TextBlock>
 
                 <TextBlock>
-                    <Hyperlink Command="{Binding Path=OpenManageFolder}">
-                        <Run Text="Папка с историей ведения карточек"/>
+                    <Hyperlink Command="{Binding Path=OpenBackupFolder}">
+                        <Run Text="{x:Static p:Resources.Main_BackupFolder}"/>
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>

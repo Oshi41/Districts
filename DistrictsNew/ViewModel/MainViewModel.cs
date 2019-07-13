@@ -30,6 +30,8 @@ namespace DistrictsNew.ViewModel
 
         public ICommand OpenCreateArchiveCommand { get; }
 
+        public ICommand OpenBackupFolder { get; }
+
         public MainViewModel(IParser parser, ISerializer serializer)
         {
             _parser = parser;
@@ -37,8 +39,10 @@ namespace DistrictsNew.ViewModel
             OpenManagementcommand = new DelegateCommand(OnOpenManage);
             OpenSettingsCommand = new DelegateCommand(OnOpenSettings);
             OpenCreateArchiveCommand = new DelegateCommand(OnOpenCreateArchive);
+            
 
             OpenManageFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.ManageFolder));
+            OpenBackupFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.BackupFolder));
         }
 
         private void OnOpenCreateArchive()

@@ -263,4 +263,13 @@
     <value>Архив создан:
 {0}</value>
   </data>
+  <data name="Main_BackupFolder" xml:space="preserve">
+    <value>Папка с архивными копиями данных</value>
+  </data>
+  <data name="Main_Files" xml:space="preserve">
+    <value>Файлы:</value>
+  </data>
+  <data name="Main_ManagementFolder" xml:space="preserve">
+    <value>Папка с историей ведения карточек</value>
+  </data>
 </root>
