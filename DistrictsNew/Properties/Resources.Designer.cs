@@ -143,11 +143,84 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Выбрать все.
+        /// </summary>
+        public static string AS_SelectAll {
+            get {
+                return ResourceManager.GetString("AS_SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Отмена.
         /// </summary>
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Архив создан:
+        ///{0}.
+        /// </summary>
+        public static string CreateArchive_StrFormat_ArchiveCreated {
+            get {
+                return ResourceManager.GetString("CreateArchive_StrFormat_ArchiveCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Архивировать.
+        /// </summary>
+        public static string CreateBackup_Archivating {
+            get {
+                return ResourceManager.GetString("CreateBackup_Archivating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ошибка в процессе создания архива:.
+        /// </summary>
+        public static string CreateBackup_Archivating_Error {
+            get {
+                return ResourceManager.GetString("CreateBackup_Archivating_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Путь где будет создан архив.
+        /// </summary>
+        public static string CreateBackup_BackupFolder {
+            get {
+                return ResourceManager.GetString("CreateBackup_BackupFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выберите файлы или папки для сохранения.
+        /// </summary>
+        public static string CreateBackup_ChooseFiles {
+            get {
+                return ResourceManager.GetString("CreateBackup_ChooseFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Список файлов и папок доступных для архивации.
+        /// </summary>
+        public static string CreateBackup_EntriesList {
+            get {
+                return ResourceManager.GetString("CreateBackup_EntriesList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Создание архивной копии.
+        /// </summary>
+        public static string CreateBackup_Title {
+            get {
+                return ResourceManager.GetString("CreateBackup_Title", resourceCulture);
             }
         }
         

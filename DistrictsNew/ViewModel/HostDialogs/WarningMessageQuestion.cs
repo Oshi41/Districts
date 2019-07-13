@@ -7,9 +7,9 @@ using Mvvm;
 
 namespace DistrictsNew.ViewModel.HostDialogs
 {
-    public class WarningMessage : BindableBase
+    public class WarningMessageQuestion : BindableBase
     {
-        public WarningMessage(string text, bool isError = false)
+        public WarningMessageQuestion(string text, bool isError = false)
         {
             Text = text;
             IsError = isError;

@@ -7,7 +7,8 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:p="clr-namespace:DistrictsNew.Properties"
                     xmlns:dialogs="clr-namespace:DistrictsNew.ViewModel.Dialogs"
-                    xmlns:manage="clr-namespace:DistrictsNew.ViewModel.Manage">
+                    xmlns:manage="clr-namespace:DistrictsNew.ViewModel.Manage"
+                    xmlns:dialogs1="clr-namespace:DistrictsNew.View.Dialogs">
 
 
     <DataTemplate DataType="{x:Type hostDialogs:AddCardViewModel}">
@@ -34,7 +35,7 @@
         </dialogHostViews:ConfirmDialogView>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type hostDialogs:WarningMessage}">
+    <DataTemplate DataType="{x:Type hostDialogs:WarningMessageQuestion}">
 
         <dialogHostViews:ConfirmDialogView OkText="{x:Static p:Resources.AS_Confirm}"
                                            MaxWidth="350">
@@ -57,6 +58,10 @@
         </dialogHostViews:ConfirmDialogView>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type hostDialogs:DialogMessage}">
+        <dialogHostViews:DialogView/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type hostDialogs:ChooseStreetViewModel}">
         <dialogHostViews:ConfirmDialogView>
             <dialogHostViews:ChooseStreetView/>
@@ -72,6 +77,9 @@
         <view:Settings/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type dialogs:CreateBackupViewModel}">
+        <dialogs1:CreateBackupView/>
+    </DataTemplate>
 
     
 </ResourceDictionary>

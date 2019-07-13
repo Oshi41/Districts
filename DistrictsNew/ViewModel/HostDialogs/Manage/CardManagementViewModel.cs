@@ -87,7 +87,7 @@ namespace DistrictsNew.ViewModel.Manage
             if (!OnCanDeleteCommand(manageRecord))
                 return;
 
-            if (!await Show(new WarningMessage(Properties.Resources.AS_DeleteRecordConfirmation, true)))
+            if (!await Show(new WarningMessageQuestion(Properties.Resources.AS_DeleteRecordConfirmation, true)))
                 return;
 
             Actions.Remove(manageRecord);

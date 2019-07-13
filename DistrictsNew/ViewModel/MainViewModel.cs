@@ -28,14 +28,28 @@ namespace DistrictsNew.ViewModel
 
         public ICommand OpenSettingsCommand { get; }
 
+        public ICommand OpenCreateArchiveCommand { get; }
+
         public MainViewModel(IParser parser, ISerializer serializer)
         {
             _parser = parser;
             _serializer = serializer;
             OpenManagementcommand = new DelegateCommand(OnOpenManage);
             OpenSettingsCommand = new DelegateCommand(OnOpenSettings);
+            OpenCreateArchiveCommand = new DelegateCommand(OnOpenCreateArchive);
 
             OpenManageFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.ManageFolder));
+        }
+
+        private void OnOpenCreateArchive()
+        {
+            var vm = new CreateBackupViewModel(new SimpleNotifier(),
+                new Archiver(),
+                Path.GetDirectoryName(Properties.Settings.Default.BackupFolder),
+                Properties.Settings.Default.BackupFolder,
+                new ActionArbiter());
+
+            vm.ShowDialog(Properties.Resources.CreateBackup_Title, 400);
         }
 
         private void OnOpenSettings()

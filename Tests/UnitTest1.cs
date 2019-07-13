@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -105,6 +106,15 @@ namespace Tests
 
             if (theSame.Any())
                 throw new Exception();
+        }
+
+        [TestMethod]
+        public void TestDirectorySearch()
+        {
+            var dir = @"D:\VsProjects\Oshi41\Districts";
+
+            var childrenDirs = Directory.GetDirectories(dir);
+            var childrenFiies = Directory.GetFiles(dir);
         }
     }
 }

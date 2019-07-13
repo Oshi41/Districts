@@ -6,7 +6,7 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        bool TryToZip(string source, string zip);
+        bool TryToZip(string zip, params string[] entries);
 
         /// <summary>
         /// Разархивирует файл в указанное место

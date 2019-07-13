@@ -238,4 +238,29 @@
   <data name="AddStreet_AlreadyExisting" xml:space="preserve">
     <value>Эта улица уже в списке</value>
   </data>
+  <data name="CreateBackup_ChooseFiles" xml:space="preserve">
+    <value>Выберите файлы или папки для сохранения</value>
+  </data>
+  <data name="CreateBackup_EntriesList" xml:space="preserve">
+    <value>Список файлов и папок доступных для архивации</value>
+  </data>
+  <data name="CreateBackup_Title" xml:space="preserve">
+    <value>Создание архивной копии</value>
+  </data>
+  <data name="CreateBackup_Archivating" xml:space="preserve">
+    <value>Архивировать</value>
+  </data>
+  <data name="CreateBackup_BackupFolder" xml:space="preserve">
+    <value>Путь где будет создан архив</value>
+  </data>
+  <data name="CreateBackup_Archivating_Error" xml:space="preserve">
+    <value>Ошибка в процессе создания архива:</value>
+  </data>
+  <data name="AS_SelectAll" xml:space="preserve">
+    <value>Выбрать все</value>
+  </data>
+  <data name="CreateArchive_StrFormat_ArchiveCreated" xml:space="preserve">
+    <value>Архив создан:
+{0}</value>
+  </data>
 </root>

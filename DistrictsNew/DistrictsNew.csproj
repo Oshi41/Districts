@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -78,13 +81,15 @@
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\Base\ChangesViewModel.cs" />
     <Compile Include="ViewModel\Base\ErrorViewModel.cs" />
+    <Compile Include="ViewModel\Dialogs\CreateBackupViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ManageViewModel.cs" />
     <Compile Include="ViewModel\Base\HostViewModelBase.cs" />
     <Compile Include="ViewModel\Dialogs\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ErrorInfo\ErrorInfo.cs" />
     <Compile Include="ViewModel\HostDialogs\AddCardViewModel.cs" />
     <Compile Include="ViewModel\HostDialogs\ChooseStreetViewModel.cs" />
-    <Compile Include="ViewModel\HostDialogs\WarningMessage.cs" />
+    <Compile Include="ViewModel\HostDialogs\DialogMessage.cs" />
+    <Compile Include="ViewModel\HostDialogs\WarningMessageQuestion.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\HostDialogs\Manage\CardManagementViewModel.cs" />
     <Compile Include="ViewModel\HostDialogs\Manage\ManageRecordViewModel.cs" />
@@ -98,6 +103,9 @@
     <Compile Include="View\DialogHostViews\ChooseStreetView.xaml.cs">
       <DependentUpon>ChooseStreetView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\DialogHostViews\DialogView.xaml.cs">
+      <DependentUpon>DialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DialogHostViews\EditCardView.xaml.cs">
       <DependentUpon>EditCardView.xaml</DependentUpon>
     </Compile>
@@ -106,6 +114,9 @@
     </Compile>
     <Compile Include="View\Dialogs\Base\DialogWindowBase.xaml.cs">
       <DependentUpon>DialogWindowBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\CreateBackupView.xaml.cs">
+      <DependentUpon>CreateBackupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Dialogs\ManagementView.xaml.cs">
       <DependentUpon>ManagementView.xaml</DependentUpon>
@@ -150,6 +161,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\DialogHostViews\DialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\DialogHostViews\EditCardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -159,6 +174,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Dialogs\Base\DialogWindowBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\CreateBackupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
