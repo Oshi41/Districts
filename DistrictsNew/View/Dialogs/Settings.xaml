@@ -8,12 +8,15 @@
              xmlns:p="clr-namespace:DistrictsNew.Properties"
              xmlns:viewModel="clr-namespace:DistrictsNew.ViewModel"
              xmlns:dialogs="clr-namespace:DistrictsNew.ViewModel.Dialogs"
+             xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type={x:Type dialogs:SettingsViewModel}}">
 
     <UserControl.Resources>
         <ResourceDictionary>
+            <wpfConverters:ImageSourceWpfConverter x:Key="ImageSourceWpfConverter" />
+
             <Style TargetType="{x:Type materialDesign:Card}"
                    BasedOn="{StaticResource {x:Type materialDesign:Card}}">
                 <Setter Property="Margin" Value="10"/>
@@ -57,6 +60,27 @@
                                  Text="{Binding Path=BaseFolder, 
                                                 UpdateSourceTrigger=PropertyChanged}"/>
                         </DockPanel>
+
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <materialDesign:Card>
+                    <StackPanel Orientation="Vertical">
+                        <DockPanel>
+                            <Image Source="{Binding Source={x:Static p:Resources.gIcon},
+                                                    Converter={StaticResource ImageSourceWpfConverter}}"
+                                   VerticalAlignment="Top"
+                                   Width="24"
+                                   Height="24"
+                                   Margin="2"/>
+                            <TextBlock Text="{x:Static p:Resources.Settings_AutoGoogleSync}"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </DockPanel>
+
+                        <CheckBox IsChecked="{Binding Path=GoogleSync}"
+                                  Margin="5"
+                                  Content="{x:Static p:Resources.AS_Enable}"/>
 
                     </StackPanel>
                 </materialDesign:Card>

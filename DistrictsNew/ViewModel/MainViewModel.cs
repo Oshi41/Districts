@@ -76,6 +76,7 @@ namespace DistrictsNew.ViewModel
             var vm = new SettingsViewModel(new RememberChangesNotify(),
                 Path.GetDirectoryName(settings.StreetsFile),
                 settings.MaxDoors,
+                settings.GoogleSync,
                 _parser.LoadStreets(),
                 new TimedAction(new SafeThreadActionArbiter(new ActionArbiter())),
                 new StreetDownload());
@@ -83,6 +84,7 @@ namespace DistrictsNew.ViewModel
             if (vm.ShowDialog(Properties.Resources.Settings_Title,
                     400) == true)
             {
+                settings.GoogleSync = vm.GoogleSync;
                 settings.MaxDoors = vm.DoorCount;
                 settings.Propagate(vm.BaseFolder);
 

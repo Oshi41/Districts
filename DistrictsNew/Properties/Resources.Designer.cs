@@ -116,6 +116,15 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Включить.
+        /// </summary>
+        public static string AS_Enable {
+            get {
+                return ResourceManager.GetString("AS_Enable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Выберите дату.
         /// </summary>
         public static string AS_EnterDate {
@@ -230,6 +239,16 @@ namespace DistrictsNew.Properties {
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon gIcon {
+            get {
+                object obj = ResourceManager.GetObject("gIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -564,6 +583,15 @@ namespace DistrictsNew.Properties {
         public static string Settings_Add {
             get {
                 return ResourceManager.GetString("Settings_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Автоматическая синхронизация с Google.
+        /// </summary>
+        public static string Settings_AutoGoogleSync {
+            get {
+                return ResourceManager.GetString("Settings_AutoGoogleSync", resourceCulture);
             }
         }
         

@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -129,6 +130,7 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfConverters\EnumDescrConverter.cs" />
+    <Compile Include="WpfConverters\ImageSourceWpfConverter.cs" />
     <Compile Include="WpfConverters\IsEmptyStrConverter.cs" />
     <Compile Include="WpfConverters\IsNullConverter.cs" />
     <Compile Include="WpfConverters\MultiBoolConverter.cs" />
@@ -235,6 +237,8 @@
       <Name>DistrictsLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\gIcon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

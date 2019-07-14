@@ -20,6 +20,7 @@ namespace DistrictsNew.ViewModel.Dialogs
         private string _baseFolder;
         private IList<string> _streets;
         private int _doorCount;
+        private bool _googleSync;
 
         #endregion
 
@@ -52,11 +53,18 @@ namespace DistrictsNew.ViewModel.Dialogs
 
         public ChooseStreetViewModel ChooseStreetVm { get; }
 
+        public bool GoogleSync
+        {
+            get => _googleSync;
+            set => SetAndRemember(ref _googleSync, value);
+        }
+
         #endregion
 
         public SettingsViewModel(IChangeNotifier changeNotifier,
             string baseFolder,
             int doors,
+            bool googleSync,
             IList<string> streets,
             ITimedAction timed,
             IStreetDownload download)
@@ -64,9 +72,10 @@ namespace DistrictsNew.ViewModel.Dialogs
         {
             _baseFolder = baseFolder;
             _doorCount = doors;
+            _googleSync = googleSync;
             _streets = new List<string>(streets);
 
-            ChooseStreetVm = new ChooseStreetViewModel(download, 
+            ChooseStreetVm = new ChooseStreetViewModel(download,
                 timed,
                 () => Streets);
             ChooseFolder = new DelegateCommand(OnChooseFolder);
