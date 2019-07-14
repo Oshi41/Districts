@@ -12,6 +12,7 @@ using DistrictsLib.Implementation.Archiver;
 using DistrictsLib.Implementation.ChangesNotifier;
 using DistrictsLib.Interfaces;
 using DistrictsNew.Extensions;
+using DistrictsNew.Models;
 using DistrictsNew.ViewModel.Dialogs;
 using Mvvm;
 using Mvvm.Commands;
@@ -52,7 +53,7 @@ namespace DistrictsNew.ViewModel
         private void OnOpenRestoreArchive()
         {
             var vm = new RestoreBackupViewModel(new SimpleNotifier(), 
-                new Archiver(), 
+                new ArchiveModel(new Archiver()), 
                 Properties.Settings.Default.BackupFolder);
 
             vm.ShowDialog(Properties.Resources.RestoreBackup_Title, 720, 440);
@@ -61,7 +62,7 @@ namespace DistrictsNew.ViewModel
         private void OnOpenCreateArchive()
         {
             var vm = new CreateBackupViewModel(new SimpleNotifier(),
-                new Archiver(),
+                new ArchiveModel(new Archiver()), 
                 Path.GetDirectoryName(Properties.Settings.Default.BackupFolder),
                 Properties.Settings.Default.BackupFolder,
                 new ActionArbiter());

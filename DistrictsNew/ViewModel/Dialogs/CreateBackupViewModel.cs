@@ -12,6 +12,7 @@ using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces;
 using DistrictsLib.Interfaces.ActionArbiter;
 using DistrictsLib.Interfaces.IArchiver;
+using DistrictsNew.Models.Interfaces;
 using DistrictsNew.ViewModel.Base;
 using DistrictsNew.ViewModel.HostDialogs;
 using MaterialDesignThemes.Wpf;
@@ -22,7 +23,7 @@ namespace DistrictsNew.ViewModel.Dialogs
 {
     public class CreateBackupViewModel : ChangesViewModel
     {
-        private readonly IArchiver _archiver;
+        private readonly ICreateArchiveModel _model;
         private string _backupFolder;
         private readonly IActionArbiter _arbiter;
         private bool? _isAllChecked;
@@ -56,13 +57,13 @@ namespace DistrictsNew.ViewModel.Dialogs
         public ICommand ChooseFolderCommand { get; }
 
         public CreateBackupViewModel(IChangeNotifier changeNotifier,
-            IArchiver archiver,
+            ICreateArchiveModel model,
             string baseFolder,
             string backupFolder,
             IActionArbiter arbiter)
             : base(changeNotifier)
         {
-            _archiver = archiver;
+            _model = model;
             _backupFolder = backupFolder;
             _arbiter = arbiter;
 
@@ -85,7 +86,18 @@ namespace DistrictsNew.ViewModel.Dialogs
 
         private void CreateZip()
         {
-            Archive(_archiver, BackupFolder);
+            try
+            {
+                var file = _model.CreateZipPath(BackupFolder, Items, null);
+
+                ChangeNotifier.SetChange();
+
+                ShowInfo(string.Format(Properties.Resources.CreateArchive_StrFormat_ArchiveCreated, file), false);
+            }
+            catch (Exception e)
+            {
+                ShowInfo(e.ToString());
+            }
         }
 
         private bool OnCanCreateZip()
@@ -104,45 +116,6 @@ namespace DistrictsNew.ViewModel.Dialogs
         }
 
         #endregion
-
-        private void Archive(IArchiver archiver, string backupFolder)
-        {
-            try
-            {
-                if (!Directory.Exists(backupFolder))
-                {
-                    throw new Exception($"Can't find backups folder - {backupFolder}");
-                }
-
-                var entries = Items
-                    .Where(x => x.IsChecked)
-                    .Select(x => x.FullName)
-                    .ToArray();
-
-                if (!entries.Any())
-                {
-                    throw new Exception($"Can't find backup entries");
-                }
-
-                var path = Path.Combine(backupFolder, $"{DateTime.Now.ToFullPrettyDateString()}.zip");
-
-                if (!archiver.TryToZip(path, entries))
-                {
-                    throw new Exception($"Error during creating backup with entries {string.Join(", ", entries)}" +
-                                        $" in backup folder {backupFolder}" +
-                                        $" and planning zip name {path}");
-                }
-
-                ChangeNotifier.SetChange();
-
-                ShowInfo(string.Format(Properties.Resources.CreateArchive_StrFormat_ArchiveCreated, path), false);
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine(e);
-                ShowInfo($"{Properties.Resources.CreateBackup_Archivating_Error}\n\n{e}");
-            }
-        }
 
         private void NotifyChanges(object sender, PropertyChangedEventArgs e)
         {

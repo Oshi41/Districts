@@ -106,6 +106,15 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Подключиться.
+        /// </summary>
+        public static string AS_Connect {
+            get {
+                return ResourceManager.GetString("AS_Connect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Удаление записи может ошибочно стереть историю ведения карточки.
         ///Подтвердить вменяемость?.
         /// </summary>
@@ -249,6 +258,60 @@ namespace DistrictsNew.Properties {
             get {
                 object obj = ResourceManager.GetObject("gIcon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Нужно ввести свое имя.
+        /// </summary>
+        public static string GoogleApi_AuthorHint {
+            get {
+                return ResourceManager.GetString("GoogleApi_AuthorHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Введите свой никнейм для истории.
+        /// </summary>
+        public static string GoogleApi_EnterAuthor {
+            get {
+                return ResourceManager.GetString("GoogleApi_EnterAuthor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не удалось подключиться.
+        /// </summary>
+        public static string GoogleApi_ErrorConnect {
+            get {
+                return ResourceManager.GetString("GoogleApi_ErrorConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Подключение прошло успешно.
+        /// </summary>
+        public static string GoogleApi_SuccessConnect {
+            get {
+                return ResourceManager.GetString("GoogleApi_SuccessConnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Данные синхронизированы.
+        /// </summary>
+        public static string GoogleApi_SyncData {
+            get {
+                return ResourceManager.GetString("GoogleApi_SyncData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ошибка при загрузке.
+        /// </summary>
+        public static string GoogleModel_UploadError {
+            get {
+                return ResourceManager.GetString("GoogleModel_UploadError", resourceCulture);
             }
         }
         

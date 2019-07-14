@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Ionic.Zip;
 
 namespace DistrictsLib.Interfaces.IArchiver
 {
@@ -8,7 +10,7 @@ namespace DistrictsLib.Interfaces.IArchiver
         /// 
         /// </summary>
         /// <returns></returns>
-        bool TryToZip(string zip, params string[] entries);
+        bool TryToZip(string zip, Func<ZipFile, string> commentFunc = null, params string[] entries);
 
         /// <summary>
         /// Разархивирует файл в указанное место

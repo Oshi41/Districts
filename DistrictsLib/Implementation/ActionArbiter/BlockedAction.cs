@@ -46,6 +46,11 @@ namespace DistrictsLib.Implementation.ActionArbiter
             _action.Do(action);
         }
 
+        public bool IsExecuting()
+        {
+            return _action.IsExecuting();
+        }
+
         #endregion
     }
 }

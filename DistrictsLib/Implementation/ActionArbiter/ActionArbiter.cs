@@ -37,6 +37,11 @@ namespace DistrictsLib.Implementation.ActionArbiter
             }
         }
 
+        public bool IsExecuting()
+        {
+            return _isExecuting;
+        }
+
         #endregion
     }
 }

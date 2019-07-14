@@ -8,5 +8,7 @@ namespace DistrictsLib.Interfaces.ActionArbiter
         void Do(Action action);
 
         void Do(Func<Task> action);
+
+        bool IsExecuting();
     }
 }

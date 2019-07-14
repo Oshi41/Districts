@@ -89,6 +89,7 @@
     <Compile Include="Implementation\ChangesNotifier\SimpleNotifier.cs" />
     <Compile Include="Implementation\GoogleApi\GoogleDataJson.cs" />
     <Compile Include="Implementation\GoogleApi\GoogleDriveApi.cs" />
+    <Compile Include="Implementation\GoogleApi\GoogleDriveApi2.cs" />
     <Compile Include="Implementation\GoogleApi\RegularGoogleData.cs" />
     <Compile Include="Implementation\Printing\Paginator\PrintPaginator.cs" />
     <Compile Include="Implementation\Printing\Printable.cs" />

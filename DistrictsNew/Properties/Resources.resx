@@ -313,4 +313,25 @@
   <data name="gIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="GoogleModel_UploadError" xml:space="preserve">
+    <value>Ошибка при загрузке</value>
+  </data>
+  <data name="GoogleApi_SuccessConnect" xml:space="preserve">
+    <value>Подключение прошло успешно</value>
+  </data>
+  <data name="GoogleApi_EnterAuthor" xml:space="preserve">
+    <value>Введите свой никнейм для истории</value>
+  </data>
+  <data name="GoogleApi_ErrorConnect" xml:space="preserve">
+    <value>Не удалось подключиться</value>
+  </data>
+  <data name="GoogleApi_SyncData" xml:space="preserve">
+    <value>Данные синхронизированы</value>
+  </data>
+  <data name="AS_Connect" xml:space="preserve">
+    <value>Подключиться</value>
+  </data>
+  <data name="GoogleApi_AuthorHint" xml:space="preserve">
+    <value>Нужно ввести свое имя</value>
+  </data>
 </root>

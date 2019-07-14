@@ -35,5 +35,10 @@ namespace DistrictsLib.Implementation.ActionArbiter
                 _arbiter.Do(action);
             }, null);
         }
+
+        public bool IsExecuting()
+        {
+            return _arbiter.IsExecuting();
+        }
     }
 }

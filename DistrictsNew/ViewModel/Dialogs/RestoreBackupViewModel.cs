@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DistrictsLib.Interfaces;
 using DistrictsLib.Interfaces.IArchiver;
+using DistrictsNew.Models;
 using DistrictsNew.ViewModel.Base;
 using DistrictsNew.ViewModel.HostDialogs;
 using MaterialDesignThemes.Wpf;
@@ -18,7 +19,7 @@ namespace DistrictsNew.ViewModel.Dialogs
 {
     class RestoreBackupViewModel : ChangesViewModel
     {
-        private readonly IArchiver _archiver;
+        private readonly IRestoreArchiveModel _model;
         private string _backupFolder;
         public List<IZipInfo> Archives { get; } = new List<IZipInfo>();
 
@@ -30,7 +31,20 @@ namespace DistrictsNew.ViewModel.Dialogs
                 if (SetProperty(ref _backupFolder, value))
                 {
                     Archives.Clear();
-                    Archives.AddRange(ReadZips(value));
+
+                    try
+                    {
+                        var toAdd = _model.ReadZips(value, out var warnings);
+                        Archives.AddRange(toAdd);
+                        if (!string.IsNullOrWhiteSpace(warnings))
+                        {
+                            ShowWarning(warnings);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ShowWarning(e.ToString());
+                    }
                 }
             }
         }
@@ -40,11 +54,11 @@ namespace DistrictsNew.ViewModel.Dialogs
         public ICommand RestoreArchiveCommand { get; }
 
         public RestoreBackupViewModel(IChangeNotifier changeNotifier,
-            IArchiver archiver,
+            IRestoreArchiveModel model,
             string backupFolder)
             : base(changeNotifier)
         {
-            _archiver = archiver;
+            _model = model;
             BackupFolder = backupFolder;
 
             RestoreArchiveCommand = DelegateCommand<IZipInfo>.FromAsyncHandler(OnRestore, info => info != null);
@@ -61,86 +75,27 @@ namespace DistrictsNew.ViewModel.Dialogs
             {
                 if (Equals(true, args.Parameter))
                 {
-                    var based = Path.GetDirectoryName(BackupFolder);
-
-                    var errors = string.Empty;
-                    foreach (var path in obj.RootedPaths)
+                    try
                     {
-                        try
-                        {
-                            var local = Path.Combine(based, path);
+                        var warnings = await _model.RestoreWithWarnings(obj, Path.GetDirectoryName(BackupFolder));
 
-                            if (File.Exists(local))
-                            {
-                                File.Delete(local);
-                                Trace.WriteLine($"Deleted file:\n{local}");
-                            }
+                        if (!string.IsNullOrWhiteSpace(warnings))
+                            ShowWarning(warnings);
 
-                            if (Directory.Exists(local))
-                            {
-                                Directory.Delete(local, true);
-                                Trace.WriteLine($"Deleted folder:\n{local}");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            errors += "\n" + e;
-                        }
+                        ChangeNotifier.SetChange();
+                        await DialogHost.Show(
+                            new DialogMessage(Properties.Resources.RestoreBackup_ArchiveRestored,
+                                false,
+                                cancelCaption: Properties.Resources.OK));
                     }
-
-                    if (!string.IsNullOrEmpty(errors))
+                    catch (Exception e)
                     {
-                        ShowWarning(errors);
+                        ShowWarning(e.ToString());
                     }
-
-                    if (!await Task.Run(() => _archiver.TryUnzip(obj.FullPath, based)))
-                    {
-                        ShowWarning($"Zip placed here\n{obj.FullPath}\nShould extracted here\n{based}\n");
-                        return;
-                    }
-
-                    ChangeNotifier.SetChange();
-                    await DialogHost.Show(
-                        new DialogMessage(Properties.Resources.RestoreBackup_ArchiveRestored,
-                            false,
-                            cancelCaption: Properties.Resources.OK));
                 }
             });
 
             await DialogHost.Show(vm, HostName, handler);
-        }
-
-        private IList<IZipInfo> ReadZips(string folder)
-        {
-            var result = new List<IZipInfo>();
-
-            if (!Directory.Exists(folder))
-            {
-                ShowWarning($"Can't find directory:\n{folder}");
-                return result;
-            }
-
-            var warnings = string.Empty;
-            foreach (var file in Directory.GetFiles(folder))
-            {
-                var info = _archiver.GetInfo(file);
-
-                if (info == null)
-                {
-                    warnings += $"Can't read zip from:\n{file}";
-                }
-                else
-                {
-                    result.Add(info);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(warnings))
-            {
-                ShowWarning(warnings);
-            }
-
-            return result;
         }
 
         private async void ShowWarning(string text, bool isError = true)

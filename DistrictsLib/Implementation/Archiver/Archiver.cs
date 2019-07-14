@@ -14,12 +14,17 @@ namespace DistrictsLib.Implementation.Archiver
     {
         #region Implementation of IArchiver
 
-        public bool TryToZip(string zip, params string[] entries)
+        public bool TryToZip(string zip, Func<ZipFile, string> commentFunc = null, params string[] entries)
         {
             if (File.Exists(zip) || entries.IsNullOrEmpty())
             {
                 Trace.WriteLine($"Zip file already existing {zip} or entries are empty");
                 return false;
+            }
+
+            if (commentFunc == null)
+            {
+                commentFunc = file => $"Created at {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}";
             }
 
             try
@@ -48,8 +53,7 @@ namespace DistrictsLib.Implementation.Archiver
                         }
                     }
 
-                    var now = DateTime.Now;
-                    zipFile.Comment = $"Created at {now.ToShortDateString()} {now.ToShortTimeString()}";
+                    zipFile.Comment = commentFunc(zipFile);
 
                     zipFile.Save(zip);
                     Trace.WriteLine($"Saved zip by path {zip}");
