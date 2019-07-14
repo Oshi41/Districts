@@ -27,11 +27,13 @@ namespace DistrictsNew.Properties {
         {
             this.SettingsLoaded -= SubscribeOnce;
 
-            // Сделать более точную проверку
             if (string.IsNullOrWhiteSpace(BuildingFolder))
             {
                 Init();
             }
+
+            // Пробуем создать папки
+            Propagate(Path.GetDirectoryName(BuildingFolder));
         }
 
         private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {

@@ -39,6 +39,8 @@
                           Command="{Binding Path=OpenManagementcommand}"/>
                 <MenuItem Header="{x:Static p:Resources.CreateBackup_Title}"
                           Command="{Binding Path=OpenCreateArchiveCommand}"/>
+                <MenuItem Header="{x:Static p:Resources.RestoreBackup_Title}"
+                          Command="{Binding Path=OpenRestoreArchiveCommand}"/>
                 <Separator/>
                 <MenuItem Header="{x:Static p:Resources.Settings_Title}"
                           Command="{Binding Path=OpenSettingsCommand}"/>

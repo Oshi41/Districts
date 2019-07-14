@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
-using Ionic.Zip;
 using DistrictsLib.Extentions;
-using DistrictsLib.Interfaces;
+using DistrictsLib.Interfaces.IArchiver;
+using Ionic.Zip;
 
-namespace DistrictsLib.Implementation
+namespace DistrictsLib.Implementation.Archiver
 {
     public class Archiver : IArchiver
     {
@@ -34,11 +36,11 @@ namespace DistrictsLib.Implementation
                     {
                         if (Directory.Exists(entry))
                         {
-                            zipFile.AddDirectory(entry, entry);
+                            zipFile.AddDirectory(entry, Path.GetFileName(entry));
                         }
                         else if (File.Exists(entry))
                         {
-                            zipFile.AddFile(entry, entry);
+                            zipFile.AddFile(entry, "");
                         }
                         else
                         {
@@ -64,9 +66,9 @@ namespace DistrictsLib.Implementation
 
         public bool TryUnzip(string zip, string destination)
         {
-            if (Directory.Exists(destination) || !File.Exists(zip))
+            if (!File.Exists(zip))
             {
-                Trace.WriteLine($"Zip file is not existing {zip} or folder already existing {destination}");
+                Trace.WriteLine($"Zip file is not existing {zip}");
                 return false;
             }
 
@@ -85,6 +87,30 @@ namespace DistrictsLib.Implementation
                 Trace.WriteLine(e);
                 return false;
             }
+        }
+
+        public IZipInfo GetInfo(string zip)
+        {
+            var rooted = new List<string>();
+
+            if (File.Exists(zip))
+            {
+                using (var file = new ZipFile(zip))
+                {
+                    rooted.AddRange(file
+                        .EntryFileNames
+                        .Select(x => x.TryGetRootedPath())
+                        .Where(x => !string.IsNullOrEmpty(x)));
+
+                    var comment = file.Comment;
+
+                    var date = file?.Entries?.FirstOrDefault()?.LastModified ?? DateTime.MinValue;
+
+                    return new ZipInfo(date, rooted, comment, zip);
+                }
+            }
+
+            return null;
         }
 
         #endregion

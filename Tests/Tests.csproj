@@ -92,6 +92,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Archiver\ArchiveTests.cs" />
     <Compile Include="API\Downloader\HintsTests.cs" />
     <Compile Include="EqualsTests.cs" />
     <Compile Include="GoogleDriveApi.cs" />

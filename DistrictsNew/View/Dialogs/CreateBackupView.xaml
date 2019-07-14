@@ -7,6 +7,7 @@
              xmlns:p="clr-namespace:DistrictsNew.Properties"
              xmlns:dialogs="clr-namespace:DistrictsNew.ViewModel.Dialogs"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
              mc:Ignorable="d" 
              d:DesignHeight="480" 
              d:DesignWidth="400"

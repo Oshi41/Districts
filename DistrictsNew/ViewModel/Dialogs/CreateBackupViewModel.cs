@@ -11,6 +11,7 @@ using System.Windows.Input;
 using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces;
 using DistrictsLib.Interfaces.ActionArbiter;
+using DistrictsLib.Interfaces.IArchiver;
 using DistrictsNew.ViewModel.Base;
 using DistrictsNew.ViewModel.HostDialogs;
 using MaterialDesignThemes.Wpf;

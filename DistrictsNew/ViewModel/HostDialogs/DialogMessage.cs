@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Mvvm;
+using Mvvm.Commands;
 
 namespace DistrictsNew.ViewModel.HostDialogs
 {
@@ -23,7 +25,8 @@ namespace DistrictsNew.ViewModel.HostDialogs
         public bool IsError { get; }
         public string OkCaption { get; }
         public string CancelCaption { get; }
-
         public string Text { get; }
+
+        public ICommand CloseCommand { get; } = new DelegateCommand(() => {});
     }
 }

@@ -77,11 +77,13 @@
     <Compile Include="Extentions\DateTimeExtenstions.cs" />
     <Compile Include="Extentions\LinqExtensions.cs" />
     <Compile Include="Extentions\ManageExtensions.cs" />
+    <Compile Include="Extentions\PathExtensions.cs" />
     <Compile Include="Implementation\ActionArbiter\ActionArbiter.cs" />
     <Compile Include="Implementation\ActionArbiter\BlockedAction.cs" />
     <Compile Include="Implementation\ActionArbiter\SafeThreadActionArbiter.cs" />
     <Compile Include="Implementation\ActionArbiter\TimedAction.cs" />
-    <Compile Include="Implementation\Archiver.cs" />
+    <Compile Include="Implementation\Archiver\Archiver.cs" />
+    <Compile Include="Implementation\Archiver\ZipInfo.cs" />
     <Compile Include="Implementation\CardGenerator.cs" />
     <Compile Include="Implementation\ChangesNotifier\RememberChangesNotify.cs" />
     <Compile Include="Implementation\ChangesNotifier\SimpleNotifier.cs" />
@@ -104,7 +106,8 @@
     <Compile Include="Interfaces\ActionArbiter\ITimedAction.cs" />
     <Compile Include="Interfaces\GoogleApi\IGoogleData.cs" />
     <Compile Include="Interfaces\ActionArbiter\IActionArbiter.cs" />
-    <Compile Include="Interfaces\IArchiver.cs" />
+    <Compile Include="Interfaces\IArchiver\IArchiver.cs" />
+    <Compile Include="Interfaces\IArchiver\IZipInfo.cs" />
     <Compile Include="Interfaces\ICardGenerator.cs" />
     <Compile Include="Interfaces\ICardRepare.cs" />
     <Compile Include="Interfaces\GoogleApi\IGoogleDriveApi.cs" />

@@ -272,4 +272,35 @@
   <data name="Main_ManagementFolder" xml:space="preserve">
     <value>Папка с историей ведения карточек</value>
   </data>
+  <data name="RestoreBackup_Archivating_Error" xml:space="preserve">
+    <value>Ошибка в процессе восстановления архива:</value>
+  </data>
+  <data name="RestoreBackup_Archivating_ReplaceWarning" xml:space="preserve">
+    <value>Восстановление архива затрёт сохранённые данные. Для сохранности данных создайте резевную копию
+Продолжить?</value>
+  </data>
+  <data name="RestoreBackup_ChooseArchive" xml:space="preserve">
+    <value>Выберите архив для восстановления</value>
+  </data>
+  <data name="RestoreBackup_ArchiveComment" xml:space="preserve">
+    <value>Коментарий</value>
+  </data>
+  <data name="RestoreBackup_ArchiveEntries" xml:space="preserve">
+    <value>Список файлов/папок</value>
+  </data>
+  <data name="RestoreBackup_ArchiveName" xml:space="preserve">
+    <value>Имя архива</value>
+  </data>
+  <data name="RestoreBackup_CreatedTime" xml:space="preserve">
+    <value>Дата создания</value>
+  </data>
+  <data name="RestoreBackup_RestoreArchive" xml:space="preserve">
+    <value>Восстановить архив</value>
+  </data>
+  <data name="RestoreBackup_Title" xml:space="preserve">
+    <value>Восстановление архива</value>
+  </data>
+  <data name="RestoreBackup_ArchiveRestored" xml:space="preserve">
+    <value>Архив восстановлен</value>
+  </data>
 </root>

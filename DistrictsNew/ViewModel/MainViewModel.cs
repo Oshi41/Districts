@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DistrictsLib.Implementation;
 using DistrictsLib.Implementation.ActionArbiter;
+using DistrictsLib.Implementation.Archiver;
 using DistrictsLib.Implementation.ChangesNotifier;
 using DistrictsLib.Interfaces;
 using DistrictsNew.Extensions;
@@ -32,6 +33,8 @@ namespace DistrictsNew.ViewModel
 
         public ICommand OpenBackupFolder { get; }
 
+        public ICommand OpenRestoreArchiveCommand { get; }
+
         public MainViewModel(IParser parser, ISerializer serializer)
         {
             _parser = parser;
@@ -39,10 +42,20 @@ namespace DistrictsNew.ViewModel
             OpenManagementcommand = new DelegateCommand(OnOpenManage);
             OpenSettingsCommand = new DelegateCommand(OnOpenSettings);
             OpenCreateArchiveCommand = new DelegateCommand(OnOpenCreateArchive);
-            
+            OpenRestoreArchiveCommand = new DelegateCommand(OnOpenRestoreArchive);
+
 
             OpenManageFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.ManageFolder));
             OpenBackupFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.BackupFolder));
+        }
+
+        private void OnOpenRestoreArchive()
+        {
+            var vm = new RestoreBackupViewModel(new SimpleNotifier(), 
+                new Archiver(), 
+                Properties.Settings.Default.BackupFolder);
+
+            vm.ShowDialog(Properties.Resources.RestoreBackup_Title, 720, 440);
         }
 
         private void OnOpenCreateArchive()
@@ -93,7 +106,14 @@ namespace DistrictsNew.ViewModel
 
         private void OpenLink(string uri)
         {
-            Process.Start(uri);
+            try
+            {
+                Process.Start(uri);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e);
+            }
         }
     }
 }

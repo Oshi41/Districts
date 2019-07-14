@@ -12,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MaterialDesignThemes.Wpf;
 
-namespace DistrictsNew.View.DialogHostViews
+namespace DistrictsNew.View.Dialogs
 {
     /// <summary>
-    /// Interaction logic for DialogView.xaml
+    /// Interaction logic for RestoreBackupView.xaml
     /// </summary>
-    public partial class DialogView : UserControl
+    public partial class RestoreBackupView : UserControl
     {
-        public DialogView()
+        public RestoreBackupView()
         {
             InitializeComponent();
         }

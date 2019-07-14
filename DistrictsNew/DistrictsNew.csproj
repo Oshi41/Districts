@@ -84,6 +84,7 @@
     <Compile Include="ViewModel\Dialogs\CreateBackupViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\ManageViewModel.cs" />
     <Compile Include="ViewModel\Base\HostViewModelBase.cs" />
+    <Compile Include="ViewModel\Dialogs\RestoreBackupViewModel.cs" />
     <Compile Include="ViewModel\Dialogs\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ErrorInfo\ErrorInfo.cs" />
     <Compile Include="ViewModel\HostDialogs\AddCardViewModel.cs" />
@@ -121,6 +122,9 @@
     <Compile Include="View\Dialogs\ManagementView.xaml.cs">
       <DependentUpon>ManagementView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Dialogs\RestoreBackupView.xaml.cs">
+      <DependentUpon>RestoreBackupView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Dialogs\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -129,6 +133,7 @@
     <Compile Include="WpfConverters\IsNullConverter.cs" />
     <Compile Include="WpfConverters\MultiBoolConverter.cs" />
     <Compile Include="WpfConverters\OpactiyConverter.cs" />
+    <Compile Include="WpfConverters\PathFileConverter.cs" />
     <Page Include="ResourceDictionaries\DataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -182,6 +187,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Dialogs\ManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\RestoreBackupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

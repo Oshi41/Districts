@@ -459,6 +459,97 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ошибка в процессе восстановления архива:.
+        /// </summary>
+        public static string RestoreBackup_Archivating_Error {
+            get {
+                return ResourceManager.GetString("RestoreBackup_Archivating_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Восстановление архива затрёт сохранённые данные. Для сохранности данных создайте резевную копию
+        ///Продолжить?.
+        /// </summary>
+        public static string RestoreBackup_Archivating_ReplaceWarning {
+            get {
+                return ResourceManager.GetString("RestoreBackup_Archivating_ReplaceWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Коментарий.
+        /// </summary>
+        public static string RestoreBackup_ArchiveComment {
+            get {
+                return ResourceManager.GetString("RestoreBackup_ArchiveComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Список файлов/папок.
+        /// </summary>
+        public static string RestoreBackup_ArchiveEntries {
+            get {
+                return ResourceManager.GetString("RestoreBackup_ArchiveEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Имя архива.
+        /// </summary>
+        public static string RestoreBackup_ArchiveName {
+            get {
+                return ResourceManager.GetString("RestoreBackup_ArchiveName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Архив восстановлен.
+        /// </summary>
+        public static string RestoreBackup_ArchiveRestored {
+            get {
+                return ResourceManager.GetString("RestoreBackup_ArchiveRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выберите архив для восстановления.
+        /// </summary>
+        public static string RestoreBackup_ChooseArchive {
+            get {
+                return ResourceManager.GetString("RestoreBackup_ChooseArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Дата создания.
+        /// </summary>
+        public static string RestoreBackup_CreatedTime {
+            get {
+                return ResourceManager.GetString("RestoreBackup_CreatedTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Восстановить архив.
+        /// </summary>
+        public static string RestoreBackup_RestoreArchive {
+            get {
+                return ResourceManager.GetString("RestoreBackup_RestoreArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Восстановление архива.
+        /// </summary>
+        public static string RestoreBackup_Title {
+            get {
+                return ResourceManager.GetString("RestoreBackup_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Поиск.
         /// </summary>
         public static string Search {

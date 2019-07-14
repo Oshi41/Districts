@@ -1,4 +1,6 @@
-﻿namespace DistrictsLib.Interfaces
+﻿using System.Collections.Generic;
+
+namespace DistrictsLib.Interfaces.IArchiver
 {
     public interface IArchiver
     {
@@ -15,5 +17,12 @@
         /// <param name="destination"></param>
         /// <returns></returns>
         bool TryUnzip(string zip, string destination);
+
+        /// <summary>
+        /// Вытаскивает список вхождений в архив
+        /// </summary>
+        /// <param name="zip"></param>
+        /// <returns></returns>
+        IZipInfo GetInfo(string zip);
     }
 }
