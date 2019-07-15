@@ -12,6 +12,7 @@ using DistrictsNew.Models.Interfaces;
 using DistrictsNew.ViewModel.Base;
 using DistrictsNew.ViewModel.Dialogs.Base;
 using DistrictsNew.ViewModel.HostDialogs;
+using MaterialDesignThemes.Wpf;
 using Mvvm.Commands;
 
 namespace DistrictsNew.ViewModel.Dialogs
@@ -36,6 +37,7 @@ namespace DistrictsNew.ViewModel.Dialogs
         //    set => SetProperty(ref _isConnected, value);
         //}
 
+        public ICommand ConnectCommand { get; }
         public ICommand UploadCommand { get; }
         public ICommand DownloadCommand { get; }
         public IReadOnlyCollection<SavingItem> Entries { get; }
@@ -47,7 +49,6 @@ namespace DistrictsNew.ViewModel.Dialogs
 
         public GoogleSyncViewModel(IChangeNotifier changeNotifier,
                                    IGoogleApiModel model,
-                                   IActionArbiter connectArbiter,
                                    string baseFolder)
             : base(changeNotifier)
         {
@@ -69,8 +70,22 @@ namespace DistrictsNew.ViewModel.Dialogs
 
             DownloadCommand = new DelegateCommand(OnDownload, OnIsConnected);
             UploadCommand = new DelegateCommand(OnUpload, OnIsConnected);
+            ConnectCommand = new DelegateCommand(OnOpenConnect, () => !OnIsConnected());
 
-            HostViewModel = new GoogleConnectViewModel(model, connectArbiter, settings.Login);
+            HostViewModel = new GoogleConnectViewModel(model, settings.Login);
+        }
+
+        private async void OnOpenConnect()
+        {
+            await DialogHost.Show(HostViewModel, HostName, RestrictClosing);
+        }
+
+        private void RestrictClosing(object sender, DialogClosingEventArgs e)
+        {
+            if (!OnIsConnected())
+            {
+                e.Cancel();
+            }
         }
 
         private void NotifyChanges(object sender, PropertyChangedEventArgs e)

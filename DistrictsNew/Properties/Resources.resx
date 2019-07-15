@@ -334,4 +334,7 @@
   <data name="GoogleApi_AuthorHint" xml:space="preserve">
     <value>Нужно ввести свое имя</value>
   </data>
+  <data name="GoogleApi_Title" xml:space="preserve">
+    <value>Google синхронизация</value>
+  </data>
 </root>

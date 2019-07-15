@@ -35,6 +35,8 @@
 
         <Menu>
             <MenuItem Header="{x:Static p:Resources.Main_Menu_Actions}">
+                <MenuItem Header="{x:Static p:Resources.GoogleApi_Title}"
+                          Command="{Binding Path=OpenGoogleSyncCommand}"/>
                 <MenuItem Header="{x:Static p:Resources.Manage_Title}"
                           Command="{Binding Path=OpenManagementcommand}"/>
                 <MenuItem Header="{x:Static p:Resources.CreateBackup_Title}"

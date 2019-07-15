@@ -12,8 +12,7 @@
              d:DataContext="{d:DesignInstance Type={x:Type hostDialogs:GoogleConnectViewModel}}">
     
     <StackPanel Orientation="Vertical"
-                Width="200"
-                Height="200"
+                MaxWidth="250"
                 Margin="10">
 
         <TextBox Margin="10,10,10,15"

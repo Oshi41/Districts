@@ -10,6 +10,7 @@ using DistrictsLib.Implementation;
 using DistrictsLib.Implementation.ActionArbiter;
 using DistrictsLib.Implementation.Archiver;
 using DistrictsLib.Implementation.ChangesNotifier;
+using DistrictsLib.Implementation.GoogleApi;
 using DistrictsLib.Interfaces;
 using DistrictsNew.Extensions;
 using DistrictsNew.Models;
@@ -36,6 +37,8 @@ namespace DistrictsNew.ViewModel
 
         public ICommand OpenRestoreArchiveCommand { get; }
 
+        public ICommand OpenGoogleSyncCommand { get; }
+
         public MainViewModel(IParser parser, ISerializer serializer)
         {
             _parser = parser;
@@ -44,10 +47,23 @@ namespace DistrictsNew.ViewModel
             OpenSettingsCommand = new DelegateCommand(OnOpenSettings);
             OpenCreateArchiveCommand = new DelegateCommand(OnOpenCreateArchive);
             OpenRestoreArchiveCommand = new DelegateCommand(OnOpenRestoreArchive);
+            OpenGoogleSyncCommand = new DelegateCommand(OnOpenGoogleSync);
 
 
             OpenManageFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.ManageFolder));
             OpenBackupFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.BackupFolder));
+        }
+
+        private void OnOpenGoogleSync()
+        {
+            var model = new ArchiveModel(new Archiver());
+
+            var vm = new GoogleSyncViewModel(new SimpleNotifier(), 
+                new GoogleApiModel(model, model, 
+                    new GoogleDriveApi2(Properties.Settings.Default.TokensFolder)),
+                Path.GetDirectoryName(Properties.Settings.Default.TokensFolder));
+
+            vm.ShowDialog(Properties.Resources.GoogleApi_Title, 300);
         }
 
         private void OnOpenRestoreArchive()

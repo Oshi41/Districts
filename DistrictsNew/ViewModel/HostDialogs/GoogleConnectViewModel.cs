@@ -14,8 +14,8 @@ namespace DistrictsNew.ViewModel.HostDialogs
 {
     class GoogleConnectViewModel : ErrorViewModel
     {
-        private readonly IActionArbiter _connectArbiter;
         private string _author;
+        private bool _isExecuting;
         public IGoogleApiModel Model { get; }
 
         public string Author
@@ -27,32 +27,35 @@ namespace DistrictsNew.ViewModel.HostDialogs
         public ICommand ConnectCommand { get; }
 
         public GoogleConnectViewModel(IGoogleApiModel model,
-            IActionArbiter connectArbiter,
             string author)
         {
-            _connectArbiter = connectArbiter;
             Model = model;
             Author = author;
 
             var command = new CompositeCommand();
 
-            command.RegisterCommand(new DelegateCommand(OnConnect, CanConnect));
+            command.RegisterCommand(DelegateCommand.FromAsyncHandler(OnConnect, CanConnect));
             command.RegisterCommand(DialogHost.CloseDialogCommand);
 
             ConnectCommand = command;
         }
 
-        private void OnConnect()
+        private async Task OnConnect()
         {
-            Model.Connect(Author);
+            _isExecuting = true;
+
+            await Model.Connect(Author);
+
             // Нужно для обработки валидации
             OnPropertyChanged(nameof(Author));
+
+            _isExecuting = false;
         }
 
         private bool CanConnect()
         {
             return !string.IsNullOrWhiteSpace(Author)
-                   && !_connectArbiter.IsExecuting();
+                   && !_isExecuting;
         }
 
         #region Overrides of ErrorViewModel

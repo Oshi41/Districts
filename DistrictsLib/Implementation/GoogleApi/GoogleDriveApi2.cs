@@ -16,7 +16,7 @@ using File = Google.Apis.Drive.v3.Data.File;
 
 namespace DistrictsLib.Implementation.GoogleApi
 {
-    class GoogleDriveApi2 : IGoogleDriveApi
+    public class GoogleDriveApi2 : IGoogleDriveApi
     {
         /// <summary>
         /// Имя файла, хранящегосся в гугл
