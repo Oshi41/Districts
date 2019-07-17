@@ -21,7 +21,7 @@ namespace DistrictsNew.ViewModel.Dialogs
     class GoogleSyncViewModel : DialogBaseViewModelBase
     {
 
-        private readonly string _baseFolder;
+        private readonly string _backupFolder;
 
         private bool _isExecuting;
         //private string _author;
@@ -53,8 +53,7 @@ namespace DistrictsNew.ViewModel.Dialogs
         public IReadOnlyCollection<SavingItem> Entries { get; }
 
         public GoogleSyncViewModel(IChangeNotifier changeNotifier,
-                                   IGoogleApiModel model,
-                                   string baseFolder)
+                                   IGoogleApiModel model)
             : base(changeNotifier)
         {
             var settings = Properties.Settings.Default;
@@ -71,7 +70,7 @@ namespace DistrictsNew.ViewModel.Dialogs
 
             Entries = list;
 
-            _baseFolder = baseFolder;
+            _backupFolder = settings.BackupFolder;
 
             DownloadCommand = ObservableCommand.FromAsyncHandler(OnDownload, OnCanExecuteCommands);
             UploadCommand = ObservableCommand.FromAsyncHandler(OnUpload, OnCanExecuteCommands);
@@ -101,9 +100,9 @@ namespace DistrictsNew.ViewModel.Dialogs
 
             try
             {
-                await HostViewModel.Model.ArchiveAndUpload(Entries, _baseFolder);
+                await HostViewModel.Model.ArchiveAndUpload(Entries, _backupFolder);
                 ShowInfo(Properties.Resources.GoogleApi_SyncData);
-                this.ChangeNotifier.SetChange();
+                ChangeNotifier.SetChange();
             }
             catch (Exception e)
             {
@@ -122,9 +121,9 @@ namespace DistrictsNew.ViewModel.Dialogs
 
             try
             {
-                await HostViewModel.Model.DownloadAndReplace(_baseFolder);
+                await HostViewModel.Model.DownloadAndReplace(_backupFolder);
                 ShowInfo(Properties.Resources.GoogleApi_SyncData);
-                this.ChangeNotifier.SetChange();
+                ChangeNotifier.SetChange();
             }
             catch (Exception e)
             {

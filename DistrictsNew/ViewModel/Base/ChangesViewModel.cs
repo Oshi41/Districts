@@ -15,7 +15,7 @@ namespace DistrictsNew.ViewModel.Base
 
         public ChangesViewModel(IChangeNotifier changeNotifier)
         {
-            if (ChangeNotifier != null)
+            if (changeNotifier != null)
             {
                 ChangeNotifier = changeNotifier;
                 ChangeNotifier.PropertyChanged += NofifyChanges;

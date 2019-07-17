@@ -41,7 +41,7 @@ namespace DistrictsNew.Models
 
         public async Task DownloadAndReplace(string backupFolder)
         {
-            var path = Path.Combine(Path.GetDirectoryName(backupFolder), $"google_{DateTime.Now.ToFullPrettyDateString()}.zip");
+            var path = Path.Combine(backupFolder, $"google_{DateTime.Now.ToFullPrettyDateString()}.zip");
             await _googleApi.Download(path);
 
             var latestZip = _restoreModel

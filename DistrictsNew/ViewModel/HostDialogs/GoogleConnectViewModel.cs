@@ -81,6 +81,14 @@ namespace DistrictsNew.ViewModel.HostDialogs
 
                 // Нужно для обработки валидации
                 OnPropertyChanged(nameof(Author));
+
+                // Сохраняю логин для гугла
+                if (IsConnected)
+                {
+                    var settings = Properties.Settings.Default;
+                    settings.Login = Author;
+                    settings.Save();
+                }
             }
         }
 
