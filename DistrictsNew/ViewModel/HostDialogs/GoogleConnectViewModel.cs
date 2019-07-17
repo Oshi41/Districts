@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DistrictsLib.Implementation.ChangesNotifier;
 using DistrictsLib.Interfaces.ActionArbiter;
 using DistrictsNew.Models.Interfaces;
 using DistrictsNew.ViewModel.Base;
+using DistrictsNew.ViewModel.Dialogs.Base;
 using MaterialDesignThemes.Wpf;
 using Mvvm.Commands;
 
 namespace DistrictsNew.ViewModel.HostDialogs
 {
-    class GoogleConnectViewModel : ErrorViewModel
+    class GoogleConnectViewModel : DialogBaseViewModelBase
     {
         private string _author;
+
+        private bool _isConnected;
         private bool _isExecuting;
         public IGoogleApiModel Model { get; }
 
@@ -24,38 +29,65 @@ namespace DistrictsNew.ViewModel.HostDialogs
             set => SetProperty(ref _author, value);
         }
 
+        // Условие видимости для кнопок
+        public bool IsConnected
+        {
+            get => _isConnected;
+            set => SetProperty(ref _isConnected, value);
+        }
+
+        // Условие видимости прогрессбара в кнопке
+        public bool IsExecuting
+        {
+            get => _isExecuting;
+            private set => SetProperty(ref _isExecuting, value);
+        }
+
         public ICommand ConnectCommand { get; }
+
+        public ICommand CancelCommand { get; }
+
 
         public GoogleConnectViewModel(IGoogleApiModel model,
             string author)
+            : base(null)
         {
             Model = model;
             Author = author;
 
-            var command = new CompositeCommand();
-
-            command.RegisterCommand(DelegateCommand.FromAsyncHandler(OnConnect, CanConnect));
-            command.RegisterCommand(DialogHost.CloseDialogCommand);
-
-            ConnectCommand = command;
+            ConnectCommand = DelegateCommand.FromAsyncHandler(OnConnect, CanConnect);
+            CancelCommand = new DelegateCommand(() => Model.Cancel(), () => IsExecuting);
         }
 
         private async Task OnConnect()
         {
-            _isExecuting = true;
+            try
+            {
+                IsExecuting = true;
 
-            await Model.Connect(Author);
+                // пытаемся подключиться
+                await Model.Connect(Author);
+            }
+            catch (Exception e)
+            {
+                // Трассируем ошибку и показываем её
+                Trace.WriteLine($"{nameof(GoogleConnectViewModel)}.{nameof(OnConnect)}: {e}");
+                ShowInfo($"{Properties.Resources.GoogleConnect_Error}\n\n{e}");
+            }
+            finally
+            {
+                IsExecuting = false;
+                IsConnected = Model.IsConnected();
 
-            // Нужно для обработки валидации
-            OnPropertyChanged(nameof(Author));
-
-            _isExecuting = false;
+                // Нужно для обработки валидации
+                OnPropertyChanged(nameof(Author));
+            }
         }
 
         private bool CanConnect()
         {
             return !string.IsNullOrWhiteSpace(Author)
-                   && !_isExecuting;
+                   && !IsExecuting;
         }
 
         #region Overrides of ErrorViewModel

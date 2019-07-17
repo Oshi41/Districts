@@ -9,6 +9,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:p="clr-namespace:DistrictsNew.Properties"
         xmlns:viewModel="clr-namespace:DistrictsNew.ViewModel"
+        xmlns:wpfConverters="clr-namespace:DistrictsNew.WpfConverters"
         mc:Ignorable="d"
         Title="Districts" 
         Height="500"
@@ -23,6 +24,8 @@
                 <Setter Property="Margin" Value="10"/>
                 <Setter Property="Padding" Value="10"/>
             </Style>
+
+            <wpfConverters:ImageSourceWpfConverter x:Key="ImageSourceWpfConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -35,8 +38,14 @@
 
         <Menu>
             <MenuItem Header="{x:Static p:Resources.Main_Menu_Actions}">
-                <MenuItem Header="{x:Static p:Resources.GoogleApi_Title}"
-                          Command="{Binding Path=OpenGoogleSyncCommand}"/>
+                <MenuItem Command="{Binding Path=OpenGoogleSyncCommand}"
+                          Header="{x:Static p:Resources.GoogleApi_Title}">
+                    <MenuItem.Icon>
+                        <Image Source="{Binding Source={x:Static p:Resources.gIcon}, Converter={StaticResource ImageSourceWpfConverter}}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator/>
                 <MenuItem Header="{x:Static p:Resources.Manage_Title}"
                           Command="{Binding Path=OpenManagementcommand}"/>
                 <MenuItem Header="{x:Static p:Resources.CreateBackup_Title}"

@@ -316,6 +316,42 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Скачать.
+        /// </summary>
+        public static string GoogleApiVm_Download {
+            get {
+                return ResourceManager.GetString("GoogleApiVm_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переподключиться.
+        /// </summary>
+        public static string GoogleApiVm_Reconnect {
+            get {
+                return ResourceManager.GetString("GoogleApiVm_Reconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Загрузить.
+        /// </summary>
+        public static string GoogleApiVm_Upload {
+            get {
+                return ResourceManager.GetString("GoogleApiVm_Upload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ошибка в процессе подключения к Google.
+        /// </summary>
+        public static string GoogleConnect_Error {
+            get {
+                return ResourceManager.GetString("GoogleConnect_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ошибка при загрузке.
         /// </summary>
         public static string GoogleModel_UploadError {

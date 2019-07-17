@@ -28,7 +28,7 @@ namespace DistrictsLib.Implementation.GoogleApi
         /// </summary>
         private DriveService _driveService;
 
-        private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
+        private CancellationTokenSource _cancellation;
         private readonly string _tokenPath;
 
         public GoogleDriveApi2(string tokenPath)
@@ -40,6 +40,8 @@ namespace DistrictsLib.Implementation.GoogleApi
 
         public async Task Connect(string author)
         {
+            _cancellation = new CancellationTokenSource();
+
             var googleCredentials = GoogleClientSecrets
                 .Load(
                     new MemoryStream(
@@ -69,6 +71,8 @@ namespace DistrictsLib.Implementation.GoogleApi
 
         public async Task Upload(string fileSource)
         {
+            _cancellation = new CancellationTokenSource();
+
             var file = await GetFile();
 
             using (var stream = new FileStream(fileSource, FileMode.Open))
@@ -92,6 +96,8 @@ namespace DistrictsLib.Implementation.GoogleApi
 
         public async Task Download(string destination)
         {
+            _cancellation = new CancellationTokenSource();
+
             var file = await GetFile();
             var request = _driveService.Files.Get(file.Id);
 

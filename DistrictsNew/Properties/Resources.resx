@@ -337,4 +337,16 @@
   <data name="GoogleApi_Title" xml:space="preserve">
     <value>Google синхронизация</value>
   </data>
+  <data name="GoogleConnect_Error" xml:space="preserve">
+    <value>Ошибка в процессе подключения к Google</value>
+  </data>
+  <data name="GoogleApiVm_Reconnect" xml:space="preserve">
+    <value>Переподключиться</value>
+  </data>
+  <data name="GoogleApiVm_Download" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
+  <data name="GoogleApiVm_Upload" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
 </root>

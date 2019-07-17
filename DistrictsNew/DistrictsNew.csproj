@@ -90,6 +90,7 @@
     <Compile Include="Models\Interfaces\ICreateArchiveModel.cs" />
     <Compile Include="Models\Interfaces\IGoogleApiModel.cs" />
     <Compile Include="Models\Interfaces\IRestoreArchiveModel.cs" />
+    <Compile Include="Models\ObservableCommand.cs" />
     <Compile Include="ResourceDictionaries\Styles\Window.xaml.cs">
       <DependentUpon>Window.xaml</DependentUpon>
     </Compile>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,7 @@ namespace DistrictsNew.Models
 
         public async Task ArchiveAndUpload(IReadOnlyCollection<SavingItem> entries, string baseFolder)
         {
-            var zip = _createModel.CreateZipPath(baseFolder, 
+            var zip = _createModel.CreateZipPath(baseFolder,
                 entries,
                 file => $"Created for Google {DateTime.Now.ToFullPrettyDateString()}");
 
@@ -52,12 +53,25 @@ namespace DistrictsNew.Models
 
         public async Task Connect(string autor)
         {
-            await _googleApi.Connect(autor);
+            try
+            {
+                await _googleApi.Connect(autor);
+            }
+            // Обрабатываю ошибку из-за отмены операции пользователем, остальные должны выбрасываться
+            catch (OperationCanceledException)
+            {
+                Trace.WriteLine("Google API Model: Operation was canceled");
+            }
         }
 
         public bool IsConnected()
         {
             return _googleApi.IsConnected();
+        }
+
+        public void Cancel()
+        {
+            _googleApi.Cancel();
         }
 
         #endregion

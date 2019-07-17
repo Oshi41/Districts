@@ -15,9 +15,11 @@ namespace DistrictsNew.ViewModel.Base
 
         public ChangesViewModel(IChangeNotifier changeNotifier)
         {
-            ChangeNotifier = changeNotifier;
-
-            ChangeNotifier.PropertyChanged += NofifyChanges;
+            if (ChangeNotifier != null)
+            {
+                ChangeNotifier = changeNotifier;
+                ChangeNotifier.PropertyChanged += NofifyChanges;
+            }
         }
 
         private void NofifyChanges(object sender, PropertyChangedEventArgs e)
@@ -28,13 +30,13 @@ namespace DistrictsNew.ViewModel.Base
         /// <summary>
         /// Были и произведены изменения
         /// </summary>
-        public bool IsChanged => ChangeNotifier.IsChanged();
+        public bool IsChanged => ChangeNotifier?.IsChanged() == true;
 
         protected bool SetAndRemember<T>(ref T source, T value, [CallerMemberName] string member = null)
         {
             if (!Equals(source, value))
             {
-                ChangeNotifier.Notify(source, value);
+                ChangeNotifier?.Notify(source, value);
                 SetProperty(ref source, value, member);
 
                 return true;

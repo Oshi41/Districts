@@ -63,7 +63,7 @@ namespace DistrictsNew.ViewModel
                     new GoogleDriveApi2(Properties.Settings.Default.TokensFolder)),
                 Path.GetDirectoryName(Properties.Settings.Default.TokensFolder));
 
-            vm.ShowDialog(Properties.Resources.GoogleApi_Title, 300);
+            vm.ShowDialog(Properties.Resources.GoogleApi_Title, 380);
         }
 
         private void OnOpenRestoreArchive()

@@ -32,5 +32,10 @@ namespace DistrictsNew.Models.Interfaces
         Task Connect(string autor);
 
         bool IsConnected();
+
+        /// <summary>
+        /// Отмена асинхронной операции
+        /// </summary>
+        void Cancel();
     }
 }

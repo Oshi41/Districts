@@ -8,11 +8,12 @@ namespace DistrictsNew.ViewModel.Dialogs.Base
 {
     class DialogBaseViewModelBase : ChangesViewModel
     {
-        public static string HostName { get; protected set; }
+        public string HostName { get; protected set; }
 
         public DialogBaseViewModelBase(IChangeNotifier changeNotifier) 
             : base(changeNotifier)
         {
+            HostName = this.GetType().Name;
         }
 
         protected async void ShowInfo(string text, bool isError = true)

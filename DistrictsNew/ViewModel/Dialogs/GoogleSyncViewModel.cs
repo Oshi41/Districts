@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DistrictsLib.Interfaces;
 using DistrictsLib.Interfaces.ActionArbiter;
+using DistrictsNew.Models;
 using DistrictsNew.Models.Interfaces;
 using DistrictsNew.ViewModel.Base;
 using DistrictsNew.ViewModel.Dialogs.Base;
@@ -19,11 +20,20 @@ namespace DistrictsNew.ViewModel.Dialogs
 {
     class GoogleSyncViewModel : DialogBaseViewModelBase
     {
+
         private readonly string _baseFolder;
+
+        private bool _isExecuting;
         //private string _author;
         //private bool _isConnected;
 
         public GoogleConnectViewModel HostViewModel { get; }
+
+        public bool IsExecuting
+        {
+            get => _isExecuting;
+            set => SetProperty(ref _isExecuting, value);
+        }
 
         //public string Author
         //{
@@ -38,14 +48,9 @@ namespace DistrictsNew.ViewModel.Dialogs
         //}
 
         public ICommand ConnectCommand { get; }
-        public ICommand UploadCommand { get; }
-        public ICommand DownloadCommand { get; }
+        public ObservableCommand UploadCommand { get; }
+        public ObservableCommand DownloadCommand { get; }
         public IReadOnlyCollection<SavingItem> Entries { get; }
-
-        static GoogleSyncViewModel()
-        {
-            HostName = nameof(GoogleSyncViewModel);
-        }
 
         public GoogleSyncViewModel(IChangeNotifier changeNotifier,
                                    IGoogleApiModel model,
@@ -68,24 +73,17 @@ namespace DistrictsNew.ViewModel.Dialogs
 
             _baseFolder = baseFolder;
 
-            DownloadCommand = new DelegateCommand(OnDownload, OnIsConnected);
-            UploadCommand = new DelegateCommand(OnUpload, OnIsConnected);
-            ConnectCommand = new DelegateCommand(OnOpenConnect, () => !OnIsConnected());
+            DownloadCommand = ObservableCommand.FromAsyncHandler(OnDownload, OnCanExecuteCommands);
+            UploadCommand = ObservableCommand.FromAsyncHandler(OnUpload, OnCanExecuteCommands);
+
+            ConnectCommand = new DelegateCommand(OnOpenConnect, () => !IsExecuting);
 
             HostViewModel = new GoogleConnectViewModel(model, settings.Login);
         }
 
         private async void OnOpenConnect()
         {
-            await DialogHost.Show(HostViewModel, HostName, RestrictClosing);
-        }
-
-        private void RestrictClosing(object sender, DialogClosingEventArgs e)
-        {
-            if (!OnIsConnected())
-            {
-                e.Cancel();
-            }
+            await DialogHost.Show(HostViewModel, HostName);
         }
 
         private void NotifyChanges(object sender, PropertyChangedEventArgs e)
@@ -97,37 +95,52 @@ namespace DistrictsNew.ViewModel.Dialogs
             }
         }
 
-        private void OnUpload()
+        private async Task OnUpload()
         {
+            IsExecuting = true;
+
             try
             {
-                HostViewModel.Model.ArchiveAndUpload(Entries, _baseFolder);
+                await HostViewModel.Model.ArchiveAndUpload(Entries, _baseFolder);
                 ShowInfo(Properties.Resources.GoogleApi_SyncData);
                 this.ChangeNotifier.SetChange();
             }
             catch (Exception e)
             {
+                // красивый текст уже сформирован
                 ShowInfo(e.ToString());
+            }
+            finally
+            {
+                IsExecuting = false;
             }
         }
 
-        private void OnDownload()
+        private async Task OnDownload()
         {
+            IsExecuting = true;
+
             try
             {
-                HostViewModel.Model.DownloadAndReplace(_baseFolder);
+                await HostViewModel.Model.DownloadAndReplace(_baseFolder);
                 ShowInfo(Properties.Resources.GoogleApi_SyncData);
                 this.ChangeNotifier.SetChange();
             }
             catch (Exception e)
             {
+                // красивый текст уже сформирован
                 ShowInfo(e.ToString());
+            }
+            finally
+            {
+                IsExecuting = false;
             }
         }
 
-        private bool OnIsConnected()
+        private bool OnCanExecuteCommands()
         {
-            return HostViewModel.Model.IsConnected();
+            return HostViewModel.Model.IsConnected()
+                && !IsExecuting;
         }
     }
 }
