@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ using DistrictsLib.Implementation.GoogleApi;
 using DistrictsLib.Interfaces;
 using DistrictsNew.Extensions;
 using DistrictsNew.Models;
+using DistrictsNew.Properties;
 using DistrictsNew.ViewModel.Dialogs;
 using Mvvm;
 using Mvvm.Commands;
@@ -24,6 +26,9 @@ namespace DistrictsNew.ViewModel
     {
         private readonly IParser _parser;
         private readonly ISerializer _serializer;
+        private readonly GoogleApiModel _googleModel;
+        private readonly GoogleSyncViewModel _googleSyncVm;
+        private bool _isBusy;
 
         public ICommand OpenManagementcommand { get; }
 
@@ -38,9 +43,16 @@ namespace DistrictsNew.ViewModel
         public ICommand OpenRestoreArchiveCommand { get; }
 
         public ICommand OpenGoogleSyncCommand { get; }
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set => SetProperty(ref _isBusy, value);
+        }
 
         public MainViewModel(IParser parser, ISerializer serializer)
         {
+            _isBusy = true;
+
             _parser = parser;
             _serializer = serializer;
             OpenManagementcommand = new DelegateCommand(OnOpenManage);
@@ -50,25 +62,71 @@ namespace DistrictsNew.ViewModel
             OpenGoogleSyncCommand = new DelegateCommand(OnOpenGoogleSync);
 
 
-            OpenManageFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.ManageFolder));
-            OpenBackupFolder = new DelegateCommand(() => OpenLink(Properties.Settings.Default.BackupFolder));
+            var settings = Settings.Default;
+
+            OpenManageFolder = new DelegateCommand(() => OpenLink(settings.ManageFolder));
+            OpenBackupFolder = new DelegateCommand(() => OpenLink(settings.BackupFolder));
+
+            var model = new ArchiveModel(new Archiver());
+            _googleModel = new GoogleApiModel(model, model,
+                new GoogleDriveApi2(settings.TokensFolder));
+            _googleSyncVm = new GoogleSyncViewModel(new SimpleNotifier(), _googleModel);
+
+            TryConnect(settings);
+        }
+
+        private async Task TryConnect(Settings settings)
+        {
+            try
+            {
+                if (!settings.GoogleSync)
+                    return;
+
+                await _googleModel.Connect(settings.Login);
+                await _googleModel.DownloadAndReplace(settings.BackupFolder);
+
+                App.Current.MainWindow.Closing += UploadToGoogle;
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine(e);
+                throw;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async void UploadToGoogle(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            IsBusy = true;
+
+            if (WindowExtensions
+                    .AskUser(Resources.AS_GoogleSync_UploadConfirm,
+                        Resources.GoogleApi_Title) == true)
+            {
+                await _googleSyncVm
+                    .HostViewModel
+                    .Model
+                    .ArchiveAndUpload(_googleSyncVm.Entries, Settings.Default.BackupFolder);
+            }
+            
+            IsBusy = false;
+
+            App.Current.Shutdown();
         }
 
         private void OnOpenGoogleSync()
         {
-            var model = new ArchiveModel(new Archiver());
-
-            var vm = new GoogleSyncViewModel(new SimpleNotifier(), 
-                new GoogleApiModel(model, model, 
-                    new GoogleDriveApi2(Properties.Settings.Default.TokensFolder)));
-
-            vm.ShowDialog(Properties.Resources.GoogleApi_Title, 380);
+            _googleSyncVm.ShowDialog(Properties.Resources.GoogleApi_Title, 380);
         }
 
         private void OnOpenRestoreArchive()
         {
-            var vm = new RestoreBackupViewModel(new SimpleNotifier(), 
-                new ArchiveModel(new Archiver()), 
+            var vm = new RestoreBackupViewModel(new SimpleNotifier(),
+                new ArchiveModel(new Archiver()),
                 Properties.Settings.Default.BackupFolder);
 
             vm.ShowDialog(Properties.Resources.RestoreBackup_Title, 720, 440);
@@ -77,7 +135,7 @@ namespace DistrictsNew.ViewModel
         private void OnOpenCreateArchive()
         {
             var vm = new CreateBackupViewModel(new SimpleNotifier(),
-                new ArchiveModel(new Archiver()), 
+                new ArchiveModel(new Archiver()),
                 Path.GetDirectoryName(Properties.Settings.Default.BackupFolder),
                 Properties.Settings.Default.BackupFolder,
                 new ActionArbiter());
@@ -93,6 +151,7 @@ namespace DistrictsNew.ViewModel
                 Path.GetDirectoryName(settings.StreetsFile),
                 settings.MaxDoors,
                 settings.GoogleSync,
+                settings.Login,
                 _parser.LoadStreets(),
                 new TimedAction(new SafeThreadActionArbiter(new ActionArbiter())),
                 new StreetDownload());

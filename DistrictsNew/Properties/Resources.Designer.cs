@@ -19,7 +19,7 @@ namespace DistrictsNew.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -161,11 +161,48 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to При открытии программа будет скачивать данные с гугла. При закрытии программа спросит пользователя о сохранении изменений в Google.
+        ///Продолжить?.
+        /// </summary>
+        public static string AS_GoogleSync_Confirm {
+            get {
+                return ResourceManager.GetString("AS_GoogleSync_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Загрузить изменения в Google?.
+        /// </summary>
+        public static string AS_GoogleSync_UploadConfirm {
+            get {
+                return ResourceManager.GetString("AS_GoogleSync_UploadConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google синхронизация....
+        /// </summary>
+        public static string AS_GoogleSync_Waiting {
+            get {
+                return ResourceManager.GetString("AS_GoogleSync_Waiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Выбрать все.
         /// </summary>
         public static string AS_SelectAll {
             get {
                 return ResourceManager.GetString("AS_SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Для автосинхронизации необходимо ввести свое имя в окне &quot;Google синхронизация&quot;.
+        /// </summary>
+        public static string AS_Settings_RestrictNeverConnecting {
+            get {
+                return ResourceManager.GetString("AS_Settings_RestrictNeverConnecting", resourceCulture);
             }
         }
         

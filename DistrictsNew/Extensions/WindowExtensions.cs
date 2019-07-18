@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using DistrictsNew.View.Dialogs;
 using DistrictsNew.ViewModel.Base;
 
@@ -10,6 +11,19 @@ namespace DistrictsNew.Extensions
 {
     public static class WindowExtensions
     {
+        public static bool? AskUser(string question, string title)
+        {
+            var result = MessageBox.Show(question,
+                title,
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Cancel)
+                return null;
+
+            return result == MessageBoxResult.Yes;
+        }
+
         public static bool? ShowDialog(this ChangesViewModel vm,
             string title,
             double? width = null,

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using DistrictsLib.Interfaces;
 using DistrictsLib.Interfaces.ActionArbiter;
+using DistrictsNew.Extensions;
 using DistrictsNew.ViewModel.Base;
 using DistrictsNew.ViewModel.HostDialogs;
 using MaterialDesignThemes.Wpf;
@@ -21,6 +22,7 @@ namespace DistrictsNew.ViewModel.Dialogs
         private IList<string> _streets;
         private int _doorCount;
         private bool _googleSync;
+        private readonly string _login;
 
         #endregion
 
@@ -56,7 +58,29 @@ namespace DistrictsNew.ViewModel.Dialogs
         public bool GoogleSync
         {
             get => _googleSync;
-            set => SetAndRemember(ref _googleSync, value);
+            set
+            {
+                if (string.IsNullOrWhiteSpace(_login))
+                {
+                    WindowExtensions.AskUser(Properties.Resources.AS_Settings_RestrictNeverConnecting,
+                        Properties.Resources.GoogleApi_Title);
+
+                    _googleSync = false;
+                    return;
+                }
+
+                if (!Equals(value, _googleSync) 
+                    && value)
+                {
+                    if (WindowExtensions.AskUser(Properties.Resources.AS_GoogleSync_Confirm,
+                            Properties.Resources.GoogleApi_Title) != true)
+                    {
+                        return;
+                    }
+                }
+
+                SetAndRemember(ref _googleSync, value);
+            }
         }
 
         #endregion
@@ -65,6 +89,7 @@ namespace DistrictsNew.ViewModel.Dialogs
             string baseFolder,
             int doors,
             bool googleSync,
+            string login,
             IList<string> streets,
             ITimedAction timed,
             IStreetDownload download)
@@ -73,6 +98,7 @@ namespace DistrictsNew.ViewModel.Dialogs
             _baseFolder = baseFolder;
             _doorCount = doors;
             _googleSync = googleSync;
+            _login = login;
             _streets = new List<string>(streets);
 
             ChooseStreetVm = new ChooseStreetViewModel(download,

@@ -138,7 +138,10 @@ namespace DistrictsLib.Implementation.GoogleApi
 
             var response = await request.ExecuteAsync(_cancellation.Token);
 
-            var file = response.Files.FirstOrDefault();
+            var file = response
+                .Files
+                .FirstOrDefault(x => string.Equals(_newFileName, x.Name));
+
             if (file != null)
             {
                 Trace.WriteLine($"Google API: File founded - {file.Name}");

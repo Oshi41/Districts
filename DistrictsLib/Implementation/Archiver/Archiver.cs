@@ -12,6 +12,8 @@ namespace DistrictsLib.Implementation.Archiver
 {
     public class Archiver : IArchiver
     {
+        private readonly Encoding _encoding = Encoding.GetEncoding(866);
+
         #region Implementation of IArchiver
 
         public bool TryToZip(string zip, Func<ZipFile, string> commentFunc = null, params string[] entries)
@@ -29,14 +31,8 @@ namespace DistrictsLib.Implementation.Archiver
 
             try
             {
-                using (var zipFile = new ZipFile())
+                using (var zipFile = new ZipFile(_encoding))
                 {
-                    //
-                    // нужно для русского языка
-                    //
-                    zipFile.AlternateEncodingUsage = ZipOption.Always;
-                    zipFile.AlternateEncoding = Encoding.GetEncoding(866);
-
                     foreach (var entry in entries)
                     {
                         if (Directory.Exists(entry))
@@ -78,7 +74,7 @@ namespace DistrictsLib.Implementation.Archiver
 
             try
             {
-                using (var archive = new ZipFile(zip))
+                using (var archive = new ZipFile(zip, _encoding))
                 {
                     archive.ExtractAll(destination);
                     Trace.WriteLine($"Successfully extracted ZIP {zip} to destination folder {destination}");

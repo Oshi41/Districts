@@ -29,51 +29,63 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+    <materialDesign:DialogHost IsOpen="{Binding Path=IsBusy}">
+        <materialDesign:DialogHost.DialogContent>
+            <StackPanel Orientation="Vertical"
+                        Margin="5">
+                <TextBlock Text="{x:Static p:Resources.AS_GoogleSync_Waiting}"
+                           Margin="10"/>
+                <ProgressBar Margin="10"
+                             IsIndeterminate="True"/>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
 
-        <Menu>
-            <MenuItem Header="{x:Static p:Resources.Main_Menu_Actions}">
-                <MenuItem Command="{Binding Path=OpenGoogleSyncCommand}"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Menu>
+                <MenuItem Header="{x:Static p:Resources.Main_Menu_Actions}">
+                    <MenuItem Command="{Binding Path=OpenGoogleSyncCommand}"
                           Header="{x:Static p:Resources.GoogleApi_Title}">
-                    <MenuItem.Icon>
-                        <Image Source="{Binding Source={x:Static p:Resources.gIcon}, Converter={StaticResource ImageSourceWpfConverter}}"/>
-                    </MenuItem.Icon>
-                </MenuItem>
+                        <MenuItem.Icon>
+                            <Image Source="{Binding Source={x:Static p:Resources.gIcon}, Converter={StaticResource ImageSourceWpfConverter}}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
 
-                <Separator/>
-                <MenuItem Header="{x:Static p:Resources.Manage_Title}"
+                    <Separator/>
+                    <MenuItem Header="{x:Static p:Resources.Manage_Title}"
                           Command="{Binding Path=OpenManagementcommand}"/>
-                <MenuItem Header="{x:Static p:Resources.CreateBackup_Title}"
+                    <MenuItem Header="{x:Static p:Resources.CreateBackup_Title}"
                           Command="{Binding Path=OpenCreateArchiveCommand}"/>
-                <MenuItem Header="{x:Static p:Resources.RestoreBackup_Title}"
+                    <MenuItem Header="{x:Static p:Resources.RestoreBackup_Title}"
                           Command="{Binding Path=OpenRestoreArchiveCommand}"/>
-                <Separator/>
-                <MenuItem Header="{x:Static p:Resources.Settings_Title}"
+                    <Separator/>
+                    <MenuItem Header="{x:Static p:Resources.Settings_Title}"
                           Command="{Binding Path=OpenSettingsCommand}"/>
-            </MenuItem>
-        </Menu>
-    
-        <materialDesign:Card Grid.Row="1">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{x:Static p:Resources.Main_Files}"/>
+                </MenuItem>
+            </Menu>
 
-                <TextBlock >
+            <materialDesign:Card Grid.Row="1">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="{x:Static p:Resources.Main_Files}"/>
+
+                    <TextBlock >
                     <Hyperlink Command="{Binding Path=OpenManageFolder}">
                         <Run Text="{x:Static p:Resources.Main_ManagementFolder}"/>
                     </Hyperlink>
-                </TextBlock>
+                    </TextBlock>
 
-                <TextBlock>
+                    <TextBlock>
                     <Hyperlink Command="{Binding Path=OpenBackupFolder}">
                         <Run Text="{x:Static p:Resources.Main_BackupFolder}"/>
                     </Hyperlink>
-                </TextBlock>
-            </StackPanel>
-        </materialDesign:Card>
-    </Grid>
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

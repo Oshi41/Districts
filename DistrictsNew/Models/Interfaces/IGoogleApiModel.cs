@@ -12,10 +12,10 @@ namespace DistrictsNew.Models.Interfaces
         /// <summary>
         /// Создаем копию и загржаем её в гугл
         /// </summary>
-        /// <param name="entries"></param>
-        /// <param name="baseFolder"></param>
+        /// <param name="entries">Список вхождений папок/файлов</param>
+        /// <param name="backupFolder">Откуда берём список папок/фалов - базовая папка откуда начинается иерархия папок</param>
         /// <returns></returns>
-        Task ArchiveAndUpload(IReadOnlyCollection<SavingItem> entries, string baseFolder);
+        Task ArchiveAndUpload(IReadOnlyCollection<SavingItem> entries, string backupFolder);
 
         /// <summary>
         /// Скачиваю архив с гугла и записываю

@@ -349,4 +349,17 @@
   <data name="GoogleApiVm_Upload" xml:space="preserve">
     <value>Загрузить</value>
   </data>
+  <data name="AS_GoogleSync_Waiting" xml:space="preserve">
+    <value>Google синхронизация...</value>
+  </data>
+  <data name="AS_GoogleSync_Confirm" xml:space="preserve">
+    <value>При открытии программа будет скачивать данные с гугла. При закрытии программа спросит пользователя о сохранении изменений в Google.
+Продолжить?</value>
+  </data>
+  <data name="AS_GoogleSync_UploadConfirm" xml:space="preserve">
+    <value>Загрузить изменения в Google?</value>
+  </data>
+  <data name="AS_Settings_RestrictNeverConnecting" xml:space="preserve">
+    <value>Для автосинхронизации необходимо ввести свое имя в окне "Google синхронизация"</value>
+  </data>
 </root>

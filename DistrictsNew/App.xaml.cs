@@ -47,7 +47,7 @@ namespace DistrictsNew
 
             window.ShowDialog();
 
-            App.Current.Shutdown(0);
+            App.Current?.Shutdown(0);
         }
     }
 }

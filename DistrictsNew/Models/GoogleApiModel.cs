@@ -30,9 +30,9 @@ namespace DistrictsNew.Models
 
         #region Implementation of IGoogleApiModel
 
-        public async Task ArchiveAndUpload(IReadOnlyCollection<SavingItem> entries, string baseFolder)
+        public async Task ArchiveAndUpload(IReadOnlyCollection<SavingItem> entries, string backupFolder)
         {
-            var zip = _createModel.CreateZipPath(baseFolder,
+            var zip = _createModel.CreateZipPath(backupFolder,
                 entries,
                 file => $"Created for Google {DateTime.Now.ToFullPrettyDateString()}");
 
