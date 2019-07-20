@@ -72,12 +72,20 @@ namespace DistrictsLib.Implementation.Archiver
                 return false;
             }
 
+            string temp = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
             try
             {
+                Directory.CreateDirectory(temp);
+
                 using (var archive = new ZipFile(zip, _encoding))
                 {
-                    archive.ExtractAll(destination);
-                    Trace.WriteLine($"Successfully extracted ZIP {zip} to destination folder {destination}");
+                    archive.ExtractAll(temp);
+                    Trace.WriteLine($"Successfully extracted ZIP {zip} to temporary folder {temp}");
+
+                    SafeMoveDir(temp, destination);
+
+                    Trace.WriteLine($"Successfully moved from {temp} to destination folder {destination}");
                 }
 
                 return true;
@@ -86,6 +94,11 @@ namespace DistrictsLib.Implementation.Archiver
             {
                 Trace.WriteLine(e);
                 return false;
+            }
+            finally
+            {
+                if (Directory.Exists(temp))
+                    Directory.Delete(temp, true);
             }
         }
 
@@ -114,5 +127,38 @@ namespace DistrictsLib.Implementation.Archiver
         }
 
         #endregion
+
+        private void SafeMoveDir(string source, string destination)
+        {
+            var folders = Directory
+                .GetDirectories(source)
+                .SelectRecursive(Directory.GetDirectories)
+                .ToList();
+
+            // создаем папки, если их нет
+            foreach (var folder in folders)
+            {
+                var newFodler = folder.Replace(source, destination);
+                if (!Directory.Exists(newFodler))
+                    Directory.CreateDirectory(newFodler);
+            }
+
+            folders.Add(source);
+
+            var all = folders.SelectMany(Directory.GetFiles);
+
+            foreach (var item in all)
+            {
+                var newName = item.Replace(source, destination);
+
+                if (File.Exists(newName))
+                {
+                    File.Delete(newName);
+                }
+
+
+                File.Move(item, newName);
+            }
+        }
     }
 }

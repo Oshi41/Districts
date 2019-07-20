@@ -66,39 +66,46 @@ namespace DistrictsNew.ViewModel.Dialogs
 
         private async Task OnRestore(IZipInfo obj)
         {
-            var vm = new DialogMessage(Properties.Resources.RestoreBackup_Archivating_ReplaceWarning, 
-                false, 
-                Properties.Resources.AS_Confirm, 
+            var vm = new DialogMessage(Properties.Resources.RestoreBackup_Archivating_ReplaceWarning,
+                false,
+                Properties.Resources.AS_Confirm,
                 Properties.Resources.Cancel);
 
-            var handler = new DialogClosingEventHandler(async (sender, args) =>
+            var result = await DialogHost.Show(vm, HostName);
+            if (!Equals(true, result))
+                return;
+
+
+            try
             {
-                if (Equals(true, args.Parameter))
+                string warnings;
+
+                using (new AwaitingMessageVm(Properties.Resources.AS_Awaiting, HostName))
                 {
-                    try
-                    {
-                        var warnings = await _model.RestoreWithWarnings(obj, Path.GetDirectoryName(BackupFolder));
-
-                        if (!string.IsNullOrWhiteSpace(warnings))
-                            ShowWarning(warnings);
-
-                        ChangeNotifier.SetChange();
-                        await DialogHost.Show(
-                            new DialogMessage(Properties.Resources.RestoreBackup_ArchiveRestored,
-                                false,
-                                cancelCaption: Properties.Resources.OK));
-                    }
-                    catch (Exception e)
-                    {
-                        ShowWarning(e.ToString());
-                    }
+                    warnings = await _model.RestoreWithWarnings(obj, Path.GetDirectoryName(BackupFolder));
+                    ChangeNotifier.SetChange();
                 }
-            });
 
-            await DialogHost.Show(vm, HostName, handler);
+                
+                if (!string.IsNullOrWhiteSpace(warnings))
+                {
+                    await ShowWarning(warnings, false);
+                }
+
+                await DialogHost.Show(
+                    new DialogMessage(Properties.Resources.RestoreBackup_ArchiveRestored,
+                        false,
+                        cancelCaption: Properties.Resources.OK), 
+                    HostName);
+            }
+
+            catch (Exception e)
+            {
+                await ShowWarning(e.ToString());
+            }
         }
 
-        private async void ShowWarning(string text, bool isError = true)
+        private async Task ShowWarning(string text, bool isError = true)
         {
             Trace.WriteLine(text);
 

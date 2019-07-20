@@ -362,4 +362,7 @@
   <data name="AS_Settings_RestrictNeverConnecting" xml:space="preserve">
     <value>Для автосинхронизации необходимо ввести свое имя в окне "Google синхронизация"</value>
   </data>
+  <data name="AS_Awaiting" xml:space="preserve">
+    <value>Ожидание...</value>
+  </data>
 </root>

@@ -60,29 +60,29 @@ namespace DistrictsNew.Models
         {
             var errors = string.Empty;
 
-            foreach (var path in info.RootedPaths)
-            {
-                try
-                {
-                    var local = Path.Combine(destination, path);
+            //foreach (var path in info.RootedPaths)
+            //{
+            //    try
+            //    {
+            //        var local = Path.Combine(destination, path);
 
-                    if (File.Exists(local))
-                    {
-                        File.Delete(local);
-                        Trace.WriteLine($"Deleted file:\n{local}");
-                    }
+            //        if (File.Exists(local))
+            //        {
+            //            File.Delete(local);
+            //            Trace.WriteLine($"Deleted file:\n{local}");
+            //        }
 
-                    if (Directory.Exists(local))
-                    {
-                        Directory.Delete(local, true);
-                        Trace.WriteLine($"Deleted folder:\n{local}");
-                    }
-                }
-                catch (Exception e)
-                {
-                    errors += "\n" + e;
-                }
-            }
+            //        if (Directory.Exists(local))
+            //        {
+            //            Directory.Delete(local, true);
+            //            Trace.WriteLine($"Deleted folder:\n{local}");
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        errors += "\n" + e;
+            //    }
+            //}
 
             if (!await Task.Run(() => _archiver.TryUnzip(info.FullPath, destination)))
             {

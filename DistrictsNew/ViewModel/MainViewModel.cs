@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using DistrictsLib.Implementation;
 using DistrictsLib.Implementation.ActionArbiter;
@@ -85,7 +87,7 @@ namespace DistrictsNew.ViewModel
                 await _googleModel.Connect(settings.Login);
                 await _googleModel.DownloadAndReplace(settings.BackupFolder);
 
-                App.Current.MainWindow.Closing += UploadToGoogle;
+                Application.Current.MainWindow.Closing += UploadToGoogle;
             }
             catch (Exception e)
             {
@@ -115,37 +117,49 @@ namespace DistrictsNew.ViewModel
             
             IsBusy = false;
 
-            App.Current.Shutdown();
+            Application.Current.Shutdown();
         }
 
         private void OnOpenGoogleSync()
         {
-            _googleSyncVm.ShowDialog(Properties.Resources.GoogleApi_Title, 380);
+            _googleSyncVm.ShowDialog(Resources.GoogleApi_Title, 380);
         }
 
         private void OnOpenRestoreArchive()
         {
             var vm = new RestoreBackupViewModel(new SimpleNotifier(),
                 new ArchiveModel(new Archiver()),
-                Properties.Settings.Default.BackupFolder);
+                Settings.Default.BackupFolder);
 
-            vm.ShowDialog(Properties.Resources.RestoreBackup_Title, 720, 440);
+            vm.ShowDialog(Resources.RestoreBackup_Title, 720, 440);
         }
 
         private void OnOpenCreateArchive()
         {
+            var settings = Settings.Default;
+
+            var selected = new[]
+            {
+                settings.ManageFolder,
+                settings.CardsFolder,
+                settings.HomeInfoFolder,
+                settings.RestrictionsFolder,
+                settings.BuildingFolder,
+            };
+
             var vm = new CreateBackupViewModel(new SimpleNotifier(),
                 new ArchiveModel(new Archiver()),
-                Path.GetDirectoryName(Properties.Settings.Default.BackupFolder),
-                Properties.Settings.Default.BackupFolder,
-                new ActionArbiter());
+                Path.GetDirectoryName(settings.BackupFolder),
+                settings.BackupFolder,
+                new ActionArbiter(),
+                selected);
 
-            vm.ShowDialog(Properties.Resources.CreateBackup_Title, 400);
+            vm.ShowDialog(Resources.CreateBackup_Title, 400);
         }
 
         private void OnOpenSettings()
         {
-            var settings = Properties.Settings.Default;
+            var settings = Settings.Default;
 
             var vm = new SettingsViewModel(new RememberChangesNotify(),
                 Path.GetDirectoryName(settings.StreetsFile),
@@ -156,7 +170,7 @@ namespace DistrictsNew.ViewModel
                 new TimedAction(new SafeThreadActionArbiter(new ActionArbiter())),
                 new StreetDownload());
 
-            if (vm.ShowDialog(Properties.Resources.Settings_Title,
+            if (vm.ShowDialog(Resources.Settings_Title,
                     400) == true)
             {
                 settings.GoogleSync = vm.GoogleSync;
@@ -174,7 +188,7 @@ namespace DistrictsNew.ViewModel
                 new SimpleNotifier(),
                 new TimedAction(new SafeThreadActionArbiter(new ActionArbiter())));
 
-            if (vm.ShowDialog(Properties.Resources.Manage_Title, 600, 600 / 1.5) == true
+            if (vm.ShowDialog(Resources.Manage_Title, 600, 600 / 1.5) == true
                 && vm.IsChanged)
             {
                 _serializer.SaveManage(vm.Origin);

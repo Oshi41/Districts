@@ -56,11 +56,22 @@ namespace DistrictsNew.ViewModel.Dialogs
         public ICommand CreateZipCommand { get; }
         public ICommand ChooseFolderCommand { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="changeNotifier"></param>
+        /// <param name="model"></param>
+        /// <param name="baseFolder"></param>
+        /// <param name="backupFolder"></param>
+        /// <param name="arbiter"></param>
+        /// <param name="selected">Полный путь к файлу/папке, которые нужно выделить</param>
         public CreateBackupViewModel(IChangeNotifier changeNotifier,
             ICreateArchiveModel model,
             string baseFolder,
             string backupFolder,
-            IActionArbiter arbiter)
+            IActionArbiter arbiter,
+            // Full path
+            IEnumerable<string> selected)
             : base(changeNotifier)
         {
             _model = model;
@@ -76,6 +87,11 @@ namespace DistrictsNew.ViewModel.Dialogs
             var files = Directory.GetFiles(baseFolder);
             Items.AddRange(files.Select(x => new SavingItem(false, x)));
 
+            foreach (var item in Items)
+            {
+                item.IsChecked = selected.Contains(item.FullName);
+            }
+
             CreateZipCommand = new DelegateCommand(CreateZip, OnCanCreateZip);
             ChooseFolderCommand = new DelegateCommand(OnChooseFolder);
 
@@ -84,19 +100,25 @@ namespace DistrictsNew.ViewModel.Dialogs
 
         #region Command handlers
 
-        private void CreateZip()
+        private async void CreateZip()
         {
             try
             {
-                var file = _model.CreateZipPath(BackupFolder, Items, null);
+                string file;
 
-                ChangeNotifier.SetChange();
+                using (new AwaitingMessageVm(Properties.Resources.AS_Awaiting, HostName))
+                {
+                    file = _model.CreateZipPath(BackupFolder, Items, null);
+                    ChangeNotifier.SetChange();
+                }
 
-                ShowInfo(string.Format(Properties.Resources.CreateArchive_StrFormat_ArchiveCreated, file), false);
+                await ShowWarning(string.Format(Properties.Resources.CreateArchive_StrFormat_ArchiveCreated, 
+                    file), 
+                    false);
             }
             catch (Exception e)
             {
-                ShowInfo(e.ToString());
+                await ShowWarning(e.ToString());
             }
         }
 
@@ -135,6 +157,14 @@ namespace DistrictsNew.ViewModel.Dialogs
             });
         }
 
+        private async Task ShowWarning(string text, bool isError = true)
+        {
+            Trace.WriteLine(text);
+
+            var vm = new DialogMessage(text, isError, cancelCaption: Properties.Resources.OK);
+            await DialogHost.Show(vm, HostName);
+        }
+
         #region Overrides of ErrorViewModel
 
         protected override string ValidateError(string column)
@@ -151,12 +181,6 @@ namespace DistrictsNew.ViewModel.Dialogs
         }
 
         #endregion
-
-        private async void ShowInfo(string text, bool isError = true)
-        {
-            var vm = new DialogMessage(text, isError, cancelCaption:Properties.Resources.OK);
-            await DialogHost.Show(vm, HostName);
-        }
     }
 
     public class SavingItem : BindableBase

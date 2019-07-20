@@ -107,6 +107,7 @@
     <Compile Include="ViewModel\Dialogs\SettingsViewModel.cs" />
     <Compile Include="ViewModel\ErrorInfo\ErrorInfo.cs" />
     <Compile Include="ViewModel\HostDialogs\AddCardViewModel.cs" />
+    <Compile Include="ViewModel\HostDialogs\AwaitingMessageVm.cs" />
     <Compile Include="ViewModel\HostDialogs\ChooseStreetViewModel.cs" />
     <Compile Include="ViewModel\HostDialogs\DialogMessage.cs" />
     <Compile Include="ViewModel\HostDialogs\GoogleConnectViewModel.cs" />
@@ -118,6 +119,9 @@
       <DependentUpon>ActionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Controls\DataGridDoubleClick.cs" />
+    <Compile Include="View\DialogHostViews\AwaitingMessageView.xaml.cs">
+      <DependentUpon>AwaitingMessageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DialogHostViews\Base\ConfirmDialogView.xaml.cs">
       <DependentUpon>ConfirmDialogView.xaml</DependentUpon>
     </Compile>
@@ -182,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ActionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DialogHostViews\AwaitingMessageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

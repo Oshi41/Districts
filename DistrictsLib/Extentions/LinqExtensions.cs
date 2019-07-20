@@ -63,5 +63,22 @@ namespace DistrictsLib.Extentions
             var temp = elements.OrderBy(x => Guid.NewGuid());
             return temp;
         }
+
+        public static IEnumerable<T> SelectRecursive<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> func)
+        {
+            if (source.IsNullOrEmpty() || func == null)
+                return source;
+
+            var result = source.ToList();
+
+            foreach (var item in source)
+            {
+                var innerList = func(item).SelectRecursive(func);
+                if (!innerList.IsNullOrEmpty())
+                    result.AddRange(innerList);
+            }
+
+            return result;
+        }
     }
 }

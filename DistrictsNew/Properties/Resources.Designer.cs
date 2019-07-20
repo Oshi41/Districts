@@ -97,6 +97,15 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ожидание....
+        /// </summary>
+        public static string AS_Awaiting {
+            get {
+                return ResourceManager.GetString("AS_Awaiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Подтверждаю.
         /// </summary>
         public static string AS_Confirm {

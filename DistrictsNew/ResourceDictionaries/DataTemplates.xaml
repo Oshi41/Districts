@@ -62,6 +62,10 @@
         <dialogHostViews:DialogView/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type hostDialogs:AwaitingMessageVm}">
+        <dialogHostViews:AwaitingMessageView/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type hostDialogs:ChooseStreetViewModel}">
         <dialogHostViews:ConfirmDialogView>
             <dialogHostViews:ChooseStreetView/>
