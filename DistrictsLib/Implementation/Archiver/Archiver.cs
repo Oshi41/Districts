@@ -64,8 +64,10 @@ namespace DistrictsLib.Implementation.Archiver
             }
         }
 
-        public bool TryUnzip(string zip, string destination)
+        public bool TryUnzip(string zip, string destination, out string warnings)
         {
+            warnings = string.Empty;
+
             if (!File.Exists(zip))
             {
                 Trace.WriteLine($"Zip file is not existing {zip}");
@@ -83,7 +85,7 @@ namespace DistrictsLib.Implementation.Archiver
                     archive.ExtractAll(temp);
                     Trace.WriteLine($"Successfully extracted ZIP {zip} to temporary folder {temp}");
 
-                    SafeMoveDir(temp, destination);
+                    SafeMoveDir(temp, destination, out warnings);
 
                     Trace.WriteLine($"Successfully moved from {temp} to destination folder {destination}");
                 }
@@ -128,8 +130,10 @@ namespace DistrictsLib.Implementation.Archiver
 
         #endregion
 
-        private void SafeMoveDir(string source, string destination)
+        private void SafeMoveDir(string source, string destination, out string warnings)
         {
+            warnings = string.Empty;
+
             var folders = Directory
                 .GetDirectories(source)
                 .SelectRecursive(Directory.GetDirectories)
@@ -151,13 +155,21 @@ namespace DistrictsLib.Implementation.Archiver
             {
                 var newName = item.Replace(source, destination);
 
-                if (File.Exists(newName))
+                try
                 {
-                    File.Delete(newName);
+                    if (File.Exists(newName))
+                    {
+                        File.Delete(newName);
+                    }
+
+                    File.Move(item, newName);
                 }
+                catch (Exception e)
+                {
+                    warnings += e.Message + "\n";
 
-
-                File.Move(item, newName);
+                    Trace.WriteLine($"{nameof(Archiver)}.{nameof(SafeMoveDir)}: {e}");
+                }
             }
         }
     }

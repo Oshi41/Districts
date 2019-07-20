@@ -365,4 +365,7 @@
   <data name="AS_Awaiting" xml:space="preserve">
     <value>Ожидание...</value>
   </data>
+  <data name="AS_FileExists_StrFormat" xml:space="preserve">
+    <value>Файл уже существует: {0}</value>
+  </data>
 </root>

@@ -21,16 +21,16 @@ namespace DistrictsNew.ViewModel.HostDialogs
             DialogHost.Show(this, hostName, OnOpen);
         }
 
-        public void UpdateContent(object vm)
-        {
-            _session?.UpdateContent(vm);
-        }
+        //public void UpdateContent(object vm)
+        //{
+        //    _session?.UpdateContent(vm);
+        //}
 
-        public void ShowWarning(string text, bool isError = true)
-        {
-            var vm = new DialogMessage(text, isError, cancelCaption:Properties.Resources.OK);
-            UpdateContent(vm);
-        }
+        //public void ShowWarning(string text, bool isError = true)
+        //{
+        //    var vm = new DialogMessage(text, isError, cancelCaption:Properties.Resources.OK);
+        //    UpdateContent(vm);
+        //}
 
         private void OnOpen(object sender, DialogOpenedEventArgs e)
         {

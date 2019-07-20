@@ -58,38 +58,14 @@ namespace DistrictsNew.Models
 
         public async Task<string> RestoreWithWarnings(IZipInfo info, string destination)
         {
-            var errors = string.Empty;
+            var warnings = string.Empty;
 
-            //foreach (var path in info.RootedPaths)
-            //{
-            //    try
-            //    {
-            //        var local = Path.Combine(destination, path);
-
-            //        if (File.Exists(local))
-            //        {
-            //            File.Delete(local);
-            //            Trace.WriteLine($"Deleted file:\n{local}");
-            //        }
-
-            //        if (Directory.Exists(local))
-            //        {
-            //            Directory.Delete(local, true);
-            //            Trace.WriteLine($"Deleted folder:\n{local}");
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        errors += "\n" + e;
-            //    }
-            //}
-
-            if (!await Task.Run(() => _archiver.TryUnzip(info.FullPath, destination)))
+            if (!await Task.Run(() => _archiver.TryUnzip(info.FullPath, destination, out warnings)))
             {
                 throw new Exception($"Zip placed here\n{info.FullPath}\nShould extracted here\n{destination}\n");
             }
 
-            return errors;
+            return warnings;
         }
 
         public IList<IZipInfo> ReadZips(string folder, out string warnings)

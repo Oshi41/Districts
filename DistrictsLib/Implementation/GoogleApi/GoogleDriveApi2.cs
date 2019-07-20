@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DistrictsLib.Extentions;
 using DistrictsLib.Interfaces.GoogleApi;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
@@ -110,6 +111,15 @@ namespace DistrictsLib.Implementation.GoogleApi
                     throw result.Exception;
                 }
             }
+        }
+
+        public async Task<string> GetFileName()
+        {
+            var file = await GetFile();
+            return "google_" +
+                   $"{file?.LastModifyingUser?.DisplayName}_" +
+                   $"{file?.ModifiedTime?.ToFullPrettyDateString()}" +
+                   ".zip";
         }
 
         public void Cancel()

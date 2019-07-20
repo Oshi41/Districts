@@ -108,7 +108,7 @@ namespace DistrictsNew.ViewModel.Dialogs
 
                 using (new AwaitingMessageVm(Properties.Resources.AS_Awaiting, HostName))
                 {
-                    file = _model.CreateZipPath(BackupFolder, Items, null);
+                    file = await Task.Run(() => _model.CreateZipPath(BackupFolder, Items, null));
                     ChangeNotifier.SetChange();
                 }
 

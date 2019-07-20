@@ -161,6 +161,15 @@ namespace DistrictsNew.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Файл уже существует: {0}.
+        /// </summary>
+        public static string AS_FileExists_StrFormat {
+            get {
+                return ResourceManager.GetString("AS_FileExists_StrFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Фильтр:.
         /// </summary>
         public static string AS_Filter {

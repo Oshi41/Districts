@@ -17,8 +17,9 @@ namespace DistrictsLib.Interfaces.IArchiver
         /// </summary>
         /// <param name="zip"></param>
         /// <param name="destination"></param>
+        /// <param name="warnings">Предупреждения в ходе распаковки</param>
         /// <returns></returns>
-        bool TryUnzip(string zip, string destination);
+        bool TryUnzip(string zip, string destination, out string warnings);
 
         /// <summary>
         /// Вытаскивает список вхождений в архив

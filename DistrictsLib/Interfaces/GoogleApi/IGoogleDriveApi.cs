@@ -30,6 +30,12 @@ namespace DistrictsLib.Interfaces.GoogleApi
         Task Download(string destination);
 
         /// <summary>
+        /// Возвращает имя файла, типа google_ДАТА
+        /// </summary>
+        /// <returns></returns>
+        Task<string> GetFileName();
+
+        /// <summary>
         /// Отмена асинхронныйх действий
         /// </summary>
         void Cancel();
